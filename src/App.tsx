@@ -1,5 +1,6 @@
-import { Button } from "./components/ui/button";
+
 import { InformativeCard } from "./components/informative-card";
+import { Button } from "./components/Button/button";
 
 function App() {
   return (
