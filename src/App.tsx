@@ -1,5 +1,3 @@
-
-import { InformativeCard } from "./components/informative-card";
 import { Button } from "./components/Button/button";
 import Logo from "./assets/Logo.svg";
 
