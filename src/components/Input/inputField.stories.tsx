@@ -6,7 +6,7 @@ const meta: Meta<typeof InputField> = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["text", "password", "search", "email"],
+      options: ["text", "password", "search", "email", "select"],
     },
     disabled: {
       control: "boolean",
@@ -47,6 +47,20 @@ export const Disabled: Story = {
     disabled: true,
   },
 };
+
+export const Select: Story = {
+  args: {
+    variant: "select",
+    label: "Hospital o Clínica",
+    placeholder: "Seleccione una unidad médica",
+    description: "Elige el hospital o clínica donde ocurrió el desabasto.",
+    options: [
+      { value: "imss-1", label: "IMSS — Hospital General de Zona #1" },
+      { value: "issste-1", label: "ISSSTE — Clínica Hospital" },
+      { value: "ssa-1", label: "SSA — Centro de Salud" },
+    ],
+  },
+}; 
 
 export const AllVariants: Story = {
   render: () => (

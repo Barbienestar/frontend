@@ -1,13 +1,19 @@
-import { Search } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 import { Field, FieldLabel, FieldDescription } from "../ui/field";
 import { Input } from "../ui/input";
 
+interface SelectOption {
+  value: string;
+  label: string;
+}
+
 interface InputFieldProps {
-  variant: "text" | "password" | "search" | "email";
+  variant: "text" | "password" | "search" | "email" | "select";
   label?: string;
   placeholder?: string;
   description?: string;
   disabled?: boolean;
+  options?: SelectOption[];
 }
 
 const variantDefaults: Record<
@@ -34,6 +40,11 @@ const variantDefaults: Record<
     placeholder: "you@example.com",
     description: "We'll never share your email.",
   },
+  select: {
+    label: "Select",
+    placeholder: "Choose an option...",
+    description: "Select from available options.",
+  },
 };
 
 const InputField = ({
@@ -42,6 +53,7 @@ const InputField = ({
   placeholder,
   description,
   disabled,
+  options,
 }: InputFieldProps) => {
   const defaults = variantDefaults[variant];
 
@@ -50,7 +62,7 @@ const InputField = ({
       <FieldLabel>{label ?? defaults.label}</FieldLabel>
       <FieldDescription>{description ?? defaults.description}</FieldDescription>
 
-      {variant === "search" ? (
+      {variant === "search" && (
         <div className="relative flex items-center">
           <Search className="absolute left-2.5 size-4 text-muted-foreground pointer-events-none" />
           <Input
@@ -60,7 +72,29 @@ const InputField = ({
             className="pl-8"
           />
         </div>
-      ) : (
+      )}
+
+      {variant === "select" && (
+        <div className="relative flex items-center">
+          <select
+            disabled={disabled}
+            defaultValue=""
+            className="w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8"
+          >
+            <option value="" disabled>
+              {placeholder ?? defaults.placeholder}
+            </option>
+            {options?.map((opt) => (
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="absolute right-2.5 size-4 text-muted-foreground pointer-events-none" />
+        </div>
+      )}
+
+      {variant !== "search" && variant !== "select" && (
         <Input
           type={variant}
           placeholder={placeholder ?? defaults.placeholder}

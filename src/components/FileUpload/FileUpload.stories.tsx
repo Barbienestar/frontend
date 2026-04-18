@@ -8,8 +8,8 @@ const meta: Meta<typeof FileUpload> = {
       control: "select",
       options: ["receta", "csv"],
     },
-    text: {
-      control: "text",
+    error: {
+      control: "boolean",
     },
   },
 } satisfies Meta<typeof FileUpload>;
@@ -20,13 +20,27 @@ type Story = StoryObj<typeof meta>;
 export const Receta: Story = {
   args: {
     variant: "receta",
-    text: "Foto de la receta",
+    error: false,
+  },
+};
+
+export const RecetaError: Story = {
+  args: {
+    variant: "receta",
+    error: true,
   },
 };
 
 export const Csv: Story = {
   args: {
     variant: "csv",
-    text: "Arrastra tu archivo CSV",
+    error: false,
+  },
+};
+
+export const CsvError: Story = {
+  args: {
+    variant: "csv",
+    error: true,
   },
 };

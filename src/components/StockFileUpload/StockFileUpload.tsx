@@ -17,7 +17,7 @@ import {
   CardAction,
   CardFooter,
 } from "../ui/card";
-import { Info, ChevronDown } from "lucide-react";
+import { ChevronDown, Info } from "lucide-react";
 
 const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
   const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(
@@ -37,7 +37,7 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
             </Badge>
           </CardAction>
         </CardHeader>
-        <FileUpload variant="csv" text="Sube el archivo CSV con tus datos" />
+        <FileUpload variant="csv" label="Sube el archivo CSV con tus datos" />
         <CardFooter>
           <Button variant="default" size="lg" className="w-full">
             <Info />
@@ -85,7 +85,7 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
           </CardAction>
         )}
       </CardHeader>
-      <FileUpload variant="csv" text="Sube el archivo CSV con tus datos" />
+      <FileUpload variant="csv" label="Sube el archivo CSV con tus datos" />
       <CardFooter>
         <Button variant="default" size="lg" className="w-full">
           <Info />
