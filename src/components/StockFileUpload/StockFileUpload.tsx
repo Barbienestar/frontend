@@ -10,6 +10,14 @@ import {
 import { Badge } from "../ui/badge";
 import type { HospitalData } from "@/common/HospitalData";
 import FileUpload from "../FileUpload/FileUpload";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardAction,
+  CardFooter,
+} from "../ui/card";
+import { Info } from "lucide-react";
 
 const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
   const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(
@@ -20,42 +28,71 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
 
   if (hospitals.length === 0) {
     return (
-      <div>
-        <Badge variant="destructive">No hay hospitales disponibles</Badge>
+      <Card>
+        <CardHeader>
+          <CardTitle>Carga de datos oficiales</CardTitle>
+          <CardAction>
+            <Badge variant="destructive" className="p-4 rounded-sm">
+              No hay hospitales disponibles
+            </Badge>
+          </CardAction>
+        </CardHeader>
         <FileUpload variant="csv" text="Sube el archivo CSV con tus datos" />
-      </div>
+        <CardFooter>
+          <Button variant="default" size="lg" className="w-full">
+            <Info />
+            Descarga la plantilla aquí.
+          </Button>
+        </CardFooter>
+      </Card>
     );
   }
 
   return (
-    <div>
-      {hospitals.length === 1 ? (
-        <div className="mb-4">
-          <Badge variant="secondary">{selectedHospital?.name}</Badge>
-        </div>
-      ) : (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="secondary">
-              {selectedHospital?.name ?? "Hospitales"}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            <DropdownMenuRadioGroup
-              value={selectedHospitalId ?? undefined}
-              onValueChange={setSelectedHospitalId}
-            >
-              {hospitals.map((hospital) => (
-                <DropdownMenuRadioItem key={hospital.id} value={hospital.id}>
-                  {hospital.name}
-                </DropdownMenuRadioItem>
-              ))}
-            </DropdownMenuRadioGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )}
+    <Card>
+      <CardHeader>
+        <CardTitle>Carga de datos oficiales</CardTitle>
+        {hospitals.length === 1 ? (
+          <CardAction>
+            <Badge variant="secondary" className="p-4 rounded-sm">
+              {selectedHospital?.name}
+            </Badge>
+          </CardAction>
+        ) : (
+          <CardAction>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="secondary">
+                  {selectedHospital?.name ?? "Hospitales"}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuRadioGroup
+                  value={selectedHospitalId ?? undefined}
+                  onValueChange={setSelectedHospitalId}
+                >
+                  {hospitals.map((hospital) => (
+                    <DropdownMenuRadioItem
+                      key={hospital.id}
+                      value={hospital.id}
+                    >
+                      {hospital.name}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </CardAction>
+        )}
+      </CardHeader>
       <FileUpload variant="csv" text="Sube el archivo CSV con tus datos" />
-    </div>
+      <CardFooter>
+        <Button variant="default" size="lg" className="w-full">
+          <Info />
+          Descarga la plantilla aquí.
+        </Button>
+      </CardFooter>
+    </Card>
   );
 };
 
