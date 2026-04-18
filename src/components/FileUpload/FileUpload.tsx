@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { FileUp, FileText, X , CloudDownload} from "lucide-react";
+import { FileUp, X, CloudUpload } from "lucide-react";
 import { FieldLabel } from "../ui/field";
 
 type FileUploadVariant = "receta" | "csv";
@@ -26,7 +26,7 @@ const config = {
   },
   csv: {
     accept: ".csv,text/csv",
-    icon: CloudDownload,
+    icon: CloudUpload, // Changed from CloudDownload to CloudUpload to keep local change
     mainText: (
       <>
         Arrastra tu archivo CSV{" "}

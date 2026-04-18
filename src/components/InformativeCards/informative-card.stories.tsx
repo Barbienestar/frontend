@@ -55,3 +55,4 @@ export const DescripcionLarga: Story = {
     className: "w-[350px]",
   },
 };
+
