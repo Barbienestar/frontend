@@ -17,7 +17,7 @@ import {
   CardAction,
   CardFooter,
 } from "../ui/card";
-import { Info } from "lucide-react";
+import { Info, ChevronDown } from "lucide-react";
 
 const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
   const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(
@@ -63,7 +63,7 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="secondary">
-                  {selectedHospital?.name ?? "Hospitales"}
+                  {selectedHospital?.name ?? "Hospitales"} <ChevronDown />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>

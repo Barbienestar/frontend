@@ -2,6 +2,7 @@ import { Field, FieldDescription, FieldLabel } from "../ui/field";
 import { Input } from "../ui/input";
 import { Card, CardContent } from "../ui/card";
 import { useState, useCallback } from "react";
+import { CloudUpload } from "lucide-react";
 
 type FileUploadVariant = "receta" | "csv";
 
@@ -63,9 +64,12 @@ const FileUpload: React.FC<FileUploadProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
-        <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-          <div className="text-muted-foreground mb-2">
-            {file ? file.name : text}
+        <CardContent className="flex flex-col items-center justify-center py-8 text-center space-y-4">
+          <div className="flex flex-col items-center space-y-2">
+            <CloudUpload className="h-8 w-8 text-primary" />
+            <div className="text-muted-foreground">
+              {file ? file.name : text}
+            </div>
           </div>
           <div className="text-sm text-muted-foreground">or</div>
           <Input
@@ -88,11 +92,11 @@ const FileUpload: React.FC<FileUploadProps> = ({
         accept="image/*"
         onChange={handleInputChange}
       />
-      <FieldDescription>
-        Selecciona una imagen para subir a tu reporte.
-      </FieldDescription>
-    </Field>
-  );
+       <FieldDescription>
+         Selecciona una imagen para subir a tu reporte.
+       </FieldDescription>
+     </Field>
+   );
 };
 
 export default FileUpload;
