@@ -118,6 +118,8 @@ const Navbar: React.FC<NavbarProps> = ({ variant = "default", activePath }) => {
                 <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
               </svg>
               {current.buttonLabel}
+
+              
             </button>
           )}
         </div>
