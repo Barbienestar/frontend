@@ -1,66 +1,66 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import InputField from "./inputField";
+import type { Meta, StoryObj } from '@storybook/react-vite'
+import InputField from './inputField'
 
 const meta: Meta<typeof InputField> = {
   component: InputField,
   argTypes: {
     variant: {
-      control: "select",
-      options: ["text", "password", "search", "email", "select"],
+      control: 'select',
+      options: ['text', 'password', 'search', 'email', 'select'],
     },
     disabled: {
-      control: "boolean",
+      control: 'boolean',
     },
   },
-} satisfies Meta<typeof InputField>;
+} satisfies Meta<typeof InputField>
 
-export default meta;
-type Story = StoryObj<typeof meta>;
+export default meta
+type Story = StoryObj<typeof meta>
 
 export const Text: Story = {
   args: {
-    variant: "text",
+    variant: 'text',
   },
-};
+}
 
 export const Password: Story = {
   args: {
-    variant: "password",
+    variant: 'password',
   },
-};
+}
 
 export const Search: Story = {
   args: {
-    variant: "search",
+    variant: 'search',
   },
-};
+}
 
 export const Email: Story = {
   args: {
-    variant: "email",
+    variant: 'email',
   },
-};
+}
 
 export const Disabled: Story = {
   args: {
-    variant: "text",
+    variant: 'text',
     disabled: true,
   },
-};
+}
 
 export const Select: Story = {
   args: {
-    variant: "select",
-    label: "Hospital o Clínica",
-    placeholder: "Seleccione una unidad médica",
-    description: "Elige el hospital o clínica donde ocurrió el desabasto.",
+    variant: 'select',
+    label: 'Hospital o Clínica',
+    placeholder: 'Seleccione una unidad médica',
+    description: 'Elige el hospital o clínica donde ocurrió el desabasto.',
     options: [
-      { value: "imss-1", label: "IMSS — Hospital General de Zona #1" },
-      { value: "issste-1", label: "ISSSTE — Clínica Hospital" },
-      { value: "ssa-1", label: "SSA — Centro de Salud" },
+      { value: 'imss-1', label: 'IMSS — Hospital General de Zona #1' },
+      { value: 'issste-1', label: 'ISSSTE — Clínica Hospital' },
+      { value: 'ssa-1', label: 'SSA — Centro de Salud' },
     ],
   },
-}; 
+}
 
 export const AllVariants: Story = {
   render: () => (
@@ -71,4 +71,4 @@ export const AllVariants: Story = {
       <InputField variant="search" />
     </div>
   ),
-};
+}

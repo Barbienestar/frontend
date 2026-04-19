@@ -1,51 +1,51 @@
-import { Search, ChevronDown } from "lucide-react";
-import { Field, FieldLabel, FieldDescription } from "../ui/field";
-import { Input } from "../ui/input";
+import { Search, ChevronDown } from 'lucide-react'
+import { Field, FieldLabel, FieldDescription } from '../ui/field'
+import { Input } from '../ui/input'
 
 interface SelectOption {
-  value: string;
-  label: string;
+  value: string
+  label: string
 }
 
 interface InputFieldProps {
-  variant: "text" | "password" | "search" | "email" | "select";
-  label?: string;
-  placeholder?: string;
-  description?: string;
-  disabled?: boolean;
-  options?: SelectOption[];
+  variant: 'text' | 'password' | 'search' | 'email' | 'select'
+  label?: string
+  placeholder?: string
+  description?: string
+  disabled?: boolean
+  options?: SelectOption[]
 }
 
 const variantDefaults: Record<
-  InputFieldProps["variant"],
+  InputFieldProps['variant'],
   { label: string; placeholder: string; description: string }
 > = {
   text: {
-    label: "Text",
-    placeholder: "Enter text...",
-    description: "Plain text input.",
+    label: 'Text',
+    placeholder: 'Enter text...',
+    description: 'Plain text input.',
   },
   password: {
-    label: "Password",
-    placeholder: "Enter password...",
-    description: "Your password is kept secure.",
+    label: 'Password',
+    placeholder: 'Enter password...',
+    description: 'Your password is kept secure.',
   },
   search: {
-    label: "Search",
-    placeholder: "Search...",
-    description: "Search for anything.",
+    label: 'Search',
+    placeholder: 'Search...',
+    description: 'Search for anything.',
   },
   email: {
-    label: "Email",
-    placeholder: "you@example.com",
+    label: 'Email',
+    placeholder: 'you@example.com',
     description: "We'll never share your email.",
   },
   select: {
-    label: "Select",
-    placeholder: "Choose an option...",
-    description: "Select from available options.",
+    label: 'Select',
+    placeholder: 'Choose an option...',
+    description: 'Select from available options.',
   },
-};
+}
 
 const InputField = ({
   variant,
@@ -55,14 +55,14 @@ const InputField = ({
   disabled,
   options,
 }: InputFieldProps) => {
-  const defaults = variantDefaults[variant];
+  const defaults = variantDefaults[variant]
 
   return (
     <Field>
       <FieldLabel>{label ?? defaults.label}</FieldLabel>
       <FieldDescription>{description ?? defaults.description}</FieldDescription>
 
-      {variant === "search" && (
+      {variant === 'search' && (
         <div className="relative flex items-center">
           <Search className="absolute left-2.5 size-4 text-muted-foreground pointer-events-none" />
           <Input
@@ -74,7 +74,7 @@ const InputField = ({
         </div>
       )}
 
-      {variant === "select" && (
+      {variant === 'select' && (
         <div className="relative flex items-center">
           <select
             disabled={disabled}
@@ -94,7 +94,7 @@ const InputField = ({
         </div>
       )}
 
-      {variant !== "search" && variant !== "select" && (
+      {variant !== 'search' && variant !== 'select' && (
         <Input
           type={variant}
           placeholder={placeholder ?? defaults.placeholder}
@@ -102,7 +102,7 @@ const InputField = ({
         />
       )}
     </Field>
-  );
-};
+  )
+}
 
-export default InputField;
+export default InputField

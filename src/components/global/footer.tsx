@@ -1,14 +1,14 @@
-import { Phone, Mail, MapPin } from "lucide-react";
-import logo from "../../assets/Logo.svg";
+import { Phone, Mail, MapPin } from 'lucide-react'
+import logo from '../../assets/Logo.svg'
 
-type FooterVariant = "full" | "minimal";
+type FooterVariant = 'full' | 'minimal'
 
 interface FooterProps {
-  variant?: FooterVariant;
+  variant?: FooterVariant
 }
 
-export function Footer({ variant = "full" }: FooterProps) {
-  if (variant === "minimal") {
+export function Footer({ variant = 'full' }: FooterProps) {
+  if (variant === 'minimal') {
     return (
       <footer className="bg-white border-t border-blue-200 w-full">
         <div className="max-w-5xl mx-auto px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-gray-500">
@@ -30,7 +30,7 @@ export function Footer({ variant = "full" }: FooterProps) {
           </div>
         </div>
       </footer>
-    );
+    )
   }
 
   return (
@@ -40,7 +40,11 @@ export function Footer({ variant = "full" }: FooterProps) {
       <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-10">
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-              <img src={logo} alt="Logo" className="brightness-0 invert w-8 h-8" />
+            <img
+              src={logo}
+              alt="Logo"
+              className="brightness-0 invert w-8 h-8"
+            />
             <span className="font-bold text-lg tracking-wide uppercase">
               Decision 360
             </span>
@@ -89,7 +93,7 @@ export function Footer({ variant = "full" }: FooterProps) {
         </nav>
       </div>
     </footer>
-  );
+  )
 }
 
-export default Footer;
+export default Footer
