@@ -6,18 +6,22 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from '@/components/ui/card'
 
 interface InformativeCardProps {
-    title: string;
-    description: string;
-    icon: React.ReactNode;
-    className?: string;
-
+  title: string
+  description: string
+  icon: React.ReactNode
+  className?: string
 }
 
-export function InformativeCard({title, description, icon, className}: InformativeCardProps) {
-    return(
+export function InformativeCard({
+  title,
+  description,
+  icon,
+  className,
+}: InformativeCardProps) {
+  return (
     <Card className={className}>
       <CardHeader>
         <div className="text-yellow-700 mb-2">{icon}</div>
@@ -25,5 +29,5 @@ export function InformativeCard({title, description, icon, className}: Informati
         <CardDescription>{description}</CardDescription>
       </CardHeader>
     </Card>
-    )
+  )
 }

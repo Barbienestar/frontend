@@ -1,24 +1,28 @@
-import { ClipboardList } from "lucide-react";
-import InputField from "../Input/inputField";
-import FileUpload from "../FileUpload/FileUpload";
-import { Button } from "../Button/button";
+import { ClipboardList } from 'lucide-react'
+import InputField from '../Input/inputField'
+import FileUpload from '../FileUpload/FileUpload'
+import { Button } from '../Button/button'
 
 const hospitalOptions = [
-  { value: "imss-1", label: "IMSS — Hospital General de Zona #1" },
-  { value: "imss-2", label: "IMSS — Hospital General de Zona #2" },
-  { value: "issste-1", label: "ISSSTE — Clínica Hospital Norte" },
-  { value: "issste-2", label: "ISSSTE — Clínica Hospital Sur" },
-  { value: "ssa-1", label: "SSA — Centro de Salud Tlalpan" },
-  { value: "ssa-2", label: "SSA — Centro de Salud Iztapalapa" },
-];
+  { value: 'imss-1', label: 'IMSS — Hospital General de Zona #1' },
+  { value: 'imss-2', label: 'IMSS — Hospital General de Zona #2' },
+  { value: 'issste-1', label: 'ISSSTE — Clínica Hospital Norte' },
+  { value: 'issste-2', label: 'ISSSTE — Clínica Hospital Sur' },
+  { value: 'ssa-1', label: 'SSA — Centro de Salud Tlalpan' },
+  { value: 'ssa-2', label: 'SSA — Centro de Salud Iztapalapa' },
+]
 
 interface ReportCardProps {
-  onCancel?: () => void;
-  onSubmit?: () => void;
-  fileUploadError?: boolean;
+  onCancel?: () => void
+  onSubmit?: () => void
+  fileUploadError?: boolean
 }
 
-const ReportCard = ({ onCancel, onSubmit, fileUploadError = false }: ReportCardProps) => {
+const ReportCard = ({
+  onCancel,
+  onSubmit,
+  fileUploadError = false,
+}: ReportCardProps) => {
   return (
     <div className="bg-card rounded-xl border border-border shadow-sm p-6 w-full max-w-lg">
       <div className="flex items-center gap-2 mb-6">
@@ -57,7 +61,7 @@ const ReportCard = ({ onCancel, onSubmit, fileUploadError = false }: ReportCardP
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ReportCard;
+export default ReportCard
