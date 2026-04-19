@@ -1,10 +1,13 @@
-import { Button } from "./components/Button/button";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { MapaPage } from "./pages/MapaPage";
 
 function App() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center">
-      <Button variant={"default"}>Click me</Button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/mapa" element={<MapaPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
