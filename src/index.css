@@ -1,7 +1,7 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -41,6 +41,8 @@
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
+    --color-access-green: var(--access-green);
+    --color-access-bar: var(--access-bar);
     --radius-sm: calc(var(--radius) * 0.6);
     --radius-md: calc(var(--radius) * 0.8);
     --radius-lg: var(--radius);
@@ -93,6 +95,8 @@
     --accent-foreground: oklch(0.2866 0.0402 179.5086);
     --accent-secondary: oklch(0.6182 0.1088 83.3);
     --accent-secondary-foreground: oklch(1 0 0);
+    --access-green: oklch(0.3434 0.0359 184.49);
+    --access-bar: oklch(27.8% 0.033 256.848);
     --destructive: oklch(0.5409 0.1428 24.1428);
     --border: oklch(0.9288 0.0126 255.5078);
     --input: oklch(0.9288 0.0126 255.5078);
@@ -159,6 +163,8 @@
     --muted-foreground: oklch(0.7107 0.0351 256.7878);
     --accent: oklch(0.2795 0.0368 260.031);
     --accent-foreground: oklch(0.9842 0.0034 247.8575);
+    --access-green: oklch(0.3434 0.0359 184.49);
+    --access-bar: oklch(27.8% 0.033 256.848);
     --destructive: oklch(0.6368 0.2078 25.3313);
     --border: oklch(0.3717 0.0392 257.287);
     --input: oklch(0.3717 0.0392 257.287);
@@ -206,14 +212,14 @@
 }
 
 @layer base {
-    * {
-        @apply border-border outline-ring/50;
-    }
-    body {
-        @apply bg-background text-foreground;
-        letter-spacing: var(--tracking-normal);
-    }
-    html {
-        @apply font-sans;
-    }
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    letter-spacing: var(--tracking-normal);
+  }
+  html {
+    @apply font-sans;
+  }
 }
