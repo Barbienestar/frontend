@@ -1,13 +1,14 @@
-import { Button } from './components/Button/button'
-import Logo from './assets/Logo.svg'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Access from "./pages/access";
 
 function App() {
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center">
-      <Button variant={'default'}>Click me</Button>
-      <img src={Logo} alt="Logo" />
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/access" element={<Access />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App
