@@ -1,5 +1,6 @@
 import { BriefcaseMedical } from "lucide-react";
 import accessBackground from "../assets/access_background.svg";
+import { Login } from "@/components/Login/login";
 
 const Access = () => {
     return (
@@ -45,8 +46,8 @@ const Access = () => {
             {/** Right side container */}
             <div className="flex-1 flex items-center justify-center bg-gray-50 p-8">
                 <div className="text-gray-800">
-                    <h1 className="text-4xl font-bold mb-4">Right Side</h1>
-                    <p className="text-lg text-gray-600">This one takes the other 50%.</p>
+                    
+                    <Login></Login>
                 </div>
             </div>
         </main>
