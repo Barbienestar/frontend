@@ -1,8 +1,7 @@
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import { useEffect } from "react";
-import "leaflet.heat";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import HeatmapLayer from "react-leaflet-heatmap-layer-v3";
 
 // Fix marker icons with Vite bundler
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)
@@ -21,31 +20,6 @@ export interface MedicinePoint {
   lng: number;
   intensity?: number;
   name?: string;
-}
-
-function HeatLayer({ points }: { points: MedicinePoint[] }) {
-  const map = useMap();
-
-  useEffect(() => {
-    const heatPoints = points.map(
-      (p) => [p.lat, p.lng, p.intensity ?? 1] as [number, number, number]
-    );
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const heat = (L as any).heatLayer(heatPoints, {
-      radius: 35,
-      blur: 20,
-      maxZoom: 17,
-      gradient: { 0.3: "#3b82f6", 0.6: "#f59e0b", 1: "#ef4444" },
-    });
-
-    heat.addTo(map);
-    return () => {
-      map.removeLayer(heat);
-    };
-  }, [map, points]);
-
-  return null;
 }
 
 export interface MapProps {
@@ -79,7 +53,18 @@ export function Map({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {variant === "heatmap" && <HeatLayer points={points} />}
+      {variant === "heatmap" && (
+        <HeatmapLayer
+          points={points}
+          latitudeExtractor={(p) => p.lat}
+          longitudeExtractor={(p) => p.lng}
+          intensityExtractor={(p) => p.intensity ?? 1}
+          radius={35}
+          blur={20}
+          max={1}
+          gradient={{ 0.3: "#3b82f6", 0.6: "#f59e0b", 1: "#ef4444" }}
+        />
+      )}
 
       {variant === "normal" &&
         points.map((point, i) => (
