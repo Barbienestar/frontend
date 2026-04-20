@@ -1,7 +1,7 @@
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
-import HeatmapLayer from 'react-leaflet-heatmap-layer-v3'
+import { HeatmapLayer } from 'react-leaflet-heatmap-layer-v3'
 
 // Fix marker icons with Vite bundler
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)

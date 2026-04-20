@@ -1,5 +1,6 @@
 import { Map } from "@/components/Map/map";
 import type { MedicinePoint } from "@/components/Map/map";
+import Navbar from "@/components/global/navbar";
 
 const mockMexicoPoints: MedicinePoint[] = [
   { lat: 16.75, lng: -93.1, intensity: 0.85, name: "Chiapas" },
@@ -21,7 +22,9 @@ const mockMexicoPoints: MedicinePoint[] = [
 
 export function MapaPage() {
   return (
-    <div className="min-h-svh bg-background p-8">
+    <div className="min-h-svh bg-background">
+      <Navbar variant="gobierno" activePath="/mapa" />
+      <div className="p-8">
       <h1 className="text-2xl font-semibold text-foreground mb-6">
         Intensidad de Desabasto por Entidad Federativa
       </h1>
@@ -32,6 +35,7 @@ export function MapaPage() {
         zoom={5}
         height="520px"
       />
+      </div>
     </div>
   );
 }
