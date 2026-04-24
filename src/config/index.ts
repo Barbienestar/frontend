@@ -1,6 +1,6 @@
 const Config = {
-  API_URL: process.env.API_URL,
-  APP_NAME: process.env.APP_NAME,
+  API_URL: import.meta.env.API_URL,
+  APP_NAME: 'Decision 360',
 }
 
 export default Config
