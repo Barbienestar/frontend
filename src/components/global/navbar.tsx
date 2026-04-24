@@ -1,18 +1,18 @@
-import React from 'react'
-import perfilPhoto from '../../assets/perfil.png'
-import logo from '../../assets/Logo.svg'
+import React from 'react';
+import perfilPhoto from '../../assets/perfil.png';
+import logo from '../../assets/Logo.svg';
 
-type NavbarVariant = 'admin' | 'gobierno' | 'default'
+type NavbarVariant = 'admin' | 'gobierno' | 'default';
 
 const linksDefault = [
   { label: 'Inicio', path: '/inicio' },
   { label: 'Reportar', path: '/reportar' },
   { label: 'Mapa de Abasto', path: '/mapa-de-abasto' },
-]
+];
 
 interface NavbarProps {
-  variant?: NavbarVariant
-  activePath?: string
+  variant?: NavbarVariant;
+  activePath?: string;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
@@ -44,11 +44,11 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
       links: linksDefault,
       buttonLabel: '',
     },
-  }
+  };
 
-  const current = config[variant]
+  const current = config[variant];
 
-  const isDark = variant === 'admin' || variant === 'gobierno'
+  const isDark = variant === 'admin' || variant === 'gobierno';
 
   return (
     <nav className={`${current.bg} px-6 py-3 shadow-md`}>
@@ -73,7 +73,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
         {current.links && (
           <div className="absolute left-3/4 -translate-x-1/2 flex gap-7">
             {current.links.map(({ label, path }) => {
-              const isActive = activePath === path
+              const isActive = activePath === path;
               return (
                 <a
                   key={label}
@@ -87,7 +87,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
                 >
                   {label}
                 </a>
-              )
+              );
             })}
           </div>
         )}
@@ -123,7 +123,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
         </div>
       </div>
     </nav>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

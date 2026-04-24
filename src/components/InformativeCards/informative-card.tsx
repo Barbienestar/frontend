@@ -3,13 +3,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
+} from '@/components/ui/card';
 
 interface InformativeCardProps {
-  title: string
-  description: string
-  icon: React.ReactNode
-  className?: string
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  className?: string;
 }
 
 export function InformativeCard({
@@ -26,5 +26,5 @@ export function InformativeCard({
         <CardDescription>{description}</CardDescription>
       </CardHeader>
     </Card>
-  )
+  );
 }

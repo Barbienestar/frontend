@@ -1,17 +1,17 @@
 // src/components/MetricCard/metric-card.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { ClipboardList, CircleCheck, CircleX } from 'lucide-react'
-import { MetricCard } from './metric-card'
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { ClipboardList, CircleCheck, CircleX } from 'lucide-react';
+import { MetricCard } from './metric-card';
 const meta = {
   component: MetricCard,
   parameters: {
     layout: 'centered',
   },
-} satisfies Meta<typeof MetricCard>
+} satisfies Meta<typeof MetricCard>;
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Pendientes: Story = {
   args: {
@@ -23,7 +23,7 @@ export const Pendientes: Story = {
     variant: 'pending',
     className: 'w-[280px]',
   },
-}
+};
 
 export const Aprobados: Story = {
   args: {
@@ -34,7 +34,7 @@ export const Aprobados: Story = {
     variant: 'approved',
     className: 'w-[280px]',
   },
-}
+};
 
 export const Rechazados: Story = {
   args: {
@@ -46,4 +46,4 @@ export const Rechazados: Story = {
     variant: 'rejected',
     className: 'w-[280px]',
   },
-}
+};

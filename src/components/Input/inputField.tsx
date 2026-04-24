@@ -1,19 +1,19 @@
-import { Search, ChevronDown } from 'lucide-react'
-import { Field, FieldLabel, FieldDescription } from '../ui/field'
-import { Input } from '../ui/input'
+import { Search, ChevronDown } from 'lucide-react';
+import { Field, FieldLabel, FieldDescription } from '../ui/field';
+import { Input } from '../ui/input';
 
 interface SelectOption {
-  value: string
-  label: string
+  value: string;
+  label: string;
 }
 
 interface InputFieldProps {
-  variant: 'text' | 'password' | 'search' | 'email' | 'select'
-  label?: string
-  placeholder?: string
-  description?: string
-  disabled?: boolean
-  options?: SelectOption[]
+  variant: 'text' | 'password' | 'search' | 'email' | 'select';
+  label?: string;
+  placeholder?: string;
+  description?: string;
+  disabled?: boolean;
+  options?: SelectOption[];
 }
 
 const variantDefaults: Record<
@@ -45,7 +45,7 @@ const variantDefaults: Record<
     placeholder: 'Choose an option...',
     description: 'Select from available options.',
   },
-}
+};
 
 const InputField = ({
   variant,
@@ -55,7 +55,7 @@ const InputField = ({
   disabled,
   options,
 }: InputFieldProps) => {
-  const defaults = variantDefaults[variant]
+  const defaults = variantDefaults[variant];
 
   return (
     <Field>
@@ -102,7 +102,7 @@ const InputField = ({
         />
       )}
     </Field>
-  )
-}
+  );
+};
 
-export default InputField
+export default InputField;

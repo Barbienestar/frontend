@@ -1,15 +1,15 @@
 // components/informative-card/informative-card.stories.tsx
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Shield, BarChart2, Users, Bell, Lock } from 'lucide-react'
-import { InformativeCard } from './informative-card'
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Shield, BarChart2, Users, Bell, Lock } from 'lucide-react';
+import { InformativeCard } from './informative-card';
 
 const meta = {
   component: InformativeCard,
-} satisfies Meta<typeof InformativeCard>
+} satisfies Meta<typeof InformativeCard>;
 
-export default meta
+export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Transparencia: Story = {
   args: {
@@ -18,7 +18,7 @@ export const Transparencia: Story = {
     icon: <Shield size={28} />,
     className: 'w-[350px]',
   },
-}
+};
 
 export const Eficiencia: Story = {
   args: {
@@ -27,7 +27,7 @@ export const Eficiencia: Story = {
     icon: <BarChart2 size={28} />,
     className: 'w-[350px]',
   },
-}
+};
 
 export const Compromiso: Story = {
   args: {
@@ -36,7 +36,7 @@ export const Compromiso: Story = {
     icon: <Users size={28} />,
     className: 'w-[350px]',
   },
-}
+};
 
 export const SinClassName: Story = {
   args: {
@@ -44,7 +44,7 @@ export const SinClassName: Story = {
     description: 'Recibe alertas en tiempo real sobre cambios importantes.',
     icon: <Bell size={28} />,
   },
-}
+};
 
 export const DescripcionLarga: Story = {
   args: {
@@ -54,4 +54,4 @@ export const DescripcionLarga: Story = {
     icon: <Lock size={28} />,
     className: 'w-[350px]',
   },
-}
+};

@@ -1,24 +1,30 @@
-import { useState } from 'react'
-import { Button } from '@/components/Button/button'
+import { useState } from 'react';
+import { Button } from '@/components/Button/button';
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from '../ui/dropdown-menu'
-import { Badge } from '../ui/badge'
-import type { HospitalData } from '@/common/HospitalData'
-import FileUpload from '../FileUpload/FileUpload'
-import { Card, CardHeader, CardTitle, CardAction, CardFooter } from '../ui/card'
-import { ChevronDown, Info } from 'lucide-react'
+} from '../ui/dropdown-menu';
+import { Badge } from '../ui/badge';
+import type { HospitalData } from '@/common/HospitalData';
+import FileUpload from '../FileUpload/FileUpload';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardAction,
+  CardFooter,
+} from '../ui/card';
+import { ChevronDown, Info } from 'lucide-react';
 
 const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
   const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(
     hospitals.length === 1 ? hospitals[0].id : null
-  )
+  );
 
-  const selectedHospital = hospitals.find((h) => h.id === selectedHospitalId)
+  const selectedHospital = hospitals.find((h) => h.id === selectedHospitalId);
 
   if (hospitals.length === 0) {
     return (
@@ -39,7 +45,7 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
           </Button>
         </CardFooter>
       </Card>
-    )
+    );
   }
 
   return (
@@ -87,7 +93,7 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
         </Button>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};
 
-export default StockFileUpload
+export default StockFileUpload;
