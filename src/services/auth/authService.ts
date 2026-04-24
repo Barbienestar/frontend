@@ -2,7 +2,7 @@ import { signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { auth } from './auth'
 import api from '../api'
 
-interface UserProfile {
+export interface UserProfile {
   id: string
   name: string
   lastName: string
@@ -27,4 +27,14 @@ export const logout = async (): Promise<void> => {
   await signOut(auth)
   localStorage.removeItem('token')
   localStorage.removeItem('user')
+}
+
+export const getStoredUser = (): UserProfile | null => {
+  const user = localStorage.getItem('user')
+  if (!user) return null
+  try {
+    JSON.parse(user) as UserProfile
+  } catch {
+    return null
+  }
 }
