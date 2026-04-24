@@ -1,23 +1,23 @@
 // src/components/Login/login.tsx
-import * as React from 'react'
-import { Button } from '@/components/Button/button'
-import { Field, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
+import * as React from 'react';
+import { Button } from '@/components/Button/button';
+import { Field, FieldLabel } from '@/components/ui/field';
+import { Input } from '@/components/ui/input';
+import { cn } from '@/lib/utils';
 
 interface LoginProps {
-  onSubmit?: (email: string, password: string) => void
-  isLoading?: boolean
-  className?: string
+  onSubmit?: (email: string, password: string) => void;
+  isLoading?: boolean;
+  className?: string;
 }
 
 export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    onSubmit?.(email, password)
+    e.preventDefault();
+    onSubmit?.(email, password);
   }
 
   return (
@@ -30,7 +30,7 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
       {/* Header */}
       <div className="mb-8 sm:mb-10">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
-            Iniciar Sesión
+          Iniciar Sesión
         </h1>
         <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           Ingrese sus credenciales para acceder al sistema.
@@ -83,5 +83,5 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

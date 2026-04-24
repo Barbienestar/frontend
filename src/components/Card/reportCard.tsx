@@ -1,7 +1,7 @@
-import { ClipboardList } from 'lucide-react'
-import InputField from '../Input/inputField'
-import FileUpload from '../FileUpload/FileUpload'
-import { Button } from '../Button/button'
+import { ClipboardList } from 'lucide-react';
+import InputField from '../Input/inputField';
+import FileUpload from '../FileUpload/FileUpload';
+import { Button } from '../Button/button';
 
 const hospitalOptions = [
   { value: 'imss-1', label: 'IMSS — Hospital General de Zona #1' },
@@ -10,12 +10,12 @@ const hospitalOptions = [
   { value: 'issste-2', label: 'ISSSTE — Clínica Hospital Sur' },
   { value: 'ssa-1', label: 'SSA — Centro de Salud Tlalpan' },
   { value: 'ssa-2', label: 'SSA — Centro de Salud Iztapalapa' },
-]
+];
 
 interface ReportCardProps {
-  onCancel?: () => void
-  onSubmit?: () => void
-  fileUploadError?: boolean
+  onCancel?: () => void;
+  onSubmit?: () => void;
+  fileUploadError?: boolean;
 }
 
 const ReportCard = ({
@@ -61,7 +61,7 @@ const ReportCard = ({
         </Button>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ReportCard
+export default ReportCard;

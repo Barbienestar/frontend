@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Access from "./pages/access";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Access from './pages/access';
 
 function App() {
   return (
@@ -11,4 +11,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

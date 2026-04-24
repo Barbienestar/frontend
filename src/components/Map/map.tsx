@@ -1,12 +1,12 @@
-import 'leaflet/dist/leaflet.css'
-import L from 'leaflet'
-import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
-import { useEffect } from 'react'
-import 'leaflet.heat'
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import { useEffect } from 'react';
+import 'leaflet.heat';
 
 // Fix marker icons with Vite bundler
 delete (L.Icon.Default.prototype as unknown as Record<string, unknown>)
-  ._getIconUrl
+  ._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
@@ -14,22 +14,22 @@ L.Icon.Default.mergeOptions({
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
   shadowUrl:
     'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-})
+});
 
 export interface MedicinePoint {
-  lat: number
-  lng: number
-  intensity?: number
-  name?: string
+  lat: number;
+  lng: number;
+  intensity?: number;
+  name?: string;
 }
 
 function HeatLayer({ points }: { points: MedicinePoint[] }) {
-  const map = useMap()
+  const map = useMap();
 
   useEffect(() => {
     const heatPoints = points.map(
       (p) => [p.lat, p.lng, p.intensity ?? 1] as [number, number, number]
-    )
+    );
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const heat = (L as any).heatLayer(heatPoints, {
@@ -37,23 +37,23 @@ function HeatLayer({ points }: { points: MedicinePoint[] }) {
       blur: 20,
       maxZoom: 17,
       gradient: { 0.3: '#3b82f6', 0.6: '#f59e0b', 1: '#ef4444' },
-    })
+    });
 
-    heat.addTo(map)
+    heat.addTo(map);
     return () => {
-      map.removeLayer(heat)
-    }
-  }, [map, points])
+      map.removeLayer(heat);
+    };
+  }, [map, points]);
 
-  return null
+  return null;
 }
 
 export interface MapProps {
-  variant: 'heatmap' | 'normal'
-  points: MedicinePoint[]
-  center?: [number, number]
-  zoom?: number
-  height?: string
+  variant: 'heatmap' | 'normal';
+  points: MedicinePoint[];
+  center?: [number, number];
+  zoom?: number;
+  height?: string;
 }
 
 export function Map({
@@ -66,7 +66,7 @@ export function Map({
   const defaultCenter: [number, number] = center ?? [
     points.reduce((acc, p) => acc + p.lat, 0) / points.length,
     points.reduce((acc, p) => acc + p.lng, 0) / points.length,
-  ]
+  ];
 
   return (
     <MapContainer
@@ -88,5 +88,5 @@ export function Map({
           </Marker>
         ))}
     </MapContainer>
-  )
+  );
 }
