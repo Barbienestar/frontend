@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/useAuth';
 import { Navigate, Outlet } from 'react-router-dom';
 
 interface ProtectedRouteProps {
@@ -10,10 +10,7 @@ export const ProtectedRoute = ({
   allowedRoles,
   redirectTo = '/access',
 }: ProtectedRouteProps) => {
-  const { isAuthenticated, user, isLoading } = useAuth();
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const { isAuthenticated, user } = useAuth();
   if (!isAuthenticated || !user) {
     return <Navigate to={redirectTo} replace />;
   }
