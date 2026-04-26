@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import perfilPhoto from '../../assets/perfil.png';
 import logo from '../../assets/Logo.svg';
 
@@ -16,6 +16,8 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const config = {
     admin: {
       bg: 'bg-white',
@@ -47,13 +49,14 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
   };
 
   const current = config[variant];
-
   const isDark = variant === 'admin' || variant === 'gobierno';
 
   return (
     <nav className={`${current.bg} px-6 py-3 shadow-md`}>
-      <div className="relative flex items-center">
-        <div className="flex items-center gap-3 shrink-0">
+      <div className="flex items-center justify-between">
+
+        {/* LOGO + TITULO */}
+        <div className="flex items-center gap-3">
           <div className={isDark ? 'bg-secondary' : ''}>
             <img
               src={logo}
@@ -62,7 +65,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
             />
           </div>
 
-          <div>
+          <div className="hidden sm:block">
             <h1 className="text-lg font-semibold text-black">
               {current.title}
             </h1>
@@ -70,8 +73,9 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
           </div>
         </div>
 
-        {current.links && (
-          <div className="absolute left-3/4 -translate-x-1/2 flex gap-7">
+        {/* LINKS DESKTOP */}
+        {current.links.length > 0 && (
+          <div className="hidden md:flex gap-7">
             {current.links.map(({ label, path }) => {
               const isActive = activePath === path;
               return (
@@ -92,9 +96,10 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
           </div>
         )}
 
-        <div
-          className={`${current.links.length > 0 ? '' : 'ml-auto'} ml-auto flex items-center`}
-        >
+        {/* RIGHT SIDE */}
+        <div className="flex items-center gap-3">
+
+          {/* BOTÓN PERFIL DEFAULT */}
           {variant === 'default' && (
             <button className="p-1 rounded-full hover:bg-gray-100">
               <img
@@ -105,8 +110,9 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
             </button>
           )}
 
+          {/* BOTÓN ADMIN/GOB */}
           {(variant === 'admin' || variant === 'gobierno') && (
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">
+            <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">
               <svg
                 className="w-4 h-4"
                 fill="none"
@@ -120,8 +126,52 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
               {current.buttonLabel}
             </button>
           )}
+
+          {/* HAMBURGER */}
+          {current.links.length > 0 && (
+            <button
+              className="md:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              <svg
+                className="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+              >
+                {isOpen ? (
+                  <path d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
+            </button>
+          )}
         </div>
       </div>
+
+      {/* MENU MOBILE */}
+      {isOpen && current.links.length > 0 && (
+        <div className="mt-4 flex flex-col gap-4 md:hidden">
+          {current.links.map(({ label, path }) => {
+            const isActive = activePath === path;
+            return (
+              <a
+                key={label}
+                href={path}
+                className={`text-base ${
+                  isActive
+                    ? 'font-semibold text-black'
+                    : 'text-gray-500'
+                }`}
+              >
+                {label}
+              </a>
+            );
+          })}
+        </div>
+      )}
     </nav>
   );
 };
