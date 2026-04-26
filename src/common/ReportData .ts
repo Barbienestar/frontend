@@ -2,6 +2,7 @@ export interface CreateReportData {
   medicineId: number;
   hospitalId: number;
   description: string;
+  imageUrl?: string;
 }
 
 export interface ReportData {

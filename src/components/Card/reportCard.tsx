@@ -1,4 +1,4 @@
-import { ClipboardList } from 'lucide-react';
+import { ClipboardList, Loader2 } from 'lucide-react';
 import InputField from '../Input/inputField';
 import { Button } from '../Button/button';
 import FileUpload from '../FileUpload/FileUpload';
@@ -21,6 +21,7 @@ interface ReportCardProps {
   onCancel?: () => void;
   onSubmit?: () => void;
   isLoading?: boolean;
+  isUploading?: boolean;
 }
 
 const ReportCard = ({
@@ -36,6 +37,7 @@ const ReportCard = ({
   onCancel,
   onSubmit,
   isLoading = false,
+  isUploading = false,
 }: ReportCardProps) => {
   return (
     <div className="bg-card rounded-xl border border-border shadow-sm p-6 w-full">
@@ -89,8 +91,20 @@ const ReportCard = ({
         <Button variant="outline" onClick={onCancel} disabled={isLoading}>
           Cancelar
         </Button>
-        <Button variant="default" onClick={onSubmit} disabled={isLoading}>
-          {isLoading ? 'Enviando...' : 'Enviar Reporte'}
+        <Button variant="default" onClick={onSubmit} disabled={isLoading || isUploading}>
+          {isUploading ? (
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              Subiendo imagen...
+            </>
+          ) : isLoading ? (
+            <>
+              <Loader2 className="size-4 animate-spin" />
+              Enviando...
+            </>
+          ) : (
+            'Enviar Reporte'
+          )}
         </Button>
       </div>
     </div>

@@ -8,12 +8,18 @@ import { Breadcrumb } from '@/components/Breadcrumb/breadcrumb';
 import { PageHeader } from '@/components/PageHeader/pageHeader';
 import { SidebarInfoCard } from '@/components/SidebarInfoCard/sidebarInfoCard';
 import { SidebarMapCard } from '@/components/SidebarMapCard/sidebarMapCard';
-import { RecentReportsTable } from '@/components/RecentReportsTable/recentReportsTable';
-import type { ReportRow } from '@/components/RecentReportsTable/recentReportsTable';
-import { getMedicines, getHospitals, createReport } from '@/services/reportService';
+import {
+  RecentReportsTable,
+  type ReportRow,
+} from '@/components/RecentReportsTable/recentReportsTable';
+import {
+  getMedicines,
+  getHospitals,
+  createReport,
+  uploadImage,
+} from '@/services/reportService';
 import type { MedicineData } from '@/common/MedicineData';
 import type { HospitalData } from '@/common/HospitalData';
-
 
 const ReportarPage = () => {
   const navigate = useNavigate();
@@ -22,10 +28,12 @@ const ReportarPage = () => {
   const [selectedMedicine, setSelectedMedicine] = useState('');
   const [selectedHospital, setSelectedHospital] = useState('');
   const [file, setFile] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
-  const [userReports] = useState<ReportRow[]>([]); 
+  const [userReports] = useState<ReportRow[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,6 +51,23 @@ const ReportarPage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (!file) return;
+    const upload = async () => {
+      setIsUploading(true);
+      try {
+        const data = await uploadImage(file);
+        setImageUrl(data.imageUrl);
+      } catch {
+        setFile(null);
+        alert('Error al subir la imagen. Intenta de nuevo.');
+      } finally {
+        setIsUploading(false);
+      }
+    };
+    upload();
+  }, [file]);
+
   const medicineOptions = medicines.map((m) => ({
     value: String(m.id),
     label: `${m.genericName} ${m.strength ?? ''} — ${m.dosageForm}`.trim(),
@@ -58,12 +83,17 @@ const ReportarPage = () => {
       alert('Por favor completa todos los campos.');
       return;
     }
+    if (file && !imageUrl) {
+      alert('La imagen aún se está subiendo. Espera un momento.');
+      return;
+    }
     setIsLoading(true);
     try {
       await createReport({
         medicineId: Number(selectedMedicine),
         hospitalId: Number(selectedHospital),
         description,
+        imageUrl: imageUrl ?? undefined,
       });
       navigate('/inicio');
     } catch {
@@ -95,7 +125,6 @@ const ReportarPage = () => {
         )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
           {/* Columna izquierda */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             <ReportCard
@@ -111,6 +140,7 @@ const ReportarPage = () => {
               onCancel={() => navigate('/inicio')}
               onSubmit={handleSubmit}
               isLoading={isLoading}
+              isUploading={isUploading}
             />
 
             <RecentReportsTable
@@ -132,9 +162,7 @@ const ReportarPage = () => {
               ]}
             />
 
-            <SidebarMapCard
-              onViewFullMap={() => navigate('/mapa-de-abasto')}
-            />
+            <SidebarMapCard onViewFullMap={() => navigate('/mapa-de-abasto')} />
 
             <div className="rounded-xl bg-[#1a2235] text-white p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
@@ -149,7 +177,6 @@ const ReportarPage = () => {
               </p>
             </div>
           </div>
-
         </div>
       </main>
 
