@@ -1,7 +1,7 @@
 import { BriefcaseMedical } from 'lucide-react';
 import accessBackground from '../assets/access_background.svg';
 import { Login } from '@/components/Login/login';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
