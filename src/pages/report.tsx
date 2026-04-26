@@ -27,7 +27,6 @@ const ReportarPage = () => {
   const [hospitals, setHospitals] = useState<HospitalData[]>([]);
   const [selectedMedicine, setSelectedMedicine] = useState('');
   const [selectedHospital, setSelectedHospital] = useState('');
-  const [file, setFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [description, setDescription] = useState('');
@@ -51,22 +50,22 @@ const ReportarPage = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    if (!file) return;
-    const upload = async () => {
-      setIsUploading(true);
-      try {
-        const data = await uploadImage(file);
-        setImageUrl(data.imageUrl);
-      } catch {
-        setFile(null);
-        alert('Error al subir la imagen. Intenta de nuevo.');
-      } finally {
-        setIsUploading(false);
-      }
-    };
-    upload();
-  }, [file]);
+  const handleFileChange = async (file: File | null) => {
+    if (!file) {
+      setImageUrl(null);
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const data = await uploadImage(file);
+      setImageUrl(data.imageUrl);
+    } catch {
+      alert('Error al subir la imagen. Intenta de nuevo.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const medicineOptions = medicines.map((m) => ({
     value: String(m.id),
@@ -83,7 +82,7 @@ const ReportarPage = () => {
       alert('Por favor completa todos los campos.');
       return;
     }
-    if (file && !imageUrl) {
+    if (isUploading) {
       alert('La imagen aún se está subiendo. Espera un momento.');
       return;
     }
@@ -136,7 +135,7 @@ const ReportarPage = () => {
               onMedicineChange={setSelectedMedicine}
               onHospitalChange={setSelectedHospital}
               onDescriptionChange={setDescription}
-              onFileChange={setFile}
+              onFileChange={handleFileChange}
               onCancel={() => navigate('/inicio')}
               onSubmit={handleSubmit}
               isLoading={isLoading}
