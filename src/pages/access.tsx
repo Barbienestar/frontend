@@ -1,8 +1,25 @@
 import { BriefcaseMedical } from 'lucide-react';
 import accessBackground from '../assets/access_background.svg';
 import { Login } from '@/components/Login/login';
+import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 const Access = () => {
+  const { signIn } = useAuth();
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleLogin = async (email: string, password: string) => {
+    try {
+      setIsLoading(true);
+      await signIn(email, password);
+      navigate('/protected', { replace: true });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <main className="flex flex-col md:flex-row min-h-screen w-full">
       {/** Left side container */}
@@ -47,7 +64,7 @@ const Access = () => {
       {/** Right side container */}
       <div className="flex-1 flex items-center justify-center bg-gray-50 p-8">
         <div className="text-gray-800">
-          <Login></Login>
+          <Login onSubmit={handleLogin} isLoading={isLoading} />
         </div>
       </div>
     </main>
