@@ -71,4 +71,8 @@ const Access = () => {
   );
 };
 
+<<<<<<< HEAD
 export default Access;
+=======
+export default Access;
+>>>>>>> 0c32e74 (Added all files)
