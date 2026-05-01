@@ -22,6 +22,9 @@ interface InputFieldProps {
   onChange?: (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => void;
+  onBlur?: (
+    e: React.FocusEvent<HTMLSelectElement | HTMLInputElement>
+  ) => void;
 }
 
 const variantDefaults: Record<
@@ -67,6 +70,7 @@ const InputField = ({
   descClassName,
   inputClassName,
   onChange,
+  onBlur,
 }: InputFieldProps) => {
   const defaults = variantDefaults[variant];
 
@@ -92,9 +96,10 @@ const InputField = ({
           <select
             value={value}
             onChange={onChange}
+            onBlur={onBlur}
             disabled={disabled}
             defaultValue=""
-            className="w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8"
+            className={cn("w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8", inputClassName)}
           >
             <option value="" disabled>
               {placeholder ?? defaults.placeholder}
