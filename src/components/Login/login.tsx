@@ -23,7 +23,7 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
   return (
     <div
       className={cn(
-        'w-full max-w-[600px] px-4 sm:px-8 md:px-10 py-10 sm:py-12',
+        'w-full',
         className
       )}
     >
