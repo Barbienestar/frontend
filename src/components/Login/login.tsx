@@ -1,36 +1,35 @@
 // src/components/Login/login.tsx
-import * as React from 'react'
-import { Button } from '@/components/Button/button'
-import { Field, FieldLabel } from '@/components/ui/field'
-import { Input } from '@/components/ui/input'
-import { cn } from '@/lib/utils'
+import * as React from 'react';
+import { Button } from '@/components/Button/button';
+import { cn } from '@/lib/utils';
+import InputField from '@/components/Input/inputField';
 
 interface LoginProps {
-  onSubmit?: (email: string, password: string) => void
-  isLoading?: boolean
-  className?: string
+  onSubmit?: (email: string, password: string) => void;
+  isLoading?: boolean;
+  className?: string;
 }
 
 export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    onSubmit?.(email, password)
+    e.preventDefault();
+    onSubmit?.(email, password);
   }
 
   return (
     <div
       className={cn(
-        'w-full max-w-[600px] px-4 sm:px-8 md:px-10 py-10 sm:py-12',
+        'w-full',
         className
       )}
     >
       {/* Header */}
       <div className="mb-8 sm:mb-10">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
-            Iniciar Sesión
+          Iniciar Sesión
         </h1>
         <p className="mt-2 text-sm sm:text-base text-muted-foreground">
           Ingrese sus credenciales para acceder al sistema.
@@ -40,36 +39,24 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
       {/* Fields */}
       <div className="flex flex-col gap-6">
         {/* Email */}
-        <Field>
-          <FieldLabel className="text-sm font-semibold text-foreground">
-            Correo Electrónico
-          </FieldLabel>
-          <Input
-            type="email"
-            placeholder="ejemplo@salud.gob.mx"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={isLoading}
-            className="h-12 rounded-xl px-4 text-sm bg-muted/40 border-input"
-          />
-        </Field>
+        <InputField 
+        variant='email'
+        label='Correo Electrónico'
+        placeholder='ejemplo@salud.gob.mx'
+        description=''
+        labelClassName='font-semibold'
+        inputClassName='h-12 rounded-xl px-4 text-sm bg-muted/40 border-input'
+        />
 
         {/* Password */}
-        <Field>
-          <FieldLabel className="text-sm font-semibold text-foreground">
-            Contraseña
-          </FieldLabel>
-          <div className="relative flex items-center">
-            <Input
-              type={'password'}
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
-              className="h-12 rounded-xl px-4 pr-12 text-sm bg-muted/40 border-input"
-            />
-          </div>
-        </Field>
+        <InputField 
+        variant='password'
+        label='Contraseña'
+        placeholder='••••••••'
+        description=''
+        labelClassName='font-semibold'
+        inputClassName='h-12 rounded-xl px-4 text-sm bg-muted/40 border-input'
+        />
 
         {/* Submit */}
         <Button
@@ -83,5 +70,5 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
         </Button>
       </div>
     </div>
-  )
+  );
 }

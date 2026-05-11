@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import InputField from './inputField'
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import InputField from './inputField';
 
 const meta: Meta<typeof InputField> = {
   component: InputField,
@@ -12,41 +12,41 @@ const meta: Meta<typeof InputField> = {
       control: 'boolean',
     },
   },
-} satisfies Meta<typeof InputField>
+} satisfies Meta<typeof InputField>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Text: Story = {
   args: {
     variant: 'text',
   },
-}
+};
 
 export const Password: Story = {
   args: {
     variant: 'password',
   },
-}
+};
 
 export const Search: Story = {
   args: {
     variant: 'search',
   },
-}
+};
 
 export const Email: Story = {
   args: {
     variant: 'email',
   },
-}
+};
 
 export const Disabled: Story = {
   args: {
     variant: 'text',
     disabled: true,
   },
-}
+};
 
 export const Select: Story = {
   args: {
@@ -60,7 +60,7 @@ export const Select: Story = {
       { value: 'ssa-1', label: 'SSA — Centro de Salud' },
     ],
   },
-}
+};
 
 export const AllVariants: Story = {
   render: () => (
@@ -71,4 +71,4 @@ export const AllVariants: Story = {
       <InputField variant="search" />
     </div>
   ),
-}
+};

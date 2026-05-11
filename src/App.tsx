@@ -1,6 +1,7 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { MapaPage } from './pages/MapaPage'
-import Access from './pages/access'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { MapaPage } from './pages/MapaPage';
+import Access from './pages/access';
+import ForbiddenPage from './pages/forbidden';
 
 function App() {
   return (
@@ -8,9 +9,10 @@ function App() {
       <Routes>
         <Route path="/mapa" element={<MapaPage />} />
         <Route path="/access" element={<Access />} />
+        <Route path="/forbidden" element={<ForbiddenPage />} />
       </Routes>
     </BrowserRouter>
   )
 }
 
-export default App
+export default App;

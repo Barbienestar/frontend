@@ -1,14 +1,14 @@
 // src/components/ui/metric-card.tsx
-import * as React from 'react'
-import { cn } from '@/lib/utils'
+import * as React from 'react';
+import { cn } from '@/lib/utils';
 
-type MetricCardVariant = 'pending' | 'approved' | 'rejected'
+type MetricCardVariant = 'pending' | 'approved' | 'rejected';
 
 const variantStyles: Record<MetricCardVariant, string> = {
   pending: 'border-l-blue-500',
   approved: 'border-l-green-500',
   rejected: 'border-l-red-500',
-}
+};
 
 function MetricCard({
   className,
@@ -26,17 +26,20 @@ function MetricCard({
       )}
       {...props}
     />
-  )
+  );
 }
 
-function MetricCardHeader({ className, ...props }: React.ComponentProps<'div'>) {
+function MetricCardHeader({
+  className,
+  ...props
+}: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="metric-card-header"
       className={cn('flex items-start justify-between', className)}
       {...props}
     />
-  )
+  );
 }
 
 function MetricCardLabel({ className, ...props }: React.ComponentProps<'p'>) {
@@ -49,7 +52,7 @@ function MetricCardLabel({ className, ...props }: React.ComponentProps<'p'>) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function MetricCardIcon({ className, ...props }: React.ComponentProps<'div'>) {
@@ -59,7 +62,7 @@ function MetricCardIcon({ className, ...props }: React.ComponentProps<'div'>) {
       className={cn('shrink-0 text-muted-foreground', className)}
       {...props}
     />
-  )
+  );
 }
 
 function MetricCardValue({ className, ...props }: React.ComponentProps<'p'>) {
@@ -72,7 +75,7 @@ function MetricCardValue({ className, ...props }: React.ComponentProps<'p'>) {
       )}
       {...props}
     />
-  )
+  );
 }
 
 function MetricCardTrend({ className, ...props }: React.ComponentProps<'p'>) {
@@ -82,7 +85,7 @@ function MetricCardTrend({ className, ...props }: React.ComponentProps<'p'>) {
       className={cn('text-sm text-muted-foreground', className)}
       {...props}
     />
-  )
+  );
 }
 
 export {
@@ -92,5 +95,5 @@ export {
   MetricCardIcon,
   MetricCardValue,
   MetricCardTrend,
-}
-export type { MetricCardVariant }
+};
+export type { MetricCardVariant };

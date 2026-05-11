@@ -1,10 +1,10 @@
-import { Phone, Mail, MapPin } from 'lucide-react'
-import logo from '../../assets/Logo.svg'
+import { Phone, Mail, MapPin } from 'lucide-react';
+import logo from '../../assets/Logo.svg';
 
-type FooterVariant = 'full' | 'minimal'
+type FooterVariant = 'full' | 'minimal';
 
 interface FooterProps {
-  variant?: FooterVariant
+  variant?: FooterVariant;
 }
 
 export function Footer({ variant = 'full' }: FooterProps) {
@@ -30,7 +30,7 @@ export function Footer({ variant = 'full' }: FooterProps) {
           </div>
         </div>
       </footer>
-    )
+    );
   }
 
   return (
@@ -93,7 +93,7 @@ export function Footer({ variant = 'full' }: FooterProps) {
         </nav>
       </div>
     </footer>
-  )
+  );
 }
 
-export default Footer
+export default Footer;

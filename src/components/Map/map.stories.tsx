@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react-vite'
-import { Map } from './map'
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Map } from './map';
 
 const meta: Meta<typeof Map> = {
   component: Map,
@@ -19,10 +19,10 @@ const meta: Meta<typeof Map> = {
   parameters: {
     layout: 'padded',
   },
-} satisfies Meta<typeof Map>
+} satisfies Meta<typeof Map>;
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 const mockPoints = [
   {
@@ -97,7 +97,7 @@ const mockPoints = [
     intensity: 0.6,
     name: 'Farmacia Comunitaria — Azitromicina, Paracetamol',
   },
-]
+];
 
 export const HeatMap: Story = {
   args: {
@@ -106,7 +106,7 @@ export const HeatMap: Story = {
     zoom: 14,
     height: '480px',
   },
-}
+};
 
 export const NormalMap: Story = {
   args: {
@@ -115,4 +115,4 @@ export const NormalMap: Story = {
     zoom: 14,
     height: '480px',
   },
-}
+};
