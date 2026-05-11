@@ -1,7 +1,7 @@
 import { BriefcaseMedical } from 'lucide-react';
-import accessBackground from '../assets/access_background.svg';
+import accessBackground from '@/assets/access_background.svg';
 import { Login } from '@/components/Login/login';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
@@ -63,8 +63,25 @@ const Access = () => {
       </div>
       {/** Right side container */}
       <div className="flex-1 flex items-center justify-center bg-gray-50 p-8">
-        <div className="text-gray-800">
+        <div className="flex flex-col items-center text-gray-800">
+          {/** Login Form */}
           <Login onSubmit={handleLogin} isLoading={isLoading} />
+
+          {/** Forms separator */}          
+          <div className="flex flex-col w-full my-6">
+            {/** Line separator */}
+            <div className="flex items-center w-full my-6">
+              {/** Left line */}
+              <div className="flex-grow h-0.5 bg-gray-200"></div>
+              <span className="mx-4">o</span>
+              {/** Right line */}
+              <div className="flex-grow h-0.5 bg-gray-200"></div>
+            </div>
+            {/** Text */}
+            <p className="text-xl font-bold">¿No tienes cuenta? Registrate</p>
+            <p className="text-sm font-thin">Registra tu cuenta de usuario para el sistema.</p>
+          </div>
+
         </div>
       </div>
     </main>

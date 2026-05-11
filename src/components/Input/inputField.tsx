@@ -1,6 +1,7 @@
 import { Search, ChevronDown } from 'lucide-react';
 import { Field, FieldLabel, FieldDescription } from '../ui/field';
 import { Input } from '../ui/input';
+import { cn } from '@/lib/utils';
 
 interface SelectOption {
   value: string;
@@ -15,8 +16,14 @@ interface InputFieldProps {
   disabled?: boolean;
   options?: SelectOption[];
   value?: string;
+  labelClassName?: string;
+  descClassName?: string;
+  inputClassName?: string;
   onChange?: (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => void;
+  onBlur?: (
+    e: React.FocusEvent<HTMLSelectElement | HTMLInputElement>
   ) => void;
 }
 
@@ -59,14 +66,18 @@ const InputField = ({
   disabled,
   options,
   value,
+  labelClassName,
+  descClassName,
+  inputClassName,
   onChange,
+  onBlur,
 }: InputFieldProps) => {
   const defaults = variantDefaults[variant];
 
   return (
     <Field>
-      <FieldLabel>{label ?? defaults.label}</FieldLabel>
-      <FieldDescription>{description ?? defaults.description}</FieldDescription>
+      <FieldLabel className={cn(labelClassName)}>{label ?? defaults.label}</FieldLabel>
+      <FieldDescription className={cn(descClassName)}>{description ?? defaults.description}</FieldDescription>
 
       {variant === 'search' && (
         <div className="relative flex items-center">
@@ -75,7 +86,7 @@ const InputField = ({
             type="search"
             placeholder={placeholder ?? defaults.placeholder}
             disabled={disabled}
-            className="pl-8"
+            className={cn(inputClassName, "pl-8")}
           />
         </div>
       )}
@@ -85,9 +96,10 @@ const InputField = ({
           <select
             value={value}
             onChange={onChange}
+            onBlur={onBlur}
             disabled={disabled}
             defaultValue=""
-            className="w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8"
+            className={cn("w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8", inputClassName)}
           >
             <option value="" disabled>
               {placeholder ?? defaults.placeholder}
@@ -107,6 +119,9 @@ const InputField = ({
           type={variant}
           placeholder={placeholder ?? defaults.placeholder}
           disabled={disabled}
+          value={value}
+          onChange={onChange}
+          className={cn(inputClassName)}
         />
       )}
     </Field>
