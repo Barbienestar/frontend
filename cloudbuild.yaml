@@ -27,7 +27,7 @@ steps:
 
 substitutions:
   _REGION: us-central1
-  _REPO: decision360
+  _REPO: frontend-decision360
   _SERVICE_NAME: frontend
 
 options:
