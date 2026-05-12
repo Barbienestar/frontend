@@ -37,7 +37,7 @@ export const getStoredUser = (): UserProfile | null => {
   const user = localStorage.getItem('user');
   if (!user) return null;
   try {
-    JSON.parse(user) as UserProfile;
+    return JSON.parse(user) as UserProfile;
   } catch {
     return null;
   }
