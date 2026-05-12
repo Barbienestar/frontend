@@ -39,23 +39,25 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
       {/* Fields */}
       <div className="flex flex-col gap-6">
         {/* Email */}
-        <InputField 
+        <InputField
         variant='email'
         label='Correo Electrónico'
         placeholder='ejemplo@salud.gob.mx'
         description=''
         labelClassName='font-semibold'
         inputClassName='h-12 rounded-xl px-4 text-sm bg-muted/40 border-input'
+        onChange={(e) => setEmail(e.target.value)}
         />
 
         {/* Password */}
-        <InputField 
+        <InputField
         variant='password'
         label='Contraseña'
         placeholder='••••••••'
         description=''
         labelClassName='font-semibold'
         inputClassName='h-12 rounded-xl px-4 text-sm bg-muted/40 border-input'
+        onChange={(e) => setPassword(e.target.value)}
         />
 
         {/* Submit */}
