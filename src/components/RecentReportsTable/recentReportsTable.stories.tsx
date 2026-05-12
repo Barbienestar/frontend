@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { RecentReportsTable } from './RecentReportsTable';
-import type { ReportRow } from './RecentReportsTable';
+import { RecentReportsTable } from './recentReportsTable';
+import type { ReportRow } from './recentReportsTable';
 
 const meta: Meta<typeof RecentReportsTable> = {
   title: 'Components/RecentReportsTable',
