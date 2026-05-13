@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Phone, ShieldCheck, Clock, CheckCircle } from 'lucide-react';
-import Navbar from '@/components/global/navbar';
-import { Footer } from '@/components/global/footer';
+import Navbar from '@/components/Global/navbar';
+import { Footer } from '@/components/Global/footer';
 import ReportCard from '@/components/Card/reportCard';
 import { Breadcrumb } from '@/components/Breadcrumb/breadcrumb';
 import { PageHeader } from '@/components/PageHeader/pageHeader';
@@ -19,13 +19,13 @@ import {
   uploadImage,
   getMyReports,
 } from '@/services/reportService';
+import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
 import { statusConfig } from '@/utils/reportStatus';
-import type { MedicineData } from '@/common/MedicineData';
 import type { HospitalData } from '@/common/HospitalData';
 
 const ReportarPage = () => {
   const navigate = useNavigate();
-  const [medicines, setMedicines] = useState<MedicineData[]>([]);
+  const [medicines, setMedicines] = useState<MedicineSearchResult[]>([]);
   const [hospitals, setHospitals] = useState<HospitalData[]>([]);
   const [selectedMedicine, setSelectedMedicine] = useState('');
   const [selectedHospital, setSelectedHospital] = useState('');
@@ -89,7 +89,7 @@ const ReportarPage = () => {
 
   const medicineOptions = medicines.map((m) => ({
     value: String(m.id),
-    label: `${m.genericName} ${m.strength ?? ''} — ${m.dosageForm}`.trim(),
+    label: `${m.generic_name} ${m.strength ?? ''} — ${m.dosage_form}`.trim(),
   }));
 
   const hospitalOptions = hospitals.map((h) => ({
@@ -126,7 +126,7 @@ const ReportarPage = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar variant="default" activePath="/reportar" />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-4">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 pt-24 pb-8">
         <Breadcrumb
           items={[
             { label: 'Inicio', href: '/inicio' },

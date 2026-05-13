@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Eye, Pencil, Trash2, History, Search } from 'lucide-react';
-import Navbar from '@/components/global/navbar';
-import { Footer } from '@/components/global/footer';
+import Navbar from '@/components/Global/navbar';
+import { Footer } from '@/components/Global/footer';
 import { Breadcrumb } from '@/components/Breadcrumb/breadcrumb';
 import { PageHeader } from '@/components/PageHeader/pageHeader';
 import { getMyReports } from '@/services/reportService';
@@ -10,7 +9,6 @@ import { statusConfig } from '@/utils/reportStatus';
 import type { ReportData } from '@/common/ReportData ';
 
 const MyReportsPage = () => {
-  const navigate = useNavigate();
   const [reports, setReports] = useState<ReportData[]>([]);
   const [filtered, setFiltered] = useState<ReportData[]>([]);
   const [search, setSearch] = useState('');
@@ -49,7 +47,7 @@ const MyReportsPage = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar variant="default" activePath="/mis-reportes" />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-4">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 pt-24 pb-8">
         <Breadcrumb
           items={[
             { label: 'Inicio', href: '/inicio' },
