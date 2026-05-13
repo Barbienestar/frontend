@@ -87,9 +87,11 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
       </CardHeader>
       <FileUpload variant="csv" label="Sube el archivo CSV con tus datos" />
       <CardFooter>
-        <Button variant="default" size="lg" className="w-full">
-          <Info />
-          Descarga la plantilla aquí.
+        <Button variant="default" size="lg" className="w-full" asChild>
+          <a href="/csvTemplate/formato_abasto.csv" download>
+            <Info />
+            Descarga la plantilla aquí.
+          </a>
         </Button>
       </CardFooter>
     </Card>
