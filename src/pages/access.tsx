@@ -72,10 +72,10 @@ const Access = () => {
             {/** Line separator */}
             <div className="flex items-center w-full my-6">
               {/** Left line */}
-              <div className="flex-grow h-0.5 bg-gray-200"></div>
+              <div className="grow h-0.5 bg-gray-200"></div>
               <span className="mx-4">o</span>
               {/** Right line */}
-              <div className="flex-grow h-0.5 bg-gray-200"></div>
+              <div className="grow h-0.5 bg-gray-200"></div>
             </div>
             {/** Text */}
             <p className="text-xl font-bold">¿No tienes cuenta? Registrate</p>
