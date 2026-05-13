@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { SidebarInfoCard } from './SidebarInfoCard';
+import { SidebarInfoCard } from './sidebarInfoCard';
 import { ShieldCheck, Clock, CheckCircle, Info, Star, Bell } from 'lucide-react';
 
 const meta: Meta<typeof SidebarInfoCard> = {

@@ -1,22 +1,30 @@
 import { Search, ChevronDown } from 'lucide-react';
 import { Field, FieldLabel, FieldDescription } from '../ui/field';
 import { Input } from '../ui/input';
+import { cn } from '@/lib/utils';
 
-interface SelectOption {
+export interface SelectOption {
   value: string;
   label: string;
 }
 
 interface InputFieldProps {
   variant: 'text' | 'password' | 'search' | 'email' | 'select';
+  name?: string;
   label?: string;
   placeholder?: string;
   description?: string;
   disabled?: boolean;
   options?: SelectOption[];
   value?: string;
+  labelClassName?: string;
+  descClassName?: string;
+  inputClassName?: string;
   onChange?: (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => void;
+  onBlur?: (
+    e: React.FocusEvent<HTMLSelectElement | HTMLInputElement>
   ) => void;
 }
 
@@ -51,31 +59,36 @@ const variantDefaults: Record<
   },
 };
 
-const InputField = ({
+export const InputField = ({
   variant,
+  name,
   label,
   placeholder,
   description,
   disabled,
   options,
   value,
+  labelClassName,
+  descClassName,
+  inputClassName,
   onChange,
+  onBlur,
 }: InputFieldProps) => {
   const defaults = variantDefaults[variant];
 
   return (
     <Field>
-      <FieldLabel>{label ?? defaults.label}</FieldLabel>
-      <FieldDescription>{description ?? defaults.description}</FieldDescription>
+      <FieldLabel className={cn(labelClassName)}>{label ?? defaults.label}</FieldLabel>
 
       {variant === 'search' && (
         <div className="relative flex items-center">
           <Search className="absolute left-2.5 size-4 text-muted-foreground pointer-events-none" />
           <Input
             type="search"
+            name={name}
             placeholder={placeholder ?? defaults.placeholder}
             disabled={disabled}
-            className="pl-8"
+            className={cn(inputClassName, "pl-8")}
           />
         </div>
       )}
@@ -83,11 +96,13 @@ const InputField = ({
       {variant === 'select' && (
         <div className="relative flex items-center">
           <select
+            name={name}
             value={value}
             onChange={onChange}
+            onBlur={onBlur}
             disabled={disabled}
             defaultValue=""
-            className="w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8"
+            className={cn("w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8", inputClassName)}
           >
             <option value="" disabled>
               {placeholder ?? defaults.placeholder}
@@ -107,8 +122,15 @@ const InputField = ({
           type={variant}
           placeholder={placeholder ?? defaults.placeholder}
           disabled={disabled}
+          name={name}
+          value={value}
+          onChange={onChange}
+          onBlur={onBlur}
+          className={cn(inputClassName)}
         />
       )}
+
+      <FieldDescription className={cn(descClassName)}>{description ?? defaults.description}</FieldDescription>
     </Field>
   );
 };
