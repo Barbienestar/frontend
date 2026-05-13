@@ -40,8 +40,8 @@ const ReportCard = ({
   isUploading = false,
 }: ReportCardProps) => {
   return (
-    <div className="bg-card rounded-xl border border-border shadow-sm p-6 w-full">
-      <div className="flex items-center gap-2 mb-6">
+    <div className="bg-card rounded-xl border border-border shadow-sm p-5 w-full">
+      <div className="flex items-center gap-2 mb-4">
         <ClipboardList className="size-5 text-foreground" />
         <h2 className="text-lg font-semibold text-foreground">
           Datos del Reporte
@@ -69,21 +69,21 @@ const ReportCard = ({
         />
       </div>
 
-      <div className="mb-6">
+      <div className="mb-4">
         <label className="block text-sm font-medium text-foreground mb-1">
           Descripción
         </label>
         <textarea
           className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm
                      text-foreground placeholder:text-muted-foreground focus:outline-none
-                     focus:ring-2 focus:ring-ring resize-none min-h-[100px]"
+                     focus:ring-2 focus:ring-ring resize-none min-h-[90px]"
           placeholder="Describe el problema con el abasto del medicamento..."
           value={description}
           onChange={(e) => onDescriptionChange(e.target.value)}
         />
       </div>
 
-      <div className="mb-6">
+      <div className="mb-4">
         <FileUpload variant="receta" onFileChange={onFileChange} />
       </div>
 

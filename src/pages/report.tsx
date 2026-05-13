@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Phone, ShieldCheck, Clock, CheckCircle } from 'lucide-react';
-import Navbar from '@/components/global/navbar';
-import { Footer } from '@/components/global/footer';
+import Navbar from '@/components/Global/navbar';
+import { Footer } from '@/components/Global/footer';
 import ReportCard from '@/components/Card/reportCard';
 import { Breadcrumb } from '@/components/Breadcrumb/breadcrumb';
 import { PageHeader } from '@/components/PageHeader/pageHeader';
@@ -17,13 +17,15 @@ import {
   getHospitals,
   createReport,
   uploadImage,
+  getMyReports,
 } from '@/services/reportService';
-import type { MedicineData } from '@/common/MedicineData';
+import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
+import { statusConfig } from '@/utils/reportStatus';
 import type { HospitalData } from '@/common/HospitalData';
 
 const ReportarPage = () => {
   const navigate = useNavigate();
-  const [medicines, setMedicines] = useState<MedicineData[]>([]);
+  const [medicines, setMedicines] = useState<MedicineSearchResult[]>([]);
   const [hospitals, setHospitals] = useState<HospitalData[]>([]);
   const [selectedMedicine, setSelectedMedicine] = useState('');
   const [selectedHospital, setSelectedHospital] = useState('');
@@ -32,7 +34,7 @@ const ReportarPage = () => {
   const [description, setDescription] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
-  const [userReports] = useState<ReportRow[]>([]);
+  const [userReports, setUserReports] = useState<ReportRow[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,6 +47,24 @@ const ReportarPage = () => {
         setHospitals(hospitalsData);
       } catch {
         setFetchError('Error al cargar datos. Intenta de nuevo.');
+      }
+
+      try {
+        const reportsData = await getMyReports();
+        setUserReports(
+          reportsData.slice(0, 3).map((r) => {
+            const cfg = statusConfig(r.status);
+            return {
+              folio: String(r.id),
+              medicine: r.medicineName,
+              hospital: r.hospitalName,
+              status: cfg.label,
+              statusColor: cfg.color,
+            };
+          })
+        );
+      } catch {
+        // no bloquea el formulario si falla
       }
     };
     fetchData();
@@ -69,7 +89,7 @@ const ReportarPage = () => {
 
   const medicineOptions = medicines.map((m) => ({
     value: String(m.id),
-    label: `${m.genericName} ${m.strength ?? ''} — ${m.dosageForm}`.trim(),
+    label: `${m.generic_name} ${m.strength ?? ''} — ${m.dosage_form}`.trim(),
   }));
 
   const hospitalOptions = hospitals.map((h) => ({
@@ -106,7 +126,7 @@ const ReportarPage = () => {
     <div className="min-h-screen bg-background flex flex-col">
       <Navbar variant="default" activePath="/reportar" />
 
-      <main className="flex-1 max-w-5xl mx-auto w-full px-4 py-8">
+      <main className="flex-1 max-w-6xl mx-auto w-full px-4 pt-24 pb-8">
         <Breadcrumb
           items={[
             { label: 'Inicio', href: '/inicio' },
@@ -123,9 +143,9 @@ const ReportarPage = () => {
           <p className="text-red-500 text-sm mb-4">{fetchError}</p>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Columna izquierda */}
-          <div className="lg:col-span-2 flex flex-col gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
+          {/* Columna izquierda — formulario + teléfono */}
+          <div className="lg:col-span-3 flex flex-col gap-4">
             <ReportCard
               medicineOptions={medicineOptions}
               hospitalOptions={hospitalOptions}
@@ -142,27 +162,6 @@ const ReportarPage = () => {
               isUploading={isUploading}
             />
 
-            <RecentReportsTable
-              reports={userReports}
-              onViewAll={() => navigate('/mis-reportes')}
-            />
-          </div>
-
-          {/* Sidebar derecho */}
-          <div className="flex flex-col gap-4">
-            <SidebarInfoCard
-              icon={ShieldCheck}
-              title="¿Por qué reportar?"
-              description="Los reportes ciudadanos permiten a la Secretaría de Salud identificar zonas críticas y redistribuir el inventario nacional de manera eficiente."
-              features={[
-                { icon: ShieldCheck, text: 'Anónimo y Seguro' },
-                { icon: Clock, text: 'Seguimiento en Tiempo Real' },
-                { icon: CheckCircle, text: 'Validez Oficial' },
-              ]}
-            />
-
-            <SidebarMapCard onViewFullMap={() => navigate('/mapa-de-abasto')} />
-
             <div className="rounded-xl bg-[#1a2235] text-white p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">
                 Atención Ciudadana
@@ -176,6 +175,31 @@ const ReportarPage = () => {
               </p>
             </div>
           </div>
+
+          {/* Sidebar derecho — mapa + reportes */}
+          <div className="lg:col-span-2 flex flex-col gap-4 h-full">
+            <SidebarMapCard onViewFullMap={() => navigate('/mapa-de-abasto')} />
+
+            <RecentReportsTable
+              reports={userReports}
+              onViewAll={() => navigate('/mis-reportes')}
+            />
+          </div>
+        </div>
+
+        {/* Banner ¿Por qué reportar? */}
+        <div className="mt-6">
+          <SidebarInfoCard
+            icon={ShieldCheck}
+            title="¿Por qué reportar?"
+            description="Los reportes ciudadanos permiten a la Secretaría de Salud identificar zonas críticas y redistribuir el inventario nacional de manera eficiente."
+            features={[
+              { icon: ShieldCheck, text: 'Anónimo y Seguro' },
+              { icon: Clock, text: 'Seguimiento en Tiempo Real' },
+              { icon: CheckCircle, text: 'Validez Oficial' },
+            ]}
+            horizontal
+          />
         </div>
       </main>
 
