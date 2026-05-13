@@ -24,7 +24,7 @@ const Access = () => {
   };
 
   return (
-    <main className="flex flex-col min-h-screen w-full">
+    <main className="flex flex-col min-h-screen w-full pt-18">
       {/** Navbar */}
       <div className="top-0 z-50 bg-white shadow-md">
         <Navbar variant="default" activePath='' />
