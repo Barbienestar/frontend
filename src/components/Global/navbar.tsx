@@ -52,9 +52,10 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
   const isDark = variant === 'admin' || variant === 'gobierno';
 
   return (
-    <nav className={`${current.bg} px-6 py-3 shadow-md`}>
+    <nav
+  className={`${current.bg} fixed top-0 left-0 w-full z-9999 px-6 py-3 shadow-md`}
+>
       <div className="flex items-center justify-between">
-
         {/* LOGO + TITULO */}
         <div className="flex items-center gap-3">
           <div className={isDark ? 'bg-secondary' : ''}>
@@ -98,7 +99,6 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
 
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-3">
-
           {/* BOTÓN PERFIL DEFAULT */}
           {variant === 'default' && (
             <button className="p-1 rounded-full hover:bg-gray-100">
@@ -129,10 +129,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
 
           {/* HAMBURGER */}
           {current.links.length > 0 && (
-            <button
-              className="md:hidden"
-              onClick={() => setIsOpen(!isOpen)}
-            >
+            <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -161,9 +158,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
                 key={label}
                 href={path}
                 className={`text-base ${
-                  isActive
-                    ? 'font-semibold text-black'
-                    : 'text-gray-500'
+                  isActive ? 'font-semibold text-black' : 'text-gray-500'
                 }`}
               >
                 {label}

@@ -1,14 +1,14 @@
 import api from './api';
-import type { MedicineData } from '@/common/MedicineData';
 import type { HospitalData } from '@/common/HospitalData';
 import type { CreateReportData, ReportData } from '@/common/ReportData ';
+import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
 
 interface ReportImageData {
   imageUrl: string;
 }
 
-export const getMedicines = async (): Promise<MedicineData[]> => {
-  const res = await api.get<MedicineData[]>('/medicines');
+export const getMedicines = async (): Promise<MedicineSearchResult[]> => {
+  const res = await api.get<MedicineSearchResult[]>('/medicines');
   return res.data;
 };
 
@@ -20,7 +20,12 @@ export const getHospitals = async (): Promise<HospitalData[]> => {
 export const createReport = async (
   data: CreateReportData
 ): Promise<ReportData> => {
-  const res = await api.post<ReportData>('/reports/create', data);
+  const res = await api.post<ReportData>('/reports', data);
+  return res.data;
+};
+
+export const getMyReports = async (): Promise<ReportData[]> => {
+  const res = await api.get<ReportData[]>('/reports/me');
   return res.data;
 };
 

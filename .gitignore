@@ -27,3 +27,6 @@ dist-ssr
 storybook-static
 
 /**/*.env
+
+# Claude context (local only)
+CLAUDE.md
