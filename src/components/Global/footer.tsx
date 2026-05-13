@@ -37,7 +37,7 @@ export function Footer({ variant = 'full' }: FooterProps) {
     <footer className="bg-[#1a2235] text-white w-full">
       <div className="h-1 bg-blue-500 w-full" />
 
-      <div className="max-w-5xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div className="max-w-6xl mx-auto px-6 py-10 flex flex-col md:flex-row md:justify-between gap-10">
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <img
@@ -78,7 +78,7 @@ export function Footer({ variant = 'full' }: FooterProps) {
 
       <div className="border-t border-white/10" />
 
-      <div className="max-w-5xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+      <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-500">
         <span>© 2026 Secretaría de Salud · Algunos derechos reservados</span>
         <nav className="flex items-center gap-6">
           <a href="#" className="hover:text-white transition-colors">

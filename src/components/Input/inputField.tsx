@@ -3,13 +3,14 @@ import { Field, FieldLabel, FieldDescription } from '../ui/field';
 import { Input } from '../ui/input';
 import { cn } from '@/lib/utils';
 
-interface SelectOption {
+export interface SelectOption {
   value: string;
   label: string;
 }
 
 interface InputFieldProps {
   variant: 'text' | 'password' | 'search' | 'email' | 'select';
+  name?: string;
   label?: string;
   placeholder?: string;
   description?: string;
@@ -58,8 +59,9 @@ const variantDefaults: Record<
   },
 };
 
-const InputField = ({
+export const InputField = ({
   variant,
+  name,
   label,
   placeholder,
   description,
@@ -77,13 +79,13 @@ const InputField = ({
   return (
     <Field>
       <FieldLabel className={cn(labelClassName)}>{label ?? defaults.label}</FieldLabel>
-      <FieldDescription className={cn(descClassName)}>{description ?? defaults.description}</FieldDescription>
 
       {variant === 'search' && (
         <div className="relative flex items-center">
           <Search className="absolute left-2.5 size-4 text-muted-foreground pointer-events-none" />
           <Input
             type="search"
+            name={name}
             placeholder={placeholder ?? defaults.placeholder}
             disabled={disabled}
             className={cn(inputClassName, "pl-8")}
@@ -94,6 +96,7 @@ const InputField = ({
       {variant === 'select' && (
         <div className="relative flex items-center">
           <select
+            name={name}
             value={value}
             onChange={onChange}
             onBlur={onBlur}
@@ -119,11 +122,15 @@ const InputField = ({
           type={variant}
           placeholder={placeholder ?? defaults.placeholder}
           disabled={disabled}
+          name={name}
           value={value}
           onChange={onChange}
+          onBlur={onBlur}
           className={cn(inputClassName)}
         />
       )}
+
+      <FieldDescription className={cn(descClassName)}>{description ?? defaults.description}</FieldDescription>
     </Field>
   );
 };

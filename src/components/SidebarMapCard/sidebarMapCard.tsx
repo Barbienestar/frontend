@@ -22,7 +22,7 @@ export const SidebarMapCard = ({
         points={points}
         center={[19.4326, -99.1332]}
         zoom={11}
-        height="128px"
+        height="280px"
       />
       <div className="p-3 border-t border-border">
         <button
@@ -32,13 +32,6 @@ export const SidebarMapCard = ({
           <MapPin className="size-3.5" />
           Ver Mapa de Abasto
         </button>
-      </div>
-      <div className="px-3 pb-3">
-        <p className="text-xs text-muted-foreground">
-          <span className="font-medium text-foreground">Consulta Disponibilidad</span>
-          <br />
-          Revisa si el medicamento está disponible en farmacias cercanas a tu ubicación.
-        </p>
       </div>
     </div>
   );
