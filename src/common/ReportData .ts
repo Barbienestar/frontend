@@ -11,5 +11,7 @@ export interface ReportData {
   hospitalName: string;
   status: string;
   description: string;
+  imageUrl?: string;
   createdAt: string;
+  updatedAt: string;
 }
