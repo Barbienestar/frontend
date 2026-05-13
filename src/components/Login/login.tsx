@@ -35,7 +35,7 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
       {/* Fields */}
       <div className="flex flex-col gap-6">
         {/* Email */}
-        <InputField 
+        <InputField
         variant='email'
         label='Correo Electrónico'
         placeholder='ejemplo@salud.gob.mx'
@@ -47,7 +47,7 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
         />
 
         {/* Password */}
-        <InputField 
+        <InputField
         variant='password'
         label='Contraseña'
         placeholder='••••••••'
