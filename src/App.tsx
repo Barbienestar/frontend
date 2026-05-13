@@ -4,6 +4,7 @@ import ForbiddenPage from './pages/forbidden';
 import MapaDeAbasto from './pages/mapaDeAbasto';
 import ReportarPage from './pages/report';
 import Inicio from './pages/inicio';
+import MyReports from './pages/myReports';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
         <Route path="/mapa-de-abasto" element={<MapaDeAbasto />} />
         <Route path="/reportar" element={<ReportarPage />} />
         <Route path="/inicio" element={<Inicio />} />
+        <Route path="/mis-reportes" element={<MyReports />} />
       </Routes>
     </BrowserRouter>
   );

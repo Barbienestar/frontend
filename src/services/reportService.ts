@@ -20,7 +20,12 @@ export const getHospitals = async (): Promise<HospitalData[]> => {
 export const createReport = async (
   data: CreateReportData
 ): Promise<ReportData> => {
-  const res = await api.post<ReportData>('/reports/create', data);
+  const res = await api.post<ReportData>('/reports', data);
+  return res.data;
+};
+
+export const getMyReports = async (): Promise<ReportData[]> => {
+  const res = await api.get<ReportData[]>('/reports/me');
   return res.data;
 };
 

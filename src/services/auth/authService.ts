@@ -1,6 +1,17 @@
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import { signInWithEmailAndPassword, signOut, type User } from 'firebase/auth';
 import { auth } from './auth';
 import api from '../api';
+
+export interface CreateUserRequest {
+  name: string;
+  last_name_1: string;
+  last_name_2?: string;
+  email: string;
+  password: string;
+  age?: number;
+  suburbId: number;
+  roleId: number;
+}
 
 export interface UserProfile {
   id: string;
@@ -9,6 +20,20 @@ export interface UserProfile {
   role: string;
   email: string;
 }
+
+export const signup = async (req: CreateUserRequest): Promise<UserProfile> => {
+  const profileResponse = await api.post<UserProfile>('/user', req);
+  const UserCredential = await signInWithEmailAndPassword(
+    auth,
+    req.email,
+    req.password
+  );
+  const token = await UserCredential.user.getIdToken();
+  localStorage.setItem('token', token);
+  localStorage.setItem('user', JSON.stringify(profileResponse.data));
+
+  return profileResponse.data;
+};
 
 export const login = async (
   email: string,
@@ -37,7 +62,7 @@ export const getStoredUser = (): UserProfile | null => {
   const user = localStorage.getItem('user');
   if (!user) return null;
   try {
-    JSON.parse(user) as UserProfile;
+    return JSON.parse(user) as UserProfile;
   } catch {
     return null;
   }
