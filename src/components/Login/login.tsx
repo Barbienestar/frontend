@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Button } from '@/components/Button/button';
 import { cn } from '@/lib/utils';
-import InputField from '@/components/Input/inputField';
+import { InputField } from '@/components/Input/inputField';
 
 interface LoginProps {
   onSubmit?: (email: string, password: string) => void;
@@ -17,15 +17,11 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onSubmit?.(email, password);
+    console.log("Llamando a login desde componente...");
   }
 
   return (
-    <div
-      className={cn(
-        'w-full',
-        className
-      )}
-    >
+    <form onSubmit={handleSubmit} className={cn('w-full', className)}>
       {/* Header */}
       <div className="mb-8 sm:mb-10">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
@@ -43,6 +39,8 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
         variant='email'
         label='Correo Electrónico'
         placeholder='ejemplo@salud.gob.mx'
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
         description=''
         labelClassName='font-semibold'
         inputClassName='h-12 rounded-xl px-4 text-sm bg-muted/40 border-input'
@@ -53,6 +51,8 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
         variant='password'
         label='Contraseña'
         placeholder='••••••••'
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
         description=''
         labelClassName='font-semibold'
         inputClassName='h-12 rounded-xl px-4 text-sm bg-muted/40 border-input'
@@ -63,12 +63,11 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
           type="submit"
           variant="secondary"
           disabled={isLoading}
-          onClick={handleSubmit}
           className="w-full h-9 sm:h-12 rounded-xl text-xs sm:text-sm font-bold tracking-widest uppercase mt-2"
         >
           {isLoading ? 'Ingresando...' : 'Entrar al Sistema'}
         </Button>
       </div>
-    </div>
+    </form>
   );
 }
