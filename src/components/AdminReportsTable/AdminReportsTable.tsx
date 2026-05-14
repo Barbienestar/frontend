@@ -15,7 +15,7 @@ interface AdminReportsTableProps {
 
 export const AdminReportsTable = ({
   statusId = 2,
-  pageSize = 5,
+  pageSize = 3,
   onAccept,
   onReject,
 }: AdminReportsTableProps) => {

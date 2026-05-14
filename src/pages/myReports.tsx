@@ -51,7 +51,7 @@ const MyReportsPage = () => {
         <Breadcrumb
           items={[
             { label: 'Inicio', href: '/inicio' },
-            { label: 'Reportar Desabasto', href: '/report' },
+            { label: 'Reportar Desabasto', href: '/reportar' },
             { label: 'Mis Reportes' },
           ]}
         />

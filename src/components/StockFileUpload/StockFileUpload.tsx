@@ -27,7 +27,6 @@ const StockFileUpload = () => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [fileUploadKey, setFileUploadKey] = useState(0);
-
   const selectedHospital = hospitals.find((h) => h.id === selectedHospitalId);
 
   const handleUpload = async () => {
