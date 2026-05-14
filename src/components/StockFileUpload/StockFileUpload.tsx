@@ -74,7 +74,12 @@ const StockFileUpload = () => {
             </Badge>
           </CardAction>
         </CardHeader>
-        <FileUpload variant="csv" label="Sube el archivo CSV con tus datos" />
+        <div className='px-6'>
+          <FileUpload
+            variant="csv"
+            onFileChange={setFile}
+          />
+        </div>
         <CardFooter className="flex-col gap-2">
           <Button variant="default" size="lg" className="w-full" asChild>
             <a href="/csvTemplate/formato_abasto.csv" download>
@@ -121,23 +126,24 @@ const StockFileUpload = () => {
           </CardAction>
         )}
       </CardHeader>
-      <FileUpload
-        variant="csv"
-        label="Sube el archivo CSV con tus datos"
-        onFileChange={setFile}
-      />
+      <div className='px-6'>
+        <FileUpload
+          variant="csv"
+          onFileChange={setFile}
+        />
+      </div>
       <CardFooter className="flex-col gap-2">
         <Button
           variant="default"
           size="lg"
-          className="w-full"
+          className="w-full bg-[#065E35] hover:bg-[#065E35]/80"
           onClick={handleUpload}
           disabled={!file || uploading || (!selectedHospitalId && hospitals.length > 1)}
         >
           <Upload />
           {uploading ? 'Subiendo...' : 'Subir archivo'}
         </Button>
-        <Button variant="outline" size="lg" className="w-full" asChild>
+        <Button variant="outline" size="lg" className="w-full bg-blue-600 text-white rounded-md hover:bg-blue-700" asChild>
           <a href="/csvTemplate/formato_abasto.csv" download>
             <Info />
             Descarga la plantilla aquí.
