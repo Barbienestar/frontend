@@ -19,12 +19,14 @@ import {
 import { ChevronDown, Info, Upload } from 'lucide-react';
 import { useHospitals } from '@/hooks/useHospitals';
 import { uploadMedicineStock } from '@/services/medicines/medicinesService';
+import { toast } from 'sonner';
 
 const StockFileUpload = () => {
   const { hospitals, loading, error } = useHospitals();
   const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(null);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [fileUploadKey, setFileUploadKey] = useState(0);
 
   const selectedHospital = hospitals.find((h) => h.id === selectedHospitalId);
 
@@ -35,9 +37,11 @@ const StockFileUpload = () => {
     setUploading(true);
     try {
       await uploadMedicineStock(hospitalId, file);
-      // éxito — aquí puedes agregar un toast o mensaje después
+      toast.success('Archivo subido con éxito');
+      setFile(null);
+      setFileUploadKey(prev => prev + 1);
     } catch (e) {
-      // error — aquí puedes agregar un mensaje de error después
+      toast.error('Error al subir el archivo');
     } finally {
       setUploading(false);
     }
@@ -76,6 +80,7 @@ const StockFileUpload = () => {
         </CardHeader>
         <div className='px-6'>
           <FileUpload
+            key={fileUploadKey}
             variant="csv"
             onFileChange={setFile}
           />
@@ -128,8 +133,9 @@ const StockFileUpload = () => {
       </CardHeader>
       <div className='px-6'>
         <FileUpload
-          variant="csv"
-          onFileChange={setFile}
+        key={fileUploadKey}
+        variant="csv"
+        onFileChange={setFile}
         />
       </div>
       <CardFooter className="flex-col gap-2">
