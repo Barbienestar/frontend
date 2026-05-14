@@ -8,7 +8,6 @@ import {
   DropdownMenuRadioItem,
 } from '../ui/dropdown-menu';
 import { Badge } from '../ui/badge';
-import type { HospitalData } from '@/common/HospitalData';
 import FileUpload from '../FileUpload/FileUpload';
 import {
   Card,
@@ -17,14 +16,52 @@ import {
   CardAction,
   CardFooter,
 } from '../ui/card';
-import { ChevronDown, Info } from 'lucide-react';
+import { ChevronDown, Info, Upload } from 'lucide-react';
+import { useHospitals } from '@/hooks/useHospitals';
+import { uploadMedicineStock } from '@/services/medicines/medicinesService';
 
-const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
-  const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(
-    hospitals.length === 1 ? hospitals[0].id : null
-  );
+const StockFileUpload = () => {
+  const { hospitals, loading, error } = useHospitals();
+  const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   const selectedHospital = hospitals.find((h) => h.id === selectedHospitalId);
+
+  const handleUpload = async () => {
+    const hospitalId = selectedHospitalId ?? (hospitals.length === 1 ? hospitals[0].id : null);
+    if (!file || !hospitalId) return;
+
+    setUploading(true);
+    try {
+      await uploadMedicineStock(hospitalId, file);
+      // éxito — aquí puedes agregar un toast o mensaje después
+    } catch (e) {
+      // error — aquí puedes agregar un mensaje de error después
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Cargando hospitales...</CardTitle>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Error al cargar hospitales</CardTitle>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   if (hospitals.length === 0) {
     return (
@@ -38,10 +75,12 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
           </CardAction>
         </CardHeader>
         <FileUpload variant="csv" label="Sube el archivo CSV con tus datos" />
-        <CardFooter>
-          <Button variant="default" size="lg" className="w-full">
-            <Info />
-            Descarga la plantilla aquí.
+        <CardFooter className="flex-col gap-2">
+          <Button variant="default" size="lg" className="w-full" asChild>
+            <a href="/plantilla.csv" download>
+              <Info />
+              Descarga la plantilla aquí.
+            </a>
           </Button>
         </CardFooter>
       </Card>
@@ -55,7 +94,7 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
         {hospitals.length === 1 ? (
           <CardAction>
             <Badge variant="secondary" className="p-4 rounded-sm">
-              {selectedHospital?.name}
+              {hospitals[0].name}
             </Badge>
           </CardAction>
         ) : (
@@ -72,10 +111,7 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
                   onValueChange={setSelectedHospitalId}
                 >
                   {hospitals.map((hospital) => (
-                    <DropdownMenuRadioItem
-                      key={hospital.id}
-                      value={hospital.id}
-                    >
+                    <DropdownMenuRadioItem key={hospital.id} value={hospital.id}>
                       {hospital.name}
                     </DropdownMenuRadioItem>
                   ))}
@@ -85,10 +121,24 @@ const StockFileUpload = ({ hospitals }: { hospitals: HospitalData[] }) => {
           </CardAction>
         )}
       </CardHeader>
-      <FileUpload variant="csv" label="Sube el archivo CSV con tus datos" />
-      <CardFooter>
-        <Button variant="default" size="lg" className="w-full" asChild>
-          <a href="/csvTemplate/formato_abasto.csv" download>
+      <FileUpload
+        variant="csv"
+        label="Sube el archivo CSV con tus datos"
+        onFileChange={setFile}
+      />
+      <CardFooter className="flex-col gap-2">
+        <Button
+          variant="default"
+          size="lg"
+          className="w-full"
+          onClick={handleUpload}
+          disabled={!file || uploading || (!selectedHospitalId && hospitals.length > 1)}
+        >
+          <Upload />
+          {uploading ? 'Subiendo...' : 'Subir archivo'}
+        </Button>
+        <Button variant="outline" size="lg" className="w-full" asChild>
+          <a href="/plantilla.csv" download>
             <Info />
             Descarga la plantilla aquí.
           </a>
