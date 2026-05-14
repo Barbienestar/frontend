@@ -89,7 +89,7 @@ const ReportarPage = () => {
 
   const medicineOptions = medicines.map((m) => ({
     value: String(m.id),
-    label: `${m.generic_name} ${m.strength ?? ''} — ${m.dosage_form}`.trim(),
+    label: `${m.genericName} ${m.strength ?? ''} — ${m.dosageForm}`.trim(),
   }));
 
   const hospitalOptions = hospitals.map((h) => ({
