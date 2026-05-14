@@ -54,7 +54,6 @@ const heatPoints = [
   { lat: 28.63, lng: -106.08, intensity: 0.35, name: 'Chihuahua' },
 ];
 
-const mockHospitals: HospitalData[] = [];
 
 const chartTooltipStyle = {
   contentStyle: {
@@ -216,7 +215,7 @@ const DashboardPage = () => {
           {/* Columna derecha */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             {/* Carga de datos */}
-            <StockFileUpload hospitals={mockHospitals} />
+            <StockFileUpload/>
 
             {/* Medicamentos críticos */}
             <div className="rounded-xl border border-border bg-card p-5">

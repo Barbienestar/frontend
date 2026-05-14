@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { FullReportData } from '@/common/FullReportData';
 import { AdminReportsCard } from './AdminReportsCard';
 
@@ -14,6 +14,8 @@ export default meta;
 type Story = StoryObj<typeof AdminReportsCard>;
 
 const mockReport: FullReportData = {
+  id: 1,
+  createdAt: new Date('2023-03-01T00:00:00.000Z').getTime().toString(),
   description:
     'Patient reports severe skin rash after taking the medication for 3 days. Rash is concentrated on the torso and limbs, appearing as red papules with intense itching.',
   imageUrl:
@@ -21,7 +23,7 @@ const mockReport: FullReportData = {
   userFullName: 'John Doe',
   medicineName: 'Amoxicillin',
   medicinePresentation: '500mg Capsule',
-  medicineDosage: 'Oral',
+  medicineDosageForm: 'Oral',
   hospitalName: 'City General Hospital',
 };
 
@@ -39,7 +41,7 @@ export const MinimalData: Story = {
       ...mockReport,
       hospitalName: 'City General Hospital',
       medicinePresentation: '500mg Capsule',
-      medicineDosage: 'Oral',
+      medicineDosageForm: 'Oral',
       description: 'Very short description.',
     },
   },
