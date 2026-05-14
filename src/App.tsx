@@ -7,10 +7,12 @@ import Inicio from './pages/inicio';
 import MapaDeAbasto from './pages/mapaDeAbasto';
 import MyReports from './pages/myReports';
 import ReportarPage from './pages/report';
+import { Toaster } from './components/ui/sonner';
 
 function App() {
   return (
     <BrowserRouter>
+    <Toaster />
       <Routes>
         <Route path="/access" element={<Access />} />
         <Route path="/forbidden" element={<ForbiddenPage />} />
