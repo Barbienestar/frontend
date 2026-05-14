@@ -16,7 +16,14 @@ const Access = () => {
     try {
       setIsLoading(true);
       await signIn(email, password);
-      navigate('/protected', { replace: true });
+      const userRole = localStorage.getItem('role');
+      if (userRole === 'admin') {
+        navigate('/admin');
+      } else if (userRole === 'health') {
+        navigate('/dashboard');
+      } else {
+        navigate('/inicio');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -26,7 +33,7 @@ const Access = () => {
     <main className="flex flex-col min-h-screen w-full pt-18">
       {/** Navbar */}
       <div className="top-0 z-50 bg-white shadow-md">
-        <Navbar variant="default" activePath='' />
+        <Navbar variant="default" activePath="" />
       </div>
 
       <div className="flex flex-col md:flex-row flex-1">
@@ -75,7 +82,7 @@ const Access = () => {
             {/** Login Form */}
             <Login onSubmit={handleLogin} isLoading={isLoading} />
 
-            {/** Forms separator */}          
+            {/** Forms separator */}
             <div className="flex flex-col w-full my-6">
               {/** Line separator */}
               <div className="flex items-center w-full my-6">
@@ -87,11 +94,12 @@ const Access = () => {
               </div>
               {/** Text */}
               <p className="text-xl font-bold">¿No tienes cuenta? Registrate</p>
-              <p className="text-sm font-thin">Registra tu cuenta de usuario para el sistema.</p>
+              <p className="text-sm font-thin">
+                Registra tu cuenta de usuario para el sistema.
+              </p>
             </div>
 
             <SignUp />
-
           </div>
         </div>
       </div>
