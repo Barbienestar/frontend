@@ -77,7 +77,7 @@ const StockFileUpload = () => {
         <FileUpload variant="csv" label="Sube el archivo CSV con tus datos" />
         <CardFooter className="flex-col gap-2">
           <Button variant="default" size="lg" className="w-full" asChild>
-            <a href="/plantilla.csv" download>
+            <a href="/csvTemplate/formato_abasto.csv" download>
               <Info />
               Descarga la plantilla aquí.
             </a>
@@ -138,7 +138,7 @@ const StockFileUpload = () => {
           {uploading ? 'Subiendo...' : 'Subir archivo'}
         </Button>
         <Button variant="outline" size="lg" className="w-full" asChild>
-          <a href="/plantilla.csv" download>
+          <a href="/csvTemplate/formato_abasto.csv" download>
             <Info />
             Descarga la plantilla aquí.
           </a>
