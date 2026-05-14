@@ -3,7 +3,7 @@ import type { StockData } from '@/common/StockData';
 import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
 
 export const getStockByMedicine = async (query: string): Promise<StockData[]> => {
-  const res = await api.get<StockData[]>('/stock', {
+  const res = await api.get<StockData[]>('/medicines-hospitals/stock', {
     params: { medicineName: query },
   });
   return res.data;
