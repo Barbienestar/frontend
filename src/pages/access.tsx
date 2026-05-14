@@ -13,7 +13,6 @@ const Access = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleLogin = async (email: string, password: string) => {
-    console.log("Llamando a login...");
     try {
       setIsLoading(true);
       await signIn(email, password);

@@ -9,8 +9,8 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
-import Navbar from '@/components/global/navbar';
-import { Footer } from '@/components/global/footer';
+import Navbar from '@/components/Global/navbar';
+import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
