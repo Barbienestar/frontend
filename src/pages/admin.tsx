@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from 'react';
 import type { FullReportData } from '@/common/FullReportData';
 import type { StatusResponse } from '@/common/StatusResponse';
 import { AdminReportsTable } from '@/components/AdminReportsTable/AdminReportsTable';
+import { AdminCreationForm } from '@/components/AdminUserCreation/AdminCreationForm';
+import { Breadcrumb } from '@/components/Breadcrumb/breadcrumb';
 import Navbar from '@/components/Global/navbar';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import type { MetricCardVariant } from '@/components/ui/metric-card';
@@ -123,7 +125,7 @@ export const Admin = () => {
     return (
       <div className="min-h-screen w-full">
         <Navbar variant="admin" activePath="/admin" />
-        <main className="flex-1 max-w-6xl mx-auto w-full px-4 pt-24 pb-8">
+        <main className="flex-1 w-full px-4 pt-24 pb-8">
           <div className="flex items-center justify-center py-12">
             <div className="text-muted-foreground">Loading...</div>
           </div>
@@ -135,31 +137,48 @@ export const Admin = () => {
   return (
     <div className="min-h-screen w-full">
       <Navbar variant="admin" activePath="/admin" />
-      <main className="flex-1 max-w-6xl mx-auto w-full px-4 pt-24 pb-8 space-y-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {statuses.map((status) => {
-            const config =
-              METRIC_CONFIG[normalize(status.name)] ?? METRIC_CONFIG.reviewing;
-            return (
-              <MetricCard
-                key={status.id}
-                label={
-                  status.name.charAt(0).toUpperCase() + status.name.slice(1)
-                }
-                value={status.count}
-                icon={config.icon}
-                trend={config.trend}
-                variant={config.variant}
-              />
-            );
-          })}
+      <main className="flex-1 w-full px-4 pt-24 pb-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+          <h2 className="text-xl font-semibold">Moderacion de reportes</h2>
+          <Breadcrumb
+            items={[
+              { label: 'Inicio', href: '/inicio' },
+              { label: 'Administración de reportes' },
+            ]}
+          />
         </div>
-        <AdminReportsTable
-          key={refetchKey}
-          statusId={pendingId}
-          onAccept={handleAccept}
-          onReject={handleReject}
-        />
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex-1 min-w-0 space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {statuses.map((status) => {
+                const config =
+                  METRIC_CONFIG[normalize(status.name)] ??
+                  METRIC_CONFIG.reviewing;
+                return (
+                  <MetricCard
+                    key={status.id}
+                    label={
+                      status.name.charAt(0).toUpperCase() + status.name.slice(1)
+                    }
+                    value={status.count}
+                    icon={config.icon}
+                    trend={config.trend}
+                    variant={config.variant}
+                  />
+                );
+              })}
+            </div>
+            <AdminReportsTable
+              key={refetchKey}
+              statusId={pendingId}
+              onAccept={handleAccept}
+              onReject={handleReject}
+            />
+          </div>
+          <div className="w-full lg:w-96 shrink-0">
+            <AdminCreationForm />
+          </div>
+        </div>
       </main>
     </div>
   );
