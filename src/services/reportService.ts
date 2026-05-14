@@ -1,7 +1,9 @@
-import api from './api';
+import type { FullReportData } from '@/common/FullReportData';
 import type { HospitalData } from '@/common/HospitalData';
-import type { CreateReportData, ReportData } from '@/common/ReportData ';
 import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
+import type { PaginatedResponse } from '@/common/PaginatedResponse';
+import type { CreateReportData, ReportData } from '@/common/ReportData ';
+import api from './api';
 
 interface ReportImageData {
   imageUrl: string;
@@ -34,4 +36,28 @@ export const uploadImage = async (file: File): Promise<ReportImageData> => {
   formData.append('image', file);
   const res = await api.post<ReportImageData>('/image/upload', formData);
   return res.data;
+};
+
+export const getAdminPageReports = async (
+  statusId: number,
+  page: number,
+  pageSize: number
+): Promise<PaginatedResponse<FullReportData>> => {
+  const res = await api.get<PaginatedResponse<FullReportData>>(
+    `/reports/status/${statusId}`,
+    {
+      params: {
+        page,
+        size: pageSize,
+      },
+    }
+  );
+  return res.data;
+};
+
+export const changeReportStatus = async (
+  reportId: number,
+  statusId: number
+): Promise<void> => {
+  await api.put(`/reports/${reportId}/status/${statusId}`);
 };
