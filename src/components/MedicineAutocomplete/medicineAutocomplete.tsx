@@ -59,7 +59,7 @@ const MedicineAutocomplete = ({
   }, []);
 
   const buildLabel = (item: MedicineSearchResult) =>
-    [item.generic_name, item.dosage_form, item.strength]
+    [item.genericName, item.dosageForm, item.strength]
       .filter(Boolean)
       .join(' ');
 
@@ -102,10 +102,10 @@ const MedicineAutocomplete = ({
               className="px-4 py-2.5 text-sm cursor-pointer hover:bg-muted transition-colors flex flex-col"
             >
               <span className="font-medium text-foreground capitalize">
-                {item.generic_name}
+                {item.genericName}
               </span>
               <span className="text-xs text-muted-foreground">
-                {[item.dosage_form, item.strength].filter(Boolean).join(' · ')}
+                {[item.dosageForm, item.strength].filter(Boolean).join(' · ')}
               </span>
             </li>
           ))}

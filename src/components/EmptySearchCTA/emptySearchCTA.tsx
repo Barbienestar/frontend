@@ -32,7 +32,7 @@ export const EmptySearchCTA = () => {
 
         {/* BUTTON */}
         <Button
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/reportar')}
           className="bg-[#7A1732] hover:bg-[#651228] text-white px-6"
         >
           Iniciar Reporte de Desabasto
