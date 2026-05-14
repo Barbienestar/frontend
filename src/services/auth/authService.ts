@@ -1,6 +1,6 @@
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { auth } from './auth';
 import api from '../api';
+import { auth } from './auth';
 
 export interface CreateUserRequest {
   name: string;
@@ -9,7 +9,7 @@ export interface CreateUserRequest {
   email: string;
   password: string;
   age?: number;
-  suburbId: number;
+  suburbId?: number;
   roleId: number;
 }
 

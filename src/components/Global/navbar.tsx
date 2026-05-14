@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import perfilPhoto from '../../assets/perfil.png';
 import logo from '../../assets/Logo.svg';
+import { useAuth } from '@/contexts/useAuth';
+import { Button } from '@/components/Button/button';
 
 type NavbarVariant = 'admin' | 'gobierno' | 'default';
 
@@ -10,6 +13,18 @@ const linksDefault = [
   { label: 'Mapa de Abasto', path: '/mapa-de-abasto' },
 ];
 
+const linksAdmin = [
+  { label: 'Inicio', path: '/inicio' },
+  { label: 'Mapa de Abasto', path: '/mapa-de-abasto' },
+  { label: 'Dashboard', path: '/admin' },
+];
+
+const linksGobierno = [
+  { label: 'Inicio', path: '/inicio' },
+  { label: 'Mapa de Abasto', path: '/mapa-de-abasto' },
+  { label: 'Dashboard', path: '/dashboard' },
+];
+
 interface NavbarProps {
   variant?: NavbarVariant;
   activePath?: string;
@@ -17,6 +32,15 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+  const { isAuthenticated, hasRole, signOut } = useAuth();
+
+  const resolveLinks = () => {
+    if (isAuthenticated && hasRole('admin')) return linksAdmin;
+    if (isAuthenticated && hasRole('health')) return linksGobierno;
+    return linksDefault;
+  };
 
   const config = {
     admin: {
@@ -25,8 +49,6 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
       subtext: 'text-m text-secondary font-bold',
       title: 'Panel de Control Admin',
       subtitle: 'DECISION 360',
-      links: [],
-      buttonLabel: 'Perfil Admin',
     },
     gobierno: {
       bg: 'bg-white',
@@ -34,8 +56,6 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
       subtext: 'text-m text-secondary font-bold',
       title: 'Panel de Control Gubernamental',
       subtitle: 'DECISION 360',
-      links: [],
-      buttonLabel: 'Perfil Gobierno',
     },
     default: {
       bg: 'bg-white',
@@ -43,21 +63,23 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
       subtext: 'text-m text-accent-secondary font-bold',
       title: 'DECISION 360',
       subtitle: 'Consulta de medicamentos',
-      links: linksDefault,
-      buttonLabel: '',
     },
   };
 
   const current = config[variant];
   const isDark = variant === 'admin' || variant === 'gobierno';
+  const links = resolveLinks();
 
   return (
     <nav
-  className={`${current.bg} fixed top-0 left-0 w-full z-9999 px-6 py-3 shadow-md`}
->
+      className={`${current.bg} fixed top-0 left-0 w-full z-9999 px-6 py-3 shadow-md`}
+    >
       <div className="flex items-center justify-between">
-        {/* LOGO + TITULO */}
-        <div className="flex items-center gap-3">
+        {/* LOGO + TITULO — clickeable */}
+        <button
+          onClick={() => navigate('/inicio')}
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+        >
           <div className={isDark ? 'bg-secondary' : ''}>
             <img
               src={logo}
@@ -65,19 +87,18 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
               className={`w-10 h-10 ${isDark ? 'brightness-0 invert' : ''}`}
             />
           </div>
-
-          <div className="hidden sm:block">
+          <div className="hidden sm:block text-left">
             <h1 className="text-lg font-semibold text-black">
               {current.title}
             </h1>
             <p className={current.subtext}>{current.subtitle}</p>
           </div>
-        </div>
+        </button>
 
         {/* LINKS DESKTOP */}
-        {current.links.length > 0 && (
+        {links.length > 0 && (
           <div className="hidden md:flex gap-7">
-            {current.links.map(({ label, path }) => {
+            {links.map(({ label, path }) => {
               const isActive = activePath === path;
               return (
                 <a
@@ -99,36 +120,45 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
 
         {/* RIGHT SIDE */}
         <div className="flex items-center gap-3">
-          {/* BOTÓN PERFIL DEFAULT */}
-          {variant === 'default' && (
-            <button className="p-1 rounded-full hover:bg-gray-100">
-              <img
-                src={perfilPhoto}
-                alt="Perfil"
-                className="w-8 h-8 rounded-full"
-              />
-            </button>
-          )}
-
-          {/* BOTÓN ADMIN/GOB */}
-          {(variant === 'admin' || variant === 'gobierno') && (
-            <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm font-medium">
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2}
-                viewBox="0 0 24 24"
+          {isAuthenticated ? (
+            <div className="relative">
+              <button
+                className="p-1 rounded-full hover:bg-gray-100"
+                onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
               >
-                <circle cx="12" cy="8" r="4" />
-                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-              </svg>
-              {current.buttonLabel}
-            </button>
+                <img
+                  src={perfilPhoto}
+                  alt="Perfil"
+                  className="w-8 h-8 rounded-full"
+                />
+              </button>
+              {isProfileDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                  <button
+                    onClick={async () => {
+                      await signOut();
+                      setIsProfileDropdownOpen(false);
+                      navigate('/inicio');
+                    }}
+                    className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
+                  >
+                    Cerrar sesión
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <Button
+              variant="default"
+              size="sm"
+              onClick={() => navigate('/access')}
+            >
+              Iniciar sesión
+            </Button>
           )}
 
           {/* HAMBURGER */}
-          {current.links.length > 0 && (
+          {links.length > 0 && (
             <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
               <svg
                 className="w-6 h-6"
@@ -149,9 +179,9 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
       </div>
 
       {/* MENU MOBILE */}
-      {isOpen && current.links.length > 0 && (
+      {isOpen && links.length > 0 && (
         <div className="mt-4 flex flex-col gap-4 md:hidden">
-          {current.links.map(({ label, path }) => {
+          {links.map(({ label, path }) => {
             const isActive = activePath === path;
             return (
               <a
@@ -165,6 +195,14 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
               </a>
             );
           })}
+          {!isAuthenticated && (
+            <button
+              onClick={() => navigate('/access')}
+              className="text-base text-gray-500 text-left"
+            >
+              Iniciar sesión
+            </button>
+          )}
         </div>
       )}
     </nav>

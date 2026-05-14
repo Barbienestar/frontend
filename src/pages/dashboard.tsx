@@ -14,7 +14,6 @@ import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
-import type { HospitalData } from '@/common/HospitalData';
 
 const discrepanciaData = [
   { mes: 'ENE', oficial: 820, reportes: 740 },
@@ -52,7 +51,6 @@ const heatPoints = [
   { lat: 28.63, lng: -106.08, intensity: 0.35, name: 'Chihuahua' },
 ];
 
-const mockHospitals: HospitalData[] = [];
 
 const chartTooltipStyle = {
   contentStyle: {
@@ -189,7 +187,7 @@ const DashboardPage = () => {
           {/* Columna derecha */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             {/* Carga de datos */}
-            <StockFileUpload hospitals={mockHospitals} />
+            <StockFileUpload/>
 
             {/* Medicamentos críticos */}
             <div className="rounded-xl border border-border bg-card p-5">
