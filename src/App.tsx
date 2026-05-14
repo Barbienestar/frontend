@@ -1,11 +1,12 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Access from './pages/access';
-import ForbiddenPage from './pages/forbidden';
-import MapaDeAbasto from './pages/mapaDeAbasto';
-import ReportarPage from './pages/report';
-import Inicio from './pages/inicio';
-import MyReports from './pages/myReports';
+import { Admin } from './pages/admin';
 import Dashboard from './pages/dashboard';
+import ForbiddenPage from './pages/forbidden';
+import Inicio from './pages/inicio';
+import MapaDeAbasto from './pages/mapaDeAbasto';
+import MyReports from './pages/myReports';
+import ReportarPage from './pages/report';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/inicio" element={<Inicio />} />
         <Route path="/mis-reportes" element={<MyReports />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   );
