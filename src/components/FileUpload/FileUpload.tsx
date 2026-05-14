@@ -6,7 +6,6 @@ type FileUploadVariant = 'receta' | 'csv';
 
 interface FileUploadProps {
   variant?: FileUploadVariant;
-  label?: string;
   error?: boolean;
   onFileChange?: (file: File | null) => void;
 }
@@ -25,14 +24,12 @@ const config = {
     icon: CloudUpload, // Changed from CloudDownload to CloudUpload to keep local change
     mainText: <>Arrastra tu archivo CSV </>,
     subText: 'Formato oficial de inventarios',
-    defaultLabel: 'Seleccionar archivo *',
     button: true,
   },
 };
 
 const FileUpload = ({
   variant = 'receta',
-  label,
   error = false,
   onFileChange,
 }: FileUploadProps) => {
@@ -91,7 +88,7 @@ const FileUpload = ({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <FieldLabel>{label ?? cfg.defaultLabel}</FieldLabel>
+      <FieldLabel>{}</FieldLabel>
 
       <label
         className={`relative flex flex-col items-center justify-center gap-3 rounded-lg border-2 border-dashed px-6 py-8 text-center cursor-pointer transition-colors ${borderClass}`}
