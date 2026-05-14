@@ -15,6 +15,8 @@ import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
 import type { HospitalData } from '@/common/HospitalData';
+import { getStockAvgs, type StockAverages } from '@/services/dashboard/kpis';
+import { useEffect, useState } from 'react';
 
 const discrepanciaData = [
   { mes: 'ENE', oficial: 820, reportes: 740 },
@@ -63,8 +65,33 @@ const chartTooltipStyle = {
 };
 
 const DashboardPage = () => {
+  const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
+
+  /** Stock averages card logic */
+
+  useEffect(() => {
+    getStockAvgs()
+    .then(data => setStockAvgs(data))
+    .catch(err => console.log("Error al obtener el abasto promedio: ", err));
+  }, []);
+
+  const renderStockValue = () => {
+    if (stockAvgs?.currentMonthAvg !== undefined) {
+      return `${stockAvgs.currentMonthAvg.toFixed(1)} %`; 
+    }
+    return "---";
+  };
+
+  const renderStockDifference = () => {
+    if (stockAvgs?.lastMonthAvg !== undefined) {
+      const diff = Number((stockAvgs.currentMonthAvg - stockAvgs.lastMonthAvg).toFixed(2));
+      return (diff < 0 ? "-" : "+") + `${diff} %` ;
+    }
+    return "---";
+  };
+
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pt-18">
       <Navbar variant="gobierno" />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-4">
@@ -82,9 +109,9 @@ const DashboardPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <MetricCard
             label="Abasto Promedio"
-            value="74.2%"
+            value={renderStockValue()}
             icon={<TrendingUp className="size-5" />}
-            trend="+2.1% vs. mes anterior"
+            trend={`${renderStockDifference()} vs. mes anterior`}
             trendHighlight="+2.1%"
             variant="approved"
           />
