@@ -24,8 +24,8 @@ export const AdminReportsCard = ({
   onReject,
 }: AdminReportsCardProps) => {
   return (
-    <div className="group relative flex flex-col md:flex-row gap-6 p-4 bg-card border border-border rounded-sm hover:border-primary transition-all duration-300 ease-out w-full shadow-sm">
-      <div className="shrink-0 w-full md:w-48">
+    <div className="group relative flex flex-col md:flex-row gap-3 p-3 bg-card border border-border rounded-sm hover:border-primary transition-all duration-300 ease-out w-full shadow-sm">
+      <div className="shrink-0 w-full md:w-36">
         <Dialog>
           <DialogTrigger asChild>
             <div className="cursor-zoom-in relative overflow-hidden rounded-sm border border-border bg-muted group-hover:border-primary transition-colors">
@@ -49,7 +49,7 @@ export const AdminReportsCard = ({
                 className="max-w-full max-h-[80vh] object-contain rounded-sm"
               />
               <div className="bg-card p-4 border border-border rounded-sm max-w-2xl w-full text-sm text-muted-foreground">
-                <div className="flex items-center gap-2 mb-2 text-foreground font-bold uppercase text-[10px] tracking-wider">
+                <div className="flex items-center gap-2 mb-1 text-foreground font-bold uppercase text-[10px] tracking-wider">
                   <FileText className="w-3 h-3" />
                   Full Description
                 </div>
@@ -58,18 +58,15 @@ export const AdminReportsCard = ({
             </div>
           </DialogContent>
         </Dialog>
-        <div className="mt-2 text-center text-[10px] font-bold text-muted-foreground uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          Click for details
-        </div>
       </div>
 
-      <div className="flex-1 flex flex-col gap-4">
-        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-          <div className="space-y-1 min-w-0">
+      <div className="flex-1 flex flex-col gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+          <div className="min-w-0">
             <h3 className="text-sm font-bold tracking-tight text-foreground uppercase">
               Medicine Report
             </h3>
-            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted-foreground font-medium">
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground font-medium">
               <User className="w-3 h-3 shrink-0" />
               <span className="truncate">{data.userFullName}</span>
               <span className="text-border">•</span>
@@ -85,18 +82,20 @@ export const AdminReportsCard = ({
 
           <div className="flex items-center gap-2 shrink-0">
             <Button
+              type="button"
               variant="outline"
-              size="sm"
+              size="xs"
               onClick={() => onReject?.(data)}
-              className="h-8 px-2 sm:px-3 border-border text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-all duration-200 rounded-sm"
+              className="px-2 border-border text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-all duration-200 rounded-sm"
             >
               <X className="w-3.5 h-3.5" />
               <span className="hidden sm:inline mr-1.5">Reject</span>
             </Button>
             <Button
-              size="sm"
+              type="button"
+              size="xs"
               onClick={() => onAccept?.(data)}
-              className="h-8 px-2 sm:px-3 bg-primary text-primary-foreground hover:opacity-90 transition-all duration-200 rounded-sm shadow-sm"
+              className="px-2 bg-primary text-primary-foreground hover:opacity-90 transition-all duration-200 rounded-sm shadow-sm"
             >
               <Check className="w-3.5 h-3.5" />
               <span className="hidden sm:inline mr-1.5">Accept</span>
@@ -104,8 +103,8 @@ export const AdminReportsCard = ({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 py-3 border-y border-border">
-          <div className="space-y-1.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 py-1.5 border-y border-border">
+          <div className="space-y-0.5">
             <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
               <Pill className="w-3 h-3" />
               Medication Detail
@@ -119,12 +118,12 @@ export const AdminReportsCard = ({
             </div>
           </div>
 
-          <div className="space-y-1.5">
+          <div className="space-y-0.5">
             <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
               <FileText className="w-3 h-3" />
               Case Description
             </div>
-            <div className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
+            <div className="text-sm text-muted-foreground line-clamp-1 leading-relaxed">
               {data.description}
             </div>
           </div>
