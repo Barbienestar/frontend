@@ -54,3 +54,10 @@ export const getAdminPageReports = async (
   );
   return res.data;
 };
+
+export const changeReportStatus = async (
+  reportId: number,
+  statusId: number
+): Promise<void> => {
+  await api.put(`/reports/${reportId}/status/${statusId}`);
+};

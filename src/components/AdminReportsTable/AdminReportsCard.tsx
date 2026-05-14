@@ -85,6 +85,7 @@ export const AdminReportsCard = ({
 
           <div className="flex items-center gap-2 shrink-0">
             <Button
+              type="button"
               variant="outline"
               size="sm"
               onClick={() => onReject?.(data)}
@@ -94,6 +95,7 @@ export const AdminReportsCard = ({
               <span className="hidden sm:inline mr-1.5">Reject</span>
             </Button>
             <Button
+              type="button"
               size="sm"
               onClick={() => onAccept?.(data)}
               className="h-8 px-2 sm:px-3 bg-primary text-primary-foreground hover:opacity-90 transition-all duration-200 rounded-sm shadow-sm"
