@@ -13,7 +13,7 @@ import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
-import { getStockAvgs, type StockAverages } from '@/services/dashboard/kpis';
+import { getStockAvgs, getStockReport, type StockAverages, type StockReport } from '@/services/dashboard/kpis';
 import { useEffect, useState } from 'react';
 
 const discrepanciaData = [
@@ -63,14 +63,25 @@ const chartTooltipStyle = {
 
 const DashboardPage = () => {
   const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
+  const [stockReport, setStockReport] = useState<StockReport | null>(null);
 
-  /** Stock averages card logic */
+  /** Stock averages card fetching */
 
   useEffect(() => {
     getStockAvgs()
     .then(data => setStockAvgs(data))
     .catch(err => console.log("Error al obtener el abasto promedio: ", err));
   }, []);
+
+  /** Stock report card fetching */
+
+  useEffect(() => {
+    getStockReport()
+    .then(data => setStockReport(data))
+    .catch(err => console.log("Error al obtener los medicamentos en desabasto: ", err));
+  }, []);
+
+  /** Stock averages rendering logic */
 
   const renderStockValue = () => {
     if (stockAvgs?.currentMonthAvg !== undefined) {
@@ -85,6 +96,23 @@ const DashboardPage = () => {
       return (diff < 0 ? "-" : "+") + `${diff} %` ;
     }
     return "---";
+  };
+
+  /** Stock report rendering logic */
+
+  const renderBottomMedicines = (medicines?: string[]) => {
+    if (!medicines || medicines.length === 0) return "---";
+  
+    return medicines
+      .map((med) => {
+        // 1. Remove trailing/leading whitespace (Handles "Paracetamol " -> "Paracetamol")
+        const trimmed = med.trim();
+  
+        // 2. Capitalize first letter, keep the rest as is
+        // This preserves "500mg" or "IV" exactly as the server sent them
+        return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+      })
+      .join(", ");
   };
 
   return (
@@ -114,9 +142,9 @@ const DashboardPage = () => {
           />
           <MetricCard
             label="Medicamentos en Desabasto"
-            value="12"
+            value={stockReport?.lowStockCount?.toString() || "---"}
             icon={<AlertTriangle className="size-5" />}
-            trend="Principales: Insulina, Paracetamol 500mg"
+            trend={`Principales: ${renderBottomMedicines(stockReport?.bottomMedicines)}`}
             variant="rejected"
           />
           <MetricCard
