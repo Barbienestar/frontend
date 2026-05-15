@@ -6,7 +6,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from 'recharts';
 import Navbar from '@/components/Global/navbar';
@@ -14,6 +13,8 @@ import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
+import { getStockAvgs, getStockReport, type StockAverages, type StockReport } from '@/services/dashboard/kpis';
+import { useEffect, useState } from 'react';
 
 const discrepanciaData = [
   { mes: 'ENE', oficial: 820, reportes: 740 },
@@ -61,8 +62,61 @@ const chartTooltipStyle = {
 };
 
 const DashboardPage = () => {
+  const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
+  const [stockReport, setStockReport] = useState<StockReport | null>(null);
+
+  /** Stock averages card fetching */
+
+  useEffect(() => {
+    getStockAvgs()
+    .then(data => setStockAvgs(data))
+    .catch(err => console.log("Error al obtener el abasto promedio: ", err));
+  }, []);
+
+  /** Stock report card fetching */
+
+  useEffect(() => {
+    getStockReport()
+    .then(data => setStockReport(data))
+    .catch(err => console.log("Error al obtener los medicamentos en desabasto: ", err));
+  }, []);
+
+  /** Stock averages rendering logic */
+
+  const renderStockValue = () => {
+    if (stockAvgs?.currentMonthAvg !== undefined) {
+      return `${stockAvgs.currentMonthAvg.toFixed(1)} %`; 
+    }
+    return "---";
+  };
+
+  const renderStockDifference = () => {
+    if (stockAvgs?.lastMonthAvg !== undefined) {
+      const diff = Number((stockAvgs.currentMonthAvg - stockAvgs.lastMonthAvg).toFixed(2));
+      return (diff < 0 ? "-" : "+") + `${diff} %` ;
+    }
+    return "---";
+  };
+
+  /** Stock report rendering logic */
+
+  const renderBottomMedicines = (medicines?: string[]) => {
+    if (!medicines || medicines.length === 0) return "---";
+  
+    return medicines
+      .map((med) => {
+        // 1. Remove trailing/leading whitespace (Handles "Paracetamol " -> "Paracetamol")
+        const trimmed = med.trim();
+  
+        // 2. Capitalize first letter, keep the rest as is
+        // This preserves "500mg" or "IV" exactly as the server sent them
+        return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+      })
+      .join(", ");
+  };
+
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pt-18">
       <Navbar variant="gobierno" />
 
       <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-4">
@@ -80,17 +134,17 @@ const DashboardPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <MetricCard
             label="Abasto Promedio"
-            value="74.2%"
+            value={renderStockValue()}
             icon={<TrendingUp className="size-5" />}
-            trend="+2.1% vs. mes anterior"
+            trend={`${renderStockDifference()} vs. mes anterior`}
             trendHighlight="+2.1%"
             variant="approved"
           />
           <MetricCard
             label="Medicamentos en Desabasto"
-            value="12"
+            value={stockReport?.lowStockCount?.toString() || "---"}
             icon={<AlertTriangle className="size-5" />}
-            trend="Principales: Insulina, Paracetamol 500mg"
+            trend={`Principales: ${renderBottomMedicines(stockReport?.bottomMedicines)}`}
             variant="rejected"
           />
           <MetricCard
