@@ -1,8 +1,9 @@
-import { ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import type { FullReportData } from '@/common/FullReportData';
 import type { PaginatedResponse } from '@/common/PaginatedResponse';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import { getAdminPageReports } from '@/services/reportService';
 import { AdminReportsCard } from './AdminReportsCard';
 
@@ -50,8 +51,32 @@ export const AdminReportsTable = ({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+      <div className="flex flex-col gap-4 w-full">
+        {Array.from({ length: pageSize }).map((_, i) => (
+          <div
+            key={i}
+            className="flex flex-col md:flex-row gap-3 p-3 bg-card border border-border rounded-sm w-full"
+          >
+            <div className="shrink-0 w-full md:w-36">
+              <Skeleton className="w-full aspect-square rounded-sm" />
+            </div>
+            <div className="flex-1 flex flex-col gap-2">
+              <Skeleton className="h-4 w-40" />
+              <Skeleton className="h-3 w-64" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 py-1.5 border-y border-border">
+                <div className="flex flex-col gap-1.5">
+                  <Skeleton className="h-3 w-28" />
+                  <Skeleton className="h-4 w-36" />
+                  <Skeleton className="h-3 w-48" />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <Skeleton className="h-3 w-24" />
+                  <Skeleton className="h-4 w-full" />
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     );
   }
