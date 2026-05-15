@@ -41,12 +41,12 @@ export const AdminReportsCard = ({
               </div>
             </div>
           </DialogTrigger>
-          <DialogContent className="max-w-4xl p-0 overflow-hidden border-none bg-transparent shadow-none">
+          <DialogContent className="max-w-[95vw] p-0 overflow-hidden border-none bg-transparent shadow-none">
             <div className="relative w-full h-full flex flex-col items-center justify-center gap-4">
               <img
                 src={data.imageUrl}
                 alt="Report full view"
-                className="max-w-full max-h-[80vh] object-contain rounded-sm"
+                className="w-auto h-auto max-w-full max-h-[96vh] object-contain rounded-sm"
               />
               <div className="bg-card p-4 border border-border rounded-sm max-w-2xl w-full text-sm text-muted-foreground">
                 <div className="flex items-center gap-2 mb-1 text-foreground font-bold uppercase text-[10px] tracking-wider">
