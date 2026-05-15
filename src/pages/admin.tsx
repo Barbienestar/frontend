@@ -1,4 +1,4 @@
-import { Check, Clock, UserCog, Stethoscope, XCircle } from 'lucide-react';
+import { Check, Clock, Stethoscope, UserCog, XCircle } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import type { FullReportData } from '@/common/FullReportData';
 import type { StatusResponse } from '@/common/StatusResponse';
@@ -209,7 +209,11 @@ export const Admin = () => {
                 Salud
               </button>
             </div>
-            {userType === 'admin' ? <AdminCreationForm /> : <HealthUserCreationForm />}
+            {userType === 'admin' ? (
+              <AdminCreationForm />
+            ) : (
+              <HealthUserCreationForm />
+            )}
           </div>
         </div>
       </main>
