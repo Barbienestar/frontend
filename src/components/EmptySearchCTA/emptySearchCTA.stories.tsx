@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router-dom';
 import { EmptySearchCTA } from './emptySearchCTA';
 
@@ -24,3 +24,4 @@ export default meta;
 type Story = StoryObj<typeof EmptySearchCTA>;
 
 export const Default: Story = {};
+

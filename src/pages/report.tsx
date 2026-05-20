@@ -1,27 +1,27 @@
+import { CheckCircle, Clock, Phone, ShieldCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Phone, ShieldCheck, Clock, CheckCircle } from 'lucide-react';
-import Navbar from '@/components/Global/navbar';
-import { Footer } from '@/components/Global/footer';
-import ReportCard from '@/components/Card/reportCard';
+import type { HospitalData } from '@/common/HospitalData';
+import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
 import { Breadcrumb } from '@/components/Breadcrumb/breadcrumb';
+import ReportCard from '@/components/Card/reportCard';
+import { Footer } from '@/components/Global/footer';
+import Navbar from '@/components/Global/navbar';
 import { PageHeader } from '@/components/PageHeader/pageHeader';
-import { SidebarInfoCard } from '@/components/SidebarInfoCard/sidebarInfoCard';
-import { SidebarMapCard } from '@/components/SidebarMapCard/sidebarMapCard';
 import {
   RecentReportsTable,
   type ReportRow,
 } from '@/components/RecentReportsTable/recentReportsTable';
+import { SidebarInfoCard } from '@/components/SidebarInfoCard/sidebarInfoCard';
+import { SidebarMapCard } from '@/components/SidebarMapCard/sidebarMapCard';
 import {
-  getMedicines,
-  getHospitals,
   createReport,
-  uploadImage,
+  getHospitals,
+  getMedicines,
   getMyReports,
+  uploadImage,
 } from '@/services/reportService';
-import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
 import { statusConfig } from '@/utils/reportStatus';
-import type { HospitalData } from '@/common/HospitalData';
 
 const ReportarPage = () => {
   const navigate = useNavigate();
@@ -114,7 +114,6 @@ const ReportarPage = () => {
         description,
         imageUrl: imageUrl ?? undefined,
       });
-      navigate('/inicio');
     } catch {
       alert('Error al enviar el reporte. Intenta de nuevo.');
     } finally {

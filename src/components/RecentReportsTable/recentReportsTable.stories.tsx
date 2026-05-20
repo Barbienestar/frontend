@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { RecentReportsTable } from './recentReportsTable';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import type { ReportRow } from './recentReportsTable';
+import { RecentReportsTable } from './recentReportsTable';
 
 const meta: Meta<typeof RecentReportsTable> = {
   title: 'Components/RecentReportsTable',
@@ -86,3 +86,4 @@ export const Empty: Story = {
     onViewAll: () => alert('Ver todos'),
   },
 };
+

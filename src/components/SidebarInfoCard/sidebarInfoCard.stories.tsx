@@ -1,6 +1,13 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import {
+  Bell,
+  CheckCircle,
+  Clock,
+  Info,
+  ShieldCheck,
+  Star,
+} from 'lucide-react';
 import { SidebarInfoCard } from './sidebarInfoCard';
-import { ShieldCheck, Clock, CheckCircle, Info, Star, Bell } from 'lucide-react';
 
 const meta: Meta<typeof SidebarInfoCard> = {
   title: 'Components/SidebarInfoCard',
@@ -55,3 +62,4 @@ export const NoFeatures: Story = {
     features: [],
   },
 };
+
