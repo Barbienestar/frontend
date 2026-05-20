@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Breadcrumb } from './breadcrumb';
 
 const meta: Meta<typeof Breadcrumb> = {
@@ -34,3 +34,4 @@ export const SingleItem: Story = {
     items: [{ label: 'Inicio' }],
   },
 };
+
