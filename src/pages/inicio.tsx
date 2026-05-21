@@ -31,8 +31,8 @@ const Inicio = () => {
           </h1>
           <p className="text-white/80 text-base max-w-md mb-8 leading-relaxed">
             Consulta la disponibilidad y reporta el desabasto de forma
-            institucional, transparente y directa. Trabajamos para garantizar
-            el derecho a la salud de todos los mexicanos.
+            institucional, transparente y directa. Trabajamos para garantizar el
+            derecho a la salud de todos los mexicanos.
           </p>
           <div className="flex flex-wrap gap-3">
             <Button

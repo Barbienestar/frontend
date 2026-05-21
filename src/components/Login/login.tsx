@@ -17,7 +17,7 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     onSubmit?.(email, password);
-    console.log("Llamando a login desde componente...");
+    console.log('Llamando a login desde componente...');
   }
 
   return (
@@ -36,26 +36,26 @@ export function Login({ onSubmit, isLoading = false, className }: LoginProps) {
       <div className="flex flex-col gap-6">
         {/* Email */}
         <InputField
-        variant='email'
-        label='Correo Electrónico'
-        placeholder='ejemplo@salud.gob.mx'
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        description=''
-        labelClassName='font-semibold'
-        inputClassName='h-12 rounded-xl px-4 text-sm bg-muted/40 border-input'
+          variant="email"
+          label="Correo Electrónico"
+          placeholder="ejemplo@salud.gob.mx"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          description=""
+          labelClassName="font-semibold"
+          inputClassName="h-12 rounded-xl px-4 text-sm bg-muted/40 border-input"
         />
 
         {/* Password */}
         <InputField
-        variant='password'
-        label='Contraseña'
-        placeholder='••••••••'
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        description=''
-        labelClassName='font-semibold'
-        inputClassName='h-12 rounded-xl px-4 text-sm bg-muted/40 border-input'
+          variant="password"
+          label="Contraseña"
+          placeholder="••••••••"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          description=""
+          labelClassName="font-semibold"
+          inputClassName="h-12 rounded-xl px-4 text-sm bg-muted/40 border-input"
         />
 
         {/* Submit */}

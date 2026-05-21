@@ -23,9 +23,7 @@ interface InputFieldProps {
   onChange?: (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => void;
-  onBlur?: (
-    e: React.FocusEvent<HTMLSelectElement | HTMLInputElement>
-  ) => void;
+  onBlur?: (e: React.FocusEvent<HTMLSelectElement | HTMLInputElement>) => void;
 }
 
 const variantDefaults: Record<
@@ -78,7 +76,9 @@ export const InputField = ({
 
   return (
     <Field>
-      <FieldLabel className={cn(labelClassName)}>{label ?? defaults.label}</FieldLabel>
+      <FieldLabel className={cn(labelClassName)}>
+        {label ?? defaults.label}
+      </FieldLabel>
 
       {variant === 'search' && (
         <div className="relative flex items-center">
@@ -88,7 +88,7 @@ export const InputField = ({
             name={name}
             placeholder={placeholder ?? defaults.placeholder}
             disabled={disabled}
-            className={cn(inputClassName, "pl-8")}
+            className={cn(inputClassName, 'pl-8')}
           />
         </div>
       )}
@@ -102,7 +102,10 @@ export const InputField = ({
             onBlur={onBlur}
             disabled={disabled}
             defaultValue=""
-            className={cn("w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8", inputClassName)}
+            className={cn(
+              'w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8',
+              inputClassName
+            )}
           >
             <option value="" disabled>
               {placeholder ?? defaults.placeholder}
@@ -130,7 +133,9 @@ export const InputField = ({
         />
       )}
 
-      <FieldDescription className={cn(descClassName)}>{description ?? defaults.description}</FieldDescription>
+      <FieldDescription className={cn(descClassName)}>
+        {description ?? defaults.description}
+      </FieldDescription>
     </Field>
   );
 };

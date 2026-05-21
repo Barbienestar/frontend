@@ -13,7 +13,12 @@ import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
-import { getStockAvgs, getStockReport, type StockAverages, type StockReport } from '@/services/dashboard/kpis';
+import {
+  getStockAvgs,
+  getStockReport,
+  type StockAverages,
+  type StockReport,
+} from '@/services/dashboard/kpis';
 import { useEffect, useState } from 'react';
 
 const discrepanciaData = [
@@ -35,10 +40,30 @@ const historicoData = [
 ];
 
 const medicamentosCriticos = [
-  { nombre: 'Metformina 850mg', clave: '010.000.0412.00', stock: 12, color: 'bg-red-500' },
-  { nombre: 'Paracetamol Sol.', clave: '010.000.0104.00', stock: 8, color: 'bg-red-500' },
-  { nombre: 'Amoxicilina 500mg', clave: '010.000.2101.00', stock: 24, color: 'bg-amber-400' },
-  { nombre: 'Losartán 50mg', clave: '010.000.0520.00', stock: 31, color: 'bg-amber-400' },
+  {
+    nombre: 'Metformina 850mg',
+    clave: '010.000.0412.00',
+    stock: 12,
+    color: 'bg-red-500',
+  },
+  {
+    nombre: 'Paracetamol Sol.',
+    clave: '010.000.0104.00',
+    stock: 8,
+    color: 'bg-red-500',
+  },
+  {
+    nombre: 'Amoxicilina 500mg',
+    clave: '010.000.2101.00',
+    stock: 24,
+    color: 'bg-amber-400',
+  },
+  {
+    nombre: 'Losartán 50mg',
+    clave: '010.000.0520.00',
+    stock: 31,
+    color: 'bg-amber-400',
+  },
 ];
 
 const heatPoints = [
@@ -51,7 +76,6 @@ const heatPoints = [
   { lat: 29.07, lng: -110.95, intensity: 0.3, name: 'Sonora' },
   { lat: 28.63, lng: -106.08, intensity: 0.35, name: 'Chihuahua' },
 ];
-
 
 const chartTooltipStyle = {
   contentStyle: {
@@ -70,8 +94,10 @@ const DashboardPage = () => {
   useEffect(() => {
     // TODO: Obtener el id del hospital del usuario
     getStockAvgs(62)
-    .then(data => setStockAvgs(data))
-    .catch(err => console.log("Error al obtener el abasto promedio: ", err));
+      .then((data) => setStockAvgs(data))
+      .catch((err) =>
+        console.log('Error al obtener el abasto promedio: ', err)
+      );
   }, []);
 
   /** Stock report card fetching */
@@ -79,42 +105,46 @@ const DashboardPage = () => {
   useEffect(() => {
     // TODO: Obtener el id del hospital del usuario
     getStockReport(62)
-    .then(data => setStockReport(data))
-    .catch(err => console.log("Error al obtener los medicamentos en desabasto: ", err));
+      .then((data) => setStockReport(data))
+      .catch((err) =>
+        console.log('Error al obtener los medicamentos en desabasto: ', err)
+      );
   }, []);
 
   /** Stock averages rendering logic */
 
   const renderStockValue = () => {
     if (stockAvgs?.currentMonthAvg !== undefined) {
-      return `${stockAvgs.currentMonthAvg.toFixed(1)} %`; 
+      return `${stockAvgs.currentMonthAvg.toFixed(1)} %`;
     }
-    return "---";
+    return '---';
   };
 
   const renderStockDifference = () => {
     if (stockAvgs?.lastMonthAvg !== undefined) {
-      const diff = Number((stockAvgs.currentMonthAvg - stockAvgs.lastMonthAvg).toFixed(2));
-      return (diff < 0 ? "-" : "+") + `${diff} %` ;
+      const diff = Number(
+        (stockAvgs.currentMonthAvg - stockAvgs.lastMonthAvg).toFixed(2)
+      );
+      return (diff < 0 ? '-' : '+') + `${diff} %`;
     }
-    return "---";
+    return '---';
   };
 
   /** Stock report rendering logic */
 
   const renderBottomMedicines = (medicines?: string[]) => {
-    if (!medicines || medicines.length === 0) return "---";
-  
+    if (!medicines || medicines.length === 0) return '---';
+
     return medicines
       .map((med) => {
         // 1. Remove trailing/leading whitespace (Handles "Paracetamol " -> "Paracetamol")
         const trimmed = med.trim();
-  
+
         // 2. Capitalize first letter, keep the rest as is
         // This preserves "500mg" or "IV" exactly as the server sent them
         return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
       })
-      .join(", ");
+      .join(', ');
   };
 
   return (
@@ -128,7 +158,8 @@ const DashboardPage = () => {
             Análisis de Disponibilidad de Medicamentos
           </h1>
           <p className="text-muted-foreground mt-1">
-            Monitoreo estratégico y detección de discrepancias en el suministro nacional.
+            Monitoreo estratégico y detección de discrepancias en el suministro
+            nacional.
           </p>
         </div>
 
@@ -144,7 +175,7 @@ const DashboardPage = () => {
           />
           <MetricCard
             label="Medicamentos en Desabasto"
-            value={stockReport?.lowStockCount?.toString() || "---"}
+            value={stockReport?.lowStockCount?.toString() || '---'}
             icon={<AlertTriangle className="size-5" />}
             trend={`Principales: ${renderBottomMedicines(stockReport?.bottomMedicines)}`}
             variant="rejected"
@@ -197,15 +228,21 @@ const DashboardPage = () => {
             <div className="rounded-xl border border-border bg-card p-5">
               <div className="flex items-start justify-between mb-1">
                 <div>
-                  <h2 className="font-semibold text-foreground">Discrepancia de Reportes</h2>
-                  <p className="text-xs text-muted-foreground">Datos Oficiales vs. Reportes Ciudadanos</p>
+                  <h2 className="font-semibold text-foreground">
+                    Discrepancia de Reportes
+                  </h2>
+                  <p className="text-xs text-muted-foreground">
+                    Datos Oficiales vs. Reportes Ciudadanos
+                  </p>
                 </div>
                 <div className="flex items-center gap-4 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-blue-500 inline-block" /> Oficial
+                    <span className="size-2 rounded-full bg-blue-500 inline-block" />{' '}
+                    Oficial
                   </span>
                   <span className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-amber-400 inline-block" /> Reportes
+                    <span className="size-2 rounded-full bg-amber-400 inline-block" />{' '}
+                    Reportes
                   </span>
                 </div>
               </div>
@@ -215,8 +252,20 @@ const DashboardPage = () => {
                   <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip {...chartTooltipStyle} />
-                  <Line type="monotone" dataKey="oficial" stroke="#3b82f6" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="reportes" stroke="#f59e0b" strokeWidth={2} dot={false} />
+                  <Line
+                    type="monotone"
+                    dataKey="oficial"
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="reportes"
+                    stroke="#f59e0b"
+                    strokeWidth={2}
+                    dot={false}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -224,8 +273,12 @@ const DashboardPage = () => {
             {/* Datos históricos */}
             <div className="rounded-xl border border-border bg-card p-5">
               <div className="mb-1">
-                <h2 className="font-semibold text-foreground">Datos históricos de reportes</h2>
-                <p className="text-xs text-muted-foreground">Reportes por mes</p>
+                <h2 className="font-semibold text-foreground">
+                  Datos históricos de reportes
+                </h2>
+                <p className="text-xs text-muted-foreground">
+                  Reportes por mes
+                </p>
               </div>
               <ResponsiveContainer width="100%" height={220}>
                 <LineChart data={historicoData}>
@@ -233,8 +286,20 @@ const DashboardPage = () => {
                   <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
                   <YAxis tick={{ fontSize: 11 }} />
                   <Tooltip {...chartTooltipStyle} />
-                  <Line type="monotone" dataKey="oficial" stroke="#3b82f6" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="reportes" stroke="#f59e0b" strokeWidth={2} dot={false} />
+                  <Line
+                    type="monotone"
+                    dataKey="oficial"
+                    stroke="#3b82f6"
+                    strokeWidth={2}
+                    dot={false}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="reportes"
+                    stroke="#f59e0b"
+                    strokeWidth={2}
+                    dot={false}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -243,27 +308,39 @@ const DashboardPage = () => {
           {/* Columna derecha */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             {/* Carga de datos */}
-            <StockFileUpload/>
+            <StockFileUpload />
 
             {/* Medicamentos críticos */}
             <div className="rounded-xl border border-border bg-card p-5">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-semibold text-foreground">Medicamentos Críticos</h2>
-                <button className="text-xs text-primary hover:underline">Ver todos</button>
+                <h2 className="font-semibold text-foreground">
+                  Medicamentos Críticos
+                </h2>
+                <button className="text-xs text-primary hover:underline">
+                  Ver todos
+                </button>
               </div>
               <div className="flex flex-col gap-3">
                 {medicamentosCriticos.map((med) => (
                   <div key={med.clave} className="flex items-center gap-3">
-                    <div className={`w-1 self-stretch rounded-full ${med.color}`} />
+                    <div
+                      className={`w-1 self-stretch rounded-full ${med.color}`}
+                    />
                     <div className="p-2 rounded-lg bg-muted">
                       <Pill className="size-4 text-muted-foreground" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">{med.nombre}</p>
-                      <p className="text-xs text-muted-foreground">Clave: {med.clave}</p>
+                      <p className="text-sm font-semibold text-foreground truncate">
+                        {med.nombre}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Clave: {med.clave}
+                      </p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className={`text-sm font-bold ${med.stock < 20 ? 'text-red-500' : 'text-amber-500'}`}>
+                      <p
+                        className={`text-sm font-bold ${med.stock < 20 ? 'text-red-500' : 'text-amber-500'}`}
+                      >
                         {String(med.stock).padStart(2, '0')}%
                       </p>
                       <p className="text-xs text-muted-foreground">STOCK</p>

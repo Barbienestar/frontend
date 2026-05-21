@@ -32,4 +32,3 @@ export const Loading: Story = {
     isLoading: true,
   },
 };
-

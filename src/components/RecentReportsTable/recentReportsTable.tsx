@@ -63,22 +63,35 @@ export const RecentReportsTable = ({
               </td>
               <td className="px-4 py-4">
                 <p className="font-semibold text-foreground">{r.medicine}</p>
-                <p className="text-xs text-muted-foreground mt-0.5">{r.hospital}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {r.hospital}
+                </p>
               </td>
               <td className="px-4 py-4">
-                <span className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${r.statusColor}`}>
+                <span
+                  className={`px-3 py-1 rounded-full text-xs font-semibold whitespace-nowrap ${r.statusColor}`}
+                >
                   {r.status}
                 </span>
               </td>
               <td className="px-5 py-4">
                 <div className="flex items-center justify-end gap-3 text-muted-foreground">
-                  <button className="hover:text-foreground transition-colors" title="Ver">
+                  <button
+                    className="hover:text-foreground transition-colors"
+                    title="Ver"
+                  >
                     <Eye className="size-5" strokeWidth={1.5} />
                   </button>
-                  <button className="hover:text-foreground transition-colors" title="Editar">
+                  <button
+                    className="hover:text-foreground transition-colors"
+                    title="Editar"
+                  >
                     <Pencil className="size-5" strokeWidth={1.5} />
                   </button>
-                  <button className="hover:text-red-500 transition-colors" title="Eliminar">
+                  <button
+                    className="hover:text-red-500 transition-colors"
+                    title="Eliminar"
+                  >
                     <Trash2 className="size-5" strokeWidth={1.5} />
                   </button>
                 </div>

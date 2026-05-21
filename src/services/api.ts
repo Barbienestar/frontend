@@ -2,10 +2,12 @@ import Config from '@/config';
 import applyCaseMiddleware from 'axios-case-converter';
 import axios from 'axios';
 
-const api = applyCaseMiddleware(axios.create({
-  baseURL: Config.API_URL,
-  timeout: 5000,
-}));
+const api = applyCaseMiddleware(
+  axios.create({
+    baseURL: Config.API_URL,
+    timeout: 5000,
+  })
+);
 
 api.interceptors.request.use(
   (config) => {

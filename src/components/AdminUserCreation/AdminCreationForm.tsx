@@ -160,9 +160,7 @@ export const AdminCreationForm = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              description={
-                isInvalid('password') ? formik.errors.password : ''
-              }
+              description={isInvalid('password') ? formik.errors.password : ''}
               descClassName="text-red-700"
               inputClassName={cn(
                 'h-12 rounded-xl',
