@@ -68,7 +68,8 @@ const DashboardPage = () => {
   /** Stock averages card fetching */
 
   useEffect(() => {
-    getStockAvgs()
+    // TODO: Obtener el id del hospital del usuario
+    getStockAvgs(62)
     .then(data => setStockAvgs(data))
     .catch(err => console.log("Error al obtener el abasto promedio: ", err));
   }, []);
@@ -76,7 +77,8 @@ const DashboardPage = () => {
   /** Stock report card fetching */
 
   useEffect(() => {
-    getStockReport()
+    // TODO: Obtener el id del hospital del usuario
+    getStockReport(62)
     .then(data => setStockReport(data))
     .catch(err => console.log("Error al obtener los medicamentos en desabasto: ", err));
   }, []);
