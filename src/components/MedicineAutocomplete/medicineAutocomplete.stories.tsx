@@ -19,12 +19,16 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    value: 'Paracetamol',
+    onChange: () => {},
     isLoading: false,
   },
 };
 
 export const Loading: Story = {
   args: {
+    value: '',
+    onChange: () => {},
     isLoading: true,
   },
 };
