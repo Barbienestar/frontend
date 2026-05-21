@@ -19,29 +19,35 @@ const MedicineAutocomplete = ({
   isLoading = false,
 }: MedicineAutocompleteProps) => {
   const [suggestions, setSuggestions] = useState<MedicineSearchResult[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    if (value.trim().length < 2) {
-      setSuggestions([]);
-      setShowSuggestions(false);
+    if (debounceRef.current) {
+      clearTimeout(debounceRef.current);
+    }
+
+    const trimmedValue = value.trim();
+
+    if (trimmedValue.length < 2) {
       return;
     }
+
     debounceRef.current = setTimeout(async () => {
       try {
-        const results = await searchMedicines(value.trim());
+        const results = await searchMedicines(trimmedValue);
         setSuggestions(results);
-        setShowSuggestions(results.length > 0);
       } catch {
         setSuggestions([]);
       }
     }, 300);
 
     return () => {
-      if (debounceRef.current) clearTimeout(debounceRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
+      }
     };
   }, [value]);
 
@@ -51,11 +57,15 @@ const MedicineAutocomplete = ({
         wrapperRef.current &&
         !wrapperRef.current.contains(e.target as Node)
       ) {
-        setShowSuggestions(false);
+        setIsFocused(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, []);
 
   const buildLabel = (item: MedicineSearchResult) =>
@@ -65,28 +75,35 @@ const MedicineAutocomplete = ({
 
   const handleSelect = (item: MedicineSearchResult) => {
     const label = buildLabel(item);
+
     onChange(label);
     setSuggestions([]);
-    setShowSuggestions(false);
+    setIsFocused(false);
     onSelect(label);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      setShowSuggestions(false);
+      setIsFocused(false);
       onSearch(value.trim());
     }
   };
 
+  const showSuggestions =
+    isFocused &&
+    value.trim().length >= 2 &&
+    suggestions.length > 0;
+
   return (
     <div ref={wrapperRef} className="relative flex-1">
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground z-10" />
+
       <input
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+        onFocus={() => setIsFocused(true)}
         placeholder="Metformina 850mg"
         disabled={isLoading}
         className="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
@@ -94,7 +111,6 @@ const MedicineAutocomplete = ({
 
       {showSuggestions && (
         <ul className="absolute top-full left-0 right-0 z-9999 mt-1 bg-card border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto">
-          {' '}
           {suggestions.map((item) => (
             <li
               key={item.id}
@@ -104,8 +120,11 @@ const MedicineAutocomplete = ({
               <span className="font-medium text-foreground capitalize">
                 {item.genericName}
               </span>
+
               <span className="text-xs text-muted-foreground">
-                {[item.dosageForm, item.strength].filter(Boolean).join(' · ')}
+                {[item.dosageForm, item.strength]
+                  .filter(Boolean)
+                  .join(' · ')}
               </span>
             </li>
           ))}

@@ -37,7 +37,7 @@ const StockFileUpload = () => {
       await uploadMedicineStock(hospitalId, file);
       // éxito — aquí puedes agregar un toast o mensaje después
     } catch (e) {
-      // error — aquí puedes agregar un mensaje de error después
+      console.error('Error uploading stock:', e);
     } finally {
       setUploading(false);
     }
