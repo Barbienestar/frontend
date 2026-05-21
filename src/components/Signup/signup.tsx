@@ -62,7 +62,7 @@ const SignUp = () => {
                 const requestData: CreateUserRequest = {
                     name: values.name,
                     last_name_1: values.lastName1,
-                    last_name_2: values.lastName2 || null,
+                    last_name_2: values.lastName2 || undefined,
                     email: values.email,
                     password: values.password,
                     age: Number(values.age),
