@@ -34,6 +34,8 @@ const signupSchema = Yup.object().shape({
     idSuburb: Yup.string().required("Seleccione una colonia"),
 });
 
+const namedInput = (name: string): Pick<React.InputHTMLAttributes<HTMLInputElement>, "name"> => ({ name });
+
 const SignUp = () => {
     const navigate = useNavigate();
     const [states, setStates] = useState<SelectOption[]>([]);
@@ -123,7 +125,7 @@ const SignUp = () => {
                         "h-12 rounded-xl px-4 text-sm bg-muted/40",
                         isInvalid("name") && "border-red-700 bg-red-100/30"
                     )}
-                    {...({ name: "name" } as any)} 
+                    {...namedInput("name")} 
                 />
 
                 <div className="flex gap-2">
@@ -137,7 +139,7 @@ const SignUp = () => {
                         description={isInvalid("lastName1") ? formik.errors.lastName1 : ""}
                         descClassName="text-red-700"
                         inputClassName={cn("h-12 rounded-xl", isInvalid("lastName1") && "border-red-700 bg-red-100/30")}
-                        {...({ name: "lastName1" } as any)}
+                        {...namedInput("lastName1")}
                     />
                     <InputField 
                         variant="text"
@@ -149,7 +151,7 @@ const SignUp = () => {
                         description={isInvalid("lastName2") ? formik.errors.lastName2 : ""}
                         descClassName="text-red-700"
                         inputClassName={cn("h-12 rounded-xl", isInvalid("lastName2") && "border-red-700 bg-red-100/30")}
-                        {...({ name: "lastName2" } as any)}
+                        {...namedInput("lastName2")}
                     />
                 </div>
 
@@ -164,7 +166,7 @@ const SignUp = () => {
                         description={isInvalid("email") ? formik.errors.email : ""}
                         descClassName="text-red-700"
                         inputClassName={cn("h-12 rounded-xl", isInvalid("email") && "border-red-700 bg-red-100/30")}
-                        {...({ name: "email" } as any)}
+                        {...namedInput("email")}
                     />
                     <InputField 
                         variant="password"
@@ -176,7 +178,7 @@ const SignUp = () => {
                         description={isInvalid("password") ? formik.errors.password : ""}
                         descClassName="text-red-700"
                         inputClassName={cn("h-12 rounded-xl", isInvalid("password") && "border-red-700 bg-red-100/30")}
-                        {...({ name: "password" } as any)}
+                        {...namedInput("password")}
                     />
                 </div>
 
@@ -190,7 +192,7 @@ const SignUp = () => {
                     description={isInvalid("confirmPassword") ? formik.errors.confirmPassword : ""}
                     descClassName="text-red-700"
                     inputClassName={cn("h-12 rounded-xl", isInvalid("confirmPassword") && "border-red-700 bg-red-100/30")}
-                    {...({ name: "confirmPassword" } as any)}
+                    {...namedInput("confirmPassword")}
                 />
 
                 <div className="flex gap-2">
@@ -205,7 +207,7 @@ const SignUp = () => {
                             description={isInvalid("age") ? formik.errors.age : ""}
                             descClassName="text-red-700"
                             inputClassName={cn("h-12 rounded-xl", isInvalid("age") && "border-red-700 bg-red-100/30")}
-                            {...({ name: "age" } as any)}
+                            {...namedInput("age")}
                         />
                     </div>
                     <InputField 
@@ -225,7 +227,7 @@ const SignUp = () => {
                         description={isInvalid("stateId") ? formik.errors.stateId : ""}
                         descClassName="text-red-700"
                         inputClassName={cn("h-12 rounded-xl", isInvalid("stateId") && "border-red-700 bg-red-100/30")}
-                        {...({ name: "stateId" } as any)}
+                        {...namedInput("stateId")}
                     />
                 </div>
 
@@ -245,7 +247,7 @@ const SignUp = () => {
                         description={isInvalid("cityId") ? formik.errors.cityId : ""}
                         descClassName="text-red-700"
                         inputClassName={cn("h-12 rounded-xl", isInvalid("cityId") && "border-red-700 bg-red-100/30")}
-                        {...({ name: "cityId" } as any)}
+                        {...namedInput("cityId")}
                     />
                 )}
 
@@ -260,7 +262,7 @@ const SignUp = () => {
                         description={isInvalid("idSuburb") ? formik.errors.idSuburb : ""}
                         descClassName="text-red-700"
                         inputClassName={cn("h-12 rounded-xl", isInvalid("idSuburb") && "border-red-700 bg-red-100/30")}
-                        {...({ name: "idSuburb" } as any)}
+                        {...namedInput("idSuburb")}
                     />
                 )}
 
