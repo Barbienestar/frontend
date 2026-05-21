@@ -34,4 +34,3 @@ export const SingleItem: Story = {
     items: [{ label: 'Inicio' }],
   },
 };
-

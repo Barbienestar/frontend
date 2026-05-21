@@ -198,9 +198,7 @@ export const HealthUserCreationForm = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              description={
-                isInvalid('password') ? formik.errors.password : ''
-              }
+              description={isInvalid('password') ? formik.errors.password : ''}
               descClassName="text-red-700"
               inputClassName={cn(
                 'h-12 rounded-xl',
@@ -268,9 +266,7 @@ export const HealthUserCreationForm = () => {
               disabled={formik.isSubmitting}
               className="w-full h-12 rounded-xl font-bold uppercase mt-2"
             >
-              {formik.isSubmitting
-                ? 'Creando...'
-                : 'Crear usuario de salud'}
+              {formik.isSubmitting ? 'Creando...' : 'Crear usuario de salud'}
             </Button>
           </div>
         </CardContent>

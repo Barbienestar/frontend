@@ -12,14 +12,14 @@ interface HospitalStockCardProps {
 
 const borderColors = {
   Disponible: 'border-l-green-500',
-  Limitado:   'border-l-yellow-500',
-  Agotado:    'border-l-red-500',
+  Limitado: 'border-l-yellow-500',
+  Agotado: 'border-l-red-500',
 };
 
 const stockLabelColors = {
   Disponible: 'text-green-600',
-  Limitado:   'text-yellow-600',
-  Agotado:    'text-red-500',
+  Limitado: 'text-yellow-600',
+  Agotado: 'text-red-500',
 };
 
 const HospitalStockCard = ({
@@ -41,7 +41,9 @@ const HospitalStockCard = ({
       {/* Row 1: badge + stock label */}
       <div className="flex items-center gap-3">
         <StatusBadge variant={data.status} />
-        <span className={`text-sm font-semibold ${stockLabelColors[data.status]}`}>
+        <span
+          className={`text-sm font-semibold ${stockLabelColors[data.status]}`}
+        >
           {data.stockLabel}
         </span>
       </div>
@@ -58,12 +60,7 @@ const HospitalStockCard = ({
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm text-muted-foreground">{medicineName}</span>
         {data.mapsUrl ? (
-          <Button
-            variant="default"
-            size="sm"
-            className="shrink-0"
-            
-          >
+          <Button variant="default" size="sm" className="shrink-0">
             <Navigation className="size-3.5" />
             Cómo llegar
           </Button>

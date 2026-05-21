@@ -90,9 +90,7 @@ const MedicineAutocomplete = ({
   };
 
   const showSuggestions =
-    isFocused &&
-    value.trim().length >= 2 &&
-    suggestions.length > 0;
+    isFocused && value.trim().length >= 2 && suggestions.length > 0;
 
   return (
     <div ref={wrapperRef} className="relative flex-1">
@@ -122,9 +120,7 @@ const MedicineAutocomplete = ({
               </span>
 
               <span className="text-xs text-muted-foreground">
-                {[item.dosageForm, item.strength]
-                  .filter(Boolean)
-                  .join(' · ')}
+                {[item.dosageForm, item.strength].filter(Boolean).join(' · ')}
               </span>
             </li>
           ))}

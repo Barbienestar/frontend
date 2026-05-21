@@ -24,4 +24,3 @@ export default meta;
 type Story = StoryObj<typeof EmptySearchCTA>;
 
 export const Default: Story = {};
-

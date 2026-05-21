@@ -22,14 +22,17 @@ import { uploadMedicineStock } from '@/services/medicines/medicinesService';
 
 const StockFileUpload = () => {
   const { hospitals, loading, error } = useHospitals();
-  const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(null);
+  const [selectedHospitalId, setSelectedHospitalId] = useState<string | null>(
+    null
+  );
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
   const selectedHospital = hospitals.find((h) => h.id === selectedHospitalId);
 
   const handleUpload = async () => {
-    const hospitalId = selectedHospitalId ?? (hospitals.length === 1 ? hospitals[0].id : null);
+    const hospitalId =
+      selectedHospitalId ?? (hospitals.length === 1 ? hospitals[0].id : null);
     if (!file || !hospitalId) return;
 
     setUploading(true);
@@ -74,11 +77,8 @@ const StockFileUpload = () => {
             </Badge>
           </CardAction>
         </CardHeader>
-        <div className='px-6'>
-          <FileUpload
-            variant="csv"
-            onFileChange={setFile}
-          />
+        <div className="px-6">
+          <FileUpload variant="csv" onFileChange={setFile} />
         </div>
         <CardFooter className="flex-col gap-2">
           <Button variant="default" size="lg" className="w-full" asChild>
@@ -116,7 +116,10 @@ const StockFileUpload = () => {
                   onValueChange={setSelectedHospitalId}
                 >
                   {hospitals.map((hospital) => (
-                    <DropdownMenuRadioItem key={hospital.id} value={hospital.id}>
+                    <DropdownMenuRadioItem
+                      key={hospital.id}
+                      value={hospital.id}
+                    >
                       {hospital.name}
                     </DropdownMenuRadioItem>
                   ))}
@@ -126,11 +129,8 @@ const StockFileUpload = () => {
           </CardAction>
         )}
       </CardHeader>
-      <div className='px-6'>
-        <FileUpload
-          variant="csv"
-          onFileChange={setFile}
-        />
+      <div className="px-6">
+        <FileUpload variant="csv" onFileChange={setFile} />
       </div>
       <CardFooter className="flex-col gap-2">
         <Button
@@ -138,12 +138,19 @@ const StockFileUpload = () => {
           size="lg"
           className="w-full bg-[#065E35] hover:bg-[#065E35]/80"
           onClick={handleUpload}
-          disabled={!file || uploading || (!selectedHospitalId && hospitals.length > 1)}
+          disabled={
+            !file || uploading || (!selectedHospitalId && hospitals.length > 1)
+          }
         >
           <Upload />
           {uploading ? 'Subiendo...' : 'Subir archivo'}
         </Button>
-        <Button variant="outline" size="lg" className="w-full bg-blue-600 text-white rounded-md hover:bg-blue-700" asChild>
+        <Button
+          variant="outline"
+          size="lg"
+          className="w-full bg-blue-600 text-white rounded-md hover:bg-blue-700"
+          asChild
+        >
           <a href="/csvTemplate/formato_abasto.csv" download>
             <Info />
             Descarga la plantilla aquí.

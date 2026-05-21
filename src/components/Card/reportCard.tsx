@@ -91,7 +91,11 @@ const ReportCard = ({
         <Button variant="outline" onClick={onCancel} disabled={isLoading}>
           Cancelar
         </Button>
-        <Button variant="default" onClick={onSubmit} disabled={isLoading || isUploading}>
+        <Button
+          variant="default"
+          onClick={onSubmit}
+          disabled={isLoading || isUploading}
+        >
           {isUploading ? (
             <>
               <Loader2 className="size-4 animate-spin" />
