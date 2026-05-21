@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import HospitalStockCard from './hospitalStockCard';
 
 const meta = {
@@ -80,3 +80,4 @@ export const SinUbicacion: Story = {
     },
   },
 };
+

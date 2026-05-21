@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import MedicineAutocomplete from './medicineAutocomplete';
 
 const meta = {
@@ -28,3 +28,4 @@ export const Loading: Story = {
     isLoading: true,
   },
 };
+
