@@ -8,19 +8,23 @@ const meta: Meta<typeof StockFileUpload> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const EmptyHospitals: Story = { args: { hospitals: [] } };
+// Caso cuando no se ha seleccionado ningún hospital todavía
+export const NoHospitalSelected: Story = {
+  args: {},
+};
 
-export const SingleHospital: Story = {
+// Caso con el hospital "20 de Noviembre"
+export const Hospital20DeNoviembre: Story = {
   args: {
-    hospitals: [{ id: '1092301920391', name: '20 de Noviembre' }],
+    hospitalId: 1092301920391,
+    hospitalName: '20 de Noviembre',
   },
 };
 
-export const MultipleHospitals: Story = {
+// Caso con el hospital "INER" 
+export const HospitalINER: Story = {
   args: {
-    hospitals: [
-      { id: '1092301920391', name: '20 de Noviembre' },
-      { id: '09asd9a-a112', name: 'INER' },
-    ],
+    hospitalId: 9876543210, 
+    hospitalName: 'INER',
   },
 };

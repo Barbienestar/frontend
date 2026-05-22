@@ -13,12 +13,14 @@ import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
+import { HospitalSelector } from '@/components/HospitalSelector/hospitalSelector';
 import {
   getStockAvgs,
   getStockReport,
   type StockAverages,
   type StockReport,
 } from '@/services/dashboard/kpis';
+import { useHospitals } from '@/hooks/useHospitals';
 import { useEffect, useState } from 'react';
 
 const discrepanciaData = [
@@ -86,42 +88,47 @@ const chartTooltipStyle = {
 };
 
 const DashboardPage = () => {
+  const {
+    hospitals,
+    selectedHospital,
+    setSelectedHospital,
+    loading: loadingHospitals,
+  } = useHospitals();
+
   const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
   const [stockReport, setStockReport] = useState<StockReport | null>(null);
 
-  /** Stock averages card fetching */
-
   useEffect(() => {
-    // TODO: Obtener el id del hospital del usuario
-    getStockAvgs(62)
-      .then((data) => setStockAvgs(data))
+    if (!selectedHospital) return;
+
+    getStockAvgs(Number(selectedHospital.id))
+      .then(setStockAvgs)
+      .catch((err) => console.log('Error al obtener el abasto promedio:', err));
+
+    getStockReport(Number(selectedHospital.id))
+      .then(setStockReport)
       .catch((err) =>
-        console.log('Error al obtener el abasto promedio: ', err)
+        console.log('Error al obtener los medicamentos en desabasto:', err)
       );
-  }, []);
-
-  /** Stock report card fetching */
-
-  useEffect(() => {
-    // TODO: Obtener el id del hospital del usuario
-    getStockReport(62)
-      .then((data) => setStockReport(data))
-      .catch((err) =>
-        console.log('Error al obtener los medicamentos en desabasto: ', err)
-      );
-  }, []);
-
-  /** Stock averages rendering logic */
+    return () => {
+      setStockAvgs(null);
+      setStockReport(null);
+    };
+  }, [selectedHospital]);
 
   const renderStockValue = () => {
-    if (stockAvgs?.currentMonthAvg !== undefined) {
+    if (stockAvgs != null && stockAvgs.currentMonthAvg != null) {
       return `${stockAvgs.currentMonthAvg.toFixed(1)} %`;
     }
     return '---';
   };
 
   const renderStockDifference = () => {
-    if (stockAvgs?.lastMonthAvg !== undefined) {
+    if (
+      stockAvgs != null &&
+      stockAvgs.currentMonthAvg != null &&
+      stockAvgs.lastMonthAvg != null
+    ) {
       const diff = Number(
         (stockAvgs.currentMonthAvg - stockAvgs.lastMonthAvg).toFixed(2)
       );
@@ -130,18 +137,11 @@ const DashboardPage = () => {
     return '---';
   };
 
-  /** Stock report rendering logic */
-
   const renderBottomMedicines = (medicines?: string[]) => {
     if (!medicines || medicines.length === 0) return '---';
-
     return medicines
       .map((med) => {
-        // 1. Remove trailing/leading whitespace (Handles "Paracetamol " -> "Paracetamol")
         const trimmed = med.trim();
-
-        // 2. Capitalize first letter, keep the rest as is
-        // This preserves "500mg" or "IV" exactly as the server sent them
         return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
       })
       .join(', ');
@@ -151,16 +151,29 @@ const DashboardPage = () => {
     <div className="min-h-screen bg-background flex flex-col pt-18">
       <Navbar variant="gobierno" />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-4">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-10">
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-foreground">
             Análisis de Disponibilidad de Medicamentos
           </h1>
-          <p className="text-muted-foreground mt-1">
-            Monitoreo estratégico y detección de discrepancias en el suministro
-            nacional.
-          </p>
+          <div className="flex items-center gap-3 mt-2">
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-muted-foreground truncate">
+                Monitoreo estratégico y detección de discrepancias en el
+                suministro nacional.
+              </p>
+            </div>
+            <span className="text-muted-foreground/30 hidden sm:block">·</span>
+            <div className="ml-auto">
+              <HospitalSelector
+                hospitals={hospitals}
+                selected={selectedHospital}
+                onSelect={setSelectedHospital}
+                loading={loadingHospitals}
+              />
+            </div>
+          </div>
         </div>
 
         {/* KPI Cards */}
@@ -308,7 +321,12 @@ const DashboardPage = () => {
           {/* Columna derecha */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             {/* Carga de datos */}
-            <StockFileUpload />
+            <StockFileUpload
+              hospitalId={
+                selectedHospital ? Number(selectedHospital.id) : undefined
+              }
+              hospitalName={selectedHospital?.name}
+            />
 
             {/* Medicamentos críticos */}
             <div className="rounded-xl border border-border bg-card p-5">
