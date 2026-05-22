@@ -62,7 +62,7 @@ export const HealthUserCreationForm = () => {
     fetchHospitals();
   }, []);
 
-  const handleHospitalToggle = (hospitalId: string) => {
+  const handleHospitalToggle = (hospitalId: number) => {
     const numId = Number(hospitalId);
     const current = formik.values.hospitalIds;
     if (current.includes(numId)) {
