@@ -10,11 +10,11 @@ import Navbar from '@/components/Global/navbar';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import type { MetricCardVariant } from '@/components/ui/metric-card';
 import { cn } from '@/lib/utils';
-import { changeReportStatus } from '@/services/reportService';
+import { changeReportStatus } from '@/services/report/reportService';
 import {
   getReportsCountByStatus,
   listStatuses,
-} from '@/services/statusService';
+} from '@/services/status/statusService';
 
 interface StatusWithCount extends StatusResponse {
   count: number;

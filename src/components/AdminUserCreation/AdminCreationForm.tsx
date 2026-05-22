@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { createAdmin } from '@/services/createUserService';
+import { createAdmin } from '@/services/user/createUserService';
 import type { CreateUserRequest } from '@/services/auth/authService';
 
 const adminSchema = Yup.object().shape({

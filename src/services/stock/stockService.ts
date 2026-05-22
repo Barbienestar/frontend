@@ -1,4 +1,4 @@
-import api from './api';
+import api from '../api';
 import type { StockData } from '@/common/StockData';
 import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
 

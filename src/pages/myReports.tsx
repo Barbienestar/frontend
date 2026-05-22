@@ -4,7 +4,7 @@ import Navbar from '@/components/Global/navbar';
 import { Footer } from '@/components/Global/footer';
 import { Breadcrumb } from '@/components/Breadcrumb/breadcrumb';
 import { PageHeader } from '@/components/PageHeader/pageHeader';
-import { getMyReports } from '@/services/reportService';
+import { getMyReports } from '@/services/report/reportService';
 import { statusConfig } from '@/utils/reportStatus';
 import type { ReportData } from '@/common/ReportData ';
 
