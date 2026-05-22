@@ -8,7 +8,7 @@ import { Button } from '@/components/Button/button';
 import HospitalStockCard from '@/components/HospitalStockCard/hospitalStockCard';
 import MedicineAutocomplete from '@/components/MedicineAutocomplete/medicineAutocomplete';
 import { Map, type MedicinePoint } from '@/components/Map/map';
-import { getStockByMedicine } from '@/services/stockService';
+import { getStockByMedicine } from '@/services/stock/stockService';
 import type { StockData } from '@/common/StockData';
 import { EmptySearchCTA } from '@/components/EmptySearchCTA/emptySearchCTA';
 

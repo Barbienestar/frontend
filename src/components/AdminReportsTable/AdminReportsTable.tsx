@@ -4,7 +4,7 @@ import type { FullReportData } from '@/common/FullReportData';
 import type { PaginatedResponse } from '@/common/PaginatedResponse';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { getAdminPageReports } from '@/services/reportService';
+import { getAdminPageReports } from '@/services/report/reportService';
 import { AdminReportsCard } from './AdminReportsCard';
 
 interface AdminReportsTableProps {

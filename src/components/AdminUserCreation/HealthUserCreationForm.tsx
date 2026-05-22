@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import type { HospitalData } from '@/common/HospitalData';
-import { getHospitals } from '@/services/reportService';
-import { createHealthUser } from '@/services/createUserService';
+import { getHospitals } from '@/services/report/reportService';
+import { createHealthUser } from '@/services/user/createUserService';
 import type { CreateUserRequest } from '@/services/auth/authService';
 
 const healthUserSchema = Yup.object().shape({

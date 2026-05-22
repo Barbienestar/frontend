@@ -20,7 +20,7 @@ import {
   getMedicines,
   getMyReports,
   uploadImage,
-} from '@/services/reportService';
+} from '@/services/report/reportService';
 import { statusConfig } from '@/utils/reportStatus';
 
 const ReportarPage = () => {

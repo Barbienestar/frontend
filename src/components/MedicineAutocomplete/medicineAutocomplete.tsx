@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { Search } from 'lucide-react';
-import { searchMedicines } from '@/services/stockService';
+import { searchMedicines } from '@/services/stock/stockService';
 import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
 
 interface MedicineAutocompleteProps {

@@ -3,7 +3,7 @@ import type { HospitalData } from '@/common/HospitalData';
 import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
 import type { PaginatedResponse } from '@/common/PaginatedResponse';
 import type { CreateReportData, ReportData } from '@/common/ReportData ';
-import api from './api';
+import api from '../api';
 
 interface ReportImageData {
   imageUrl: string;
