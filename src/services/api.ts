@@ -1,6 +1,6 @@
-import Config from '@/config';
-import applyCaseMiddleware from 'axios-case-converter';
 import axios from 'axios';
+import applyCaseMiddleware from 'axios-case-converter';
+import Config from '@/config';
 
 const api = applyCaseMiddleware(
   axios.create({

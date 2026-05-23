@@ -4,6 +4,7 @@ import {
   getStoredUser,
   type UserProfile,
 } from '@/services/auth/authService';
+import api from '@/services/api';
 import {
   useCallback,
   useMemo,
@@ -40,8 +41,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         localStorage.setItem('token', freshToken);
         setToken(freshToken);
 
-        const storedUser = getStoredUser();
-        setUser(storedUser);
+        try {
+          const response = await api.get<UserProfile>('/auth/me');
+          localStorage.setItem('user', JSON.stringify(response.data));
+          setUser(response.data);
+        } catch {
+          const storedUser = getStoredUser();
+          if (storedUser) setUser(storedUser);
+        }
       } else {
         localStorage.removeItem('token');
         localStorage.removeItem('user');

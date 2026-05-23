@@ -1,5 +1,5 @@
 import api from './api';
-import type { UserProfile, UpdateUserDto } from './auth/authService';
+import type { UpdateUserDto, UserProfile } from './auth/authService';
 
 export const updateProfile = async (
   data: UpdateUserDto
