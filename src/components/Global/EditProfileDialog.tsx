@@ -24,7 +24,10 @@ const validationSchema = Yup.object({
   name: Yup.string().max(128, 'Máximo 128'),
   lastName1: Yup.string().max(64, 'Máximo 64'),
   lastName2: Yup.string().max(64, 'Máximo 64'),
-  age: Yup.number().typeError('Debe ser número').min(0, 'Mínimo 0').max(254, 'Máximo 254'),
+  age: Yup.number()
+    .typeError('Debe ser número')
+    .min(0, 'Mínimo 0')
+    .max(254, 'Máximo 254'),
 });
 
 const EditProfileDialog = () => {
@@ -110,12 +113,11 @@ const EditProfileDialog = () => {
   // Load cities when state changes
   useEffect(() => {
     if (selectedStateId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+      /* eslint-disable react-hooks/set-state-in-effect */
       setSelectedCityId('');
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedSuburbId('');
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSuburbs([]);
+      /* eslint-enable react-hooks/set-state-in-effect */
       getCitiesByState(Number(selectedStateId))
         .then((data) =>
           setCities(
@@ -132,7 +134,7 @@ const EditProfileDialog = () => {
   // Load suburbs when city changes
   useEffect(() => {
     if (selectedCityId) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
+      /* eslint-disable-next-line react-hooks/set-state-in-effect */
       setSelectedSuburbId('');
       getSuburbsByCity(Number(selectedCityId))
         .then((data) =>
@@ -163,7 +165,12 @@ const EditProfileDialog = () => {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <button type="button" className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left">Editar perfil</button>
+        <button
+          type="button"
+          className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
+        >
+          Editar perfil
+        </button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
@@ -173,37 +180,99 @@ const EditProfileDialog = () => {
         <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="ep-name">Nombre(s)</Label>
-            <Input id="ep-name" name="name" value={formik.values.name} onChange={formik.handleChange} placeholder="Leonardo" />
+            <Input
+              id="ep-name"
+              name="name"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              placeholder="Leonardo"
+            />
           </div>
 
           <div className="flex gap-2">
             <div className="flex flex-1 flex-col gap-1.5">
               <Label htmlFor="ep-lastname1">Apellido Paterno</Label>
-              <Input id="ep-lastname1" name="lastName1" value={formik.values.lastName1} onChange={formik.handleChange} placeholder="Pérez" />
+              <Input
+                id="ep-lastname1"
+                name="lastName1"
+                value={formik.values.lastName1}
+                onChange={formik.handleChange}
+                placeholder="Pérez"
+              />
             </div>
             <div className="flex flex-1 flex-col gap-1.5">
               <Label htmlFor="ep-lastname2">Apellido Materno</Label>
-              <Input id="ep-lastname2" name="lastName2" value={formik.values.lastName2} onChange={formik.handleChange} placeholder="Palatto" />
+              <Input
+                id="ep-lastname2"
+                name="lastName2"
+                value={formik.values.lastName2}
+                onChange={formik.handleChange}
+                placeholder="Palatto"
+              />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5 w-1/3">
             <Label htmlFor="ep-age">Edad</Label>
-            <Input id="ep-age" name="age" type="number" min={0} max={254} value={formik.values.age} onChange={formik.handleChange} placeholder="20" />
+            <Input
+              id="ep-age"
+              name="age"
+              type="number"
+              min={0}
+              max={254}
+              value={formik.values.age}
+              onChange={formik.handleChange}
+              placeholder="20"
+            />
           </div>
 
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Colonia</span>
             {!isChangingLocation ? (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">{suburbLabel || 'Sin colonia'}</span>
-                <Button variant="outline" size="sm" type="button" onClick={() => setIsChangingLocation(true)}>Cambiar</Button>
+                <span className="text-sm text-muted-foreground">
+                  {suburbLabel || 'Sin colonia'}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={() => setIsChangingLocation(true)}
+                >
+                  Cambiar
+                </Button>
               </div>
             ) : (
               <div className="flex flex-col gap-2">
-                <InputField variant="select" label="Estado" options={states} value={selectedStateId} onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => setSelectedStateId(e.target.value)} />
-                {selectedStateId && <InputField variant="select" label="Ciudad" options={cities} value={selectedCityId} onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => setSelectedCityId(e.target.value)} />}
-                {selectedCityId && <InputField variant="select" label="Colonia" options={suburbs} value={selectedSuburbId} onChange={handleSuburbSelected} />}
+                <InputField
+                  variant="select"
+                  label="Estado"
+                  options={states}
+                  value={selectedStateId}
+                  onChange={(
+                    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+                  ) => setSelectedStateId(e.target.value)}
+                />
+                {selectedStateId && (
+                  <InputField
+                    variant="select"
+                    label="Ciudad"
+                    options={cities}
+                    value={selectedCityId}
+                    onChange={(
+                      e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+                    ) => setSelectedCityId(e.target.value)}
+                  />
+                )}
+                {selectedCityId && (
+                  <InputField
+                    variant="select"
+                    label="Colonia"
+                    options={suburbs}
+                    value={selectedSuburbId}
+                    onChange={handleSuburbSelected}
+                  />
+                )}
               </div>
             )}
           </div>
@@ -211,7 +280,13 @@ const EditProfileDialog = () => {
           {error && <p className="text-sm text-destructive">{error}</p>}
 
           <DialogFooter>
-            <Button type="submit" variant="default" disabled={formik.isSubmitting}>{formik.isSubmitting ? 'Guardando...' : 'Guardar'}</Button>
+            <Button
+              type="submit"
+              variant="default"
+              disabled={formik.isSubmitting}
+            >
+              {formik.isSubmitting ? 'Guardando...' : 'Guardar'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
