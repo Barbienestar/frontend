@@ -14,6 +14,7 @@ import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
 import { HospitalSelector } from '@/components/HospitalSelector/hospitalSelector';
+import { PeriodStockReportGraph } from '@/components/PeriodStockReportGraph/PeriodStockReportGraph';
 import {
   getStockAvgs,
   getStockReport,
@@ -30,15 +31,6 @@ const discrepanciaData = [
   { mes: 'ABR', oficial: 800, reportes: 790 },
   { mes: 'MAY', oficial: 815, reportes: 800 },
   { mes: 'JUN', oficial: 790, reportes: 820 },
-];
-
-const historicoData = [
-  { mes: 'ENE', oficial: 1200, reportes: 980 },
-  { mes: 'FEB', oficial: 1350, reportes: 1100 },
-  { mes: 'MAR', oficial: 1280, reportes: 1200 },
-  { mes: 'ABR', oficial: 1400, reportes: 1180 },
-  { mes: 'MAY', oficial: 1320, reportes: 1250 },
-  { mes: 'JUN', oficial: 1450, reportes: 1300 },
 ];
 
 const medicamentosCriticos = [
@@ -283,39 +275,11 @@ const DashboardPage = () => {
               </ResponsiveContainer>
             </div>
 
-            {/* Datos históricos */}
-            <div className="rounded-xl border border-border bg-card p-5">
-              <div className="mb-1">
-                <h2 className="font-semibold text-foreground">
-                  Datos históricos de reportes
-                </h2>
-                <p className="text-xs text-muted-foreground">
-                  Reportes por mes
-                </p>
-              </div>
-              <ResponsiveContainer width="100%" height={220}>
-                <LineChart data={historicoData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} />
-                  <Tooltip {...chartTooltipStyle} />
-                  <Line
-                    type="monotone"
-                    dataKey="oficial"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="reportes"
-                    stroke="#f59e0b"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <PeriodStockReportGraph
+              hospitalId={
+                selectedHospital ? Number(selectedHospital.id) : undefined
+              }
+            />
           </div>
 
           {/* Columna derecha */}
