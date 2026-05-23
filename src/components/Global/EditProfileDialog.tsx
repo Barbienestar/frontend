@@ -131,7 +131,7 @@ const EditProfileDialog = () => {
       if (name) data.name = name;
       if (lastName1) data.lastName1 = lastName1;
       if (lastName2) data.lastName2 = lastName2;
-      if (age) data.age = Number(age);
+      if (age) { const n = Number(age); if (!isNaN(n)) data.age = n; }
       if (suburbId) data.suburbId = suburbId;
 
       const updatedUser = await updateProfile(data);
@@ -264,11 +264,7 @@ const EditProfileDialog = () => {
           {error && <p className="text-sm text-destructive">{error}</p>}
 
           <DialogFooter>
-            <Button
-              type="submit"
-              variant="default"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" variant="default" disabled={isSubmitting}>
               {isSubmitting ? 'Guardando...' : 'Guardar'}
             </Button>
           </DialogFooter>
