@@ -109,7 +109,9 @@ const EditProfileDialog = () => {
     }
   }, [selectedCityId]);
 
-  const handleSuburbSelected = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
+  const handleSuburbSelected = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
     const val = e.target.value;
     setSelectedSuburbId(val);
     if (val) {
@@ -120,7 +122,8 @@ const EditProfileDialog = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError(null);
     setIsSubmitting(true);
     try {
@@ -157,7 +160,7 @@ const EditProfileDialog = () => {
           <DialogTitle>Editar Perfil</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col gap-4">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           {/* Name */}
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="ep-name">Nombre(s)</Label>
@@ -207,7 +210,7 @@ const EditProfileDialog = () => {
 
           {/* Suburb */}
           <div className="flex flex-col gap-1.5">
-            <Label>Colonia</Label>
+            <span className="text-sm font-medium">Colonia</span>
             {!isChangingLocation ? (
               <div className="flex items-center gap-2">
                 <span className="text-sm text-muted-foreground">
@@ -229,7 +232,9 @@ const EditProfileDialog = () => {
                   label="Estado"
                   options={states}
                   value={selectedStateId}
-                  onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => setSelectedStateId(e.target.value)}
+                  onChange={(
+                    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+                  ) => setSelectedStateId(e.target.value)}
                 />
                 {selectedStateId && (
                   <InputField
@@ -237,7 +242,9 @@ const EditProfileDialog = () => {
                     label="Ciudad"
                     options={cities}
                     value={selectedCityId}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => setSelectedCityId(e.target.value)}
+                    onChange={(
+                      e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+                    ) => setSelectedCityId(e.target.value)}
                   />
                 )}
                 {selectedCityId && (
@@ -255,17 +262,17 @@ const EditProfileDialog = () => {
 
           {/* Error */}
           {error && <p className="text-sm text-destructive">{error}</p>}
-        </div>
 
-        <DialogFooter>
-          <Button
-            variant="default"
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Guardando...' : 'Guardar'}
-          </Button>
-        </DialogFooter>
+          <DialogFooter>
+            <Button
+              type="submit"
+              variant="default"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Guardando...' : 'Guardar'}
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
