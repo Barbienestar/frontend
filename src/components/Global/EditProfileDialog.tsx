@@ -17,18 +17,19 @@ import { getCitiesByState } from '@/services/cities/citiesService';
 import { getSuburbsByCity } from '@/services/suburbs/suburbsService';
 import { InputField, type SelectOption } from '@/components/Input/inputField';
 import type { UpdateUserDto } from '@/services/auth/authService';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object({
+  name: Yup.string().max(128, 'Máximo 128'),
+  lastName1: Yup.string().max(64, 'Máximo 64'),
+  lastName2: Yup.string().max(64, 'Máximo 64'),
+  age: Yup.number().typeError('Debe ser número').min(0, 'Mínimo 0').max(254, 'Máximo 254'),
+});
 
 const EditProfileDialog = () => {
   const { user, setUser } = useAuth();
   const [open, setOpen] = useState(false);
-
-  // Form state
-  const [name, setName] = useState('');
-  const [lastName1, setLastName1] = useState('');
-  const [lastName2, setLastName2] = useState('');
-  const [age, setAge] = useState('');
-  const [suburbId, setSuburbId] = useState<number | undefined>(undefined);
-  const [suburbLabel, setSuburbLabel] = useState('');
 
   // Location cascade state
   const [isChangingLocation, setIsChangingLocation] = useState(false);
@@ -39,23 +40,56 @@ const EditProfileDialog = () => {
   const [selectedCityId, setSelectedCityId] = useState('');
   const [selectedSuburbId, setSelectedSuburbId] = useState('');
 
-  // Submission state
+  const [suburbId, setSuburbId] = useState<number | undefined>(undefined);
+  const [suburbLabel, setSuburbLabel] = useState('');
   const [error, setError] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Pre-fill form when dialog opens
-  useEffect(() => {
-    if (open && user) {
-      setName(user.name ?? '');
-      setLastName1(user.lastName1 ?? '');
-      setLastName2(user.lastName2 ?? '');
-      setAge(user.age?.toString() ?? '');
+  const formik = useFormik({
+    initialValues: { name: '', lastName1: '', lastName2: '', age: '' },
+    validationSchema,
+    onSubmit: async (values) => {
+      setError(null);
+      try {
+        const data: UpdateUserDto = {};
+        if (values.name) data.name = values.name;
+        if (values.lastName1) data.lastName1 = values.lastName1;
+        if (values.lastName2) data.lastName2 = values.lastName2;
+        if (values.age) {
+          const n = Number(values.age);
+          if (!isNaN(n)) data.age = n;
+        }
+        if (suburbId) data.suburbId = suburbId;
+
+        const updatedUser = await updateProfile(data);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        setUser(updatedUser);
+        setOpen(false);
+      } catch {
+        setError('Error al actualizar perfil. Intenta de nuevo.');
+      }
+    },
+  });
+
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+    if (nextOpen && user) {
+      formik.resetForm({
+        values: {
+          name: user.name ?? '',
+          lastName1: user.lastName1 ?? '',
+          lastName2: user.lastName2 ?? '',
+          age: user.age?.toString() ?? '',
+        },
+      });
       setSuburbId(user.suburb?.id);
       setSuburbLabel(user.suburb?.name ?? '');
       setIsChangingLocation(false);
+      setSelectedStateId('');
+      setSelectedCityId('');
+      setSelectedSuburbId('');
       setError(null);
     }
-  }, [open, user]);
+  };
 
   // Load states when "Cambiar" is toggled
   useEffect(() => {
@@ -76,8 +110,11 @@ const EditProfileDialog = () => {
   // Load cities when state changes
   useEffect(() => {
     if (selectedStateId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedCityId('');
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedSuburbId('');
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSuburbs([]);
       getCitiesByState(Number(selectedStateId))
         .then((data) =>
@@ -95,6 +132,7 @@ const EditProfileDialog = () => {
   // Load suburbs when city changes
   useEffect(() => {
     if (selectedCityId) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedSuburbId('');
       getSuburbsByCity(Number(selectedCityId))
         .then((data) =>
@@ -122,151 +160,58 @@ const EditProfileDialog = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setIsSubmitting(true);
-    try {
-      const data: UpdateUserDto = {};
-      if (name) data.name = name;
-      if (lastName1) data.lastName1 = lastName1;
-      if (lastName2) data.lastName2 = lastName2;
-      if (age) { const n = Number(age); if (!isNaN(n)) data.age = n; }
-      if (suburbId) data.suburbId = suburbId;
-
-      const updatedUser = await updateProfile(data);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      setUser(updatedUser);
-      setOpen(false);
-    } catch {
-      setError('Error al actualizar perfil. Intenta de nuevo.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <button
-          type="button"
-          className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
-        >
-          Editar perfil
-        </button>
+        <button type="button" className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left">Editar perfil</button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Editar Perfil</DialogTitle>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {/* Name */}
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="ep-name">Nombre(s)</Label>
-            <Input
-              id="ep-name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Leonardo"
-            />
+            <Input id="ep-name" name="name" value={formik.values.name} onChange={formik.handleChange} placeholder="Leonardo" />
           </div>
 
-          {/* Last names */}
           <div className="flex gap-2">
             <div className="flex flex-1 flex-col gap-1.5">
               <Label htmlFor="ep-lastname1">Apellido Paterno</Label>
-              <Input
-                id="ep-lastname1"
-                value={lastName1}
-                onChange={(e) => setLastName1(e.target.value)}
-                placeholder="Pérez"
-              />
+              <Input id="ep-lastname1" name="lastName1" value={formik.values.lastName1} onChange={formik.handleChange} placeholder="Pérez" />
             </div>
             <div className="flex flex-1 flex-col gap-1.5">
               <Label htmlFor="ep-lastname2">Apellido Materno</Label>
-              <Input
-                id="ep-lastname2"
-                value={lastName2}
-                onChange={(e) => setLastName2(e.target.value)}
-                placeholder="Palatto"
-              />
+              <Input id="ep-lastname2" name="lastName2" value={formik.values.lastName2} onChange={formik.handleChange} placeholder="Palatto" />
             </div>
           </div>
 
-          {/* Age */}
           <div className="flex flex-col gap-1.5 w-1/3">
             <Label htmlFor="ep-age">Edad</Label>
-            <Input
-              id="ep-age"
-              type="number"
-              min={0}
-              max={254}
-              value={age}
-              onChange={(e) => setAge(e.target.value)}
-              placeholder="20"
-            />
+            <Input id="ep-age" name="age" type="number" min={0} max={254} value={formik.values.age} onChange={formik.handleChange} placeholder="20" />
           </div>
 
-          {/* Suburb */}
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Colonia</span>
             {!isChangingLocation ? (
               <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  {suburbLabel || 'Sin colonia'}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  onClick={() => setIsChangingLocation(true)}
-                >
-                  Cambiar
-                </Button>
+                <span className="text-sm text-muted-foreground">{suburbLabel || 'Sin colonia'}</span>
+                <Button variant="outline" size="sm" type="button" onClick={() => setIsChangingLocation(true)}>Cambiar</Button>
               </div>
             ) : (
               <div className="flex flex-col gap-2">
-                <InputField
-                  variant="select"
-                  label="Estado"
-                  options={states}
-                  value={selectedStateId}
-                  onChange={(
-                    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-                  ) => setSelectedStateId(e.target.value)}
-                />
-                {selectedStateId && (
-                  <InputField
-                    variant="select"
-                    label="Ciudad"
-                    options={cities}
-                    value={selectedCityId}
-                    onChange={(
-                      e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-                    ) => setSelectedCityId(e.target.value)}
-                  />
-                )}
-                {selectedCityId && (
-                  <InputField
-                    variant="select"
-                    label="Colonia"
-                    options={suburbs}
-                    value={selectedSuburbId}
-                    onChange={handleSuburbSelected}
-                  />
-                )}
+                <InputField variant="select" label="Estado" options={states} value={selectedStateId} onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => setSelectedStateId(e.target.value)} />
+                {selectedStateId && <InputField variant="select" label="Ciudad" options={cities} value={selectedCityId} onChange={(e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => setSelectedCityId(e.target.value)} />}
+                {selectedCityId && <InputField variant="select" label="Colonia" options={suburbs} value={selectedSuburbId} onChange={handleSuburbSelected} />}
               </div>
             )}
           </div>
 
-          {/* Error */}
           {error && <p className="text-sm text-destructive">{error}</p>}
 
           <DialogFooter>
-            <Button type="submit" variant="default" disabled={isSubmitting}>
-              {isSubmitting ? 'Guardando...' : 'Guardar'}
-            </Button>
+            <Button type="submit" variant="default" disabled={formik.isSubmitting}>{formik.isSubmitting ? 'Guardando...' : 'Guardar'}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
