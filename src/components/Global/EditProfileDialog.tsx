@@ -1,24 +1,24 @@
-import { useState, useEffect } from 'react';
+import { useFormik } from 'formik';
+import { useEffect, useState } from 'react';
+import * as Yup from 'yup';
+import { InputField, type SelectOption } from '@/components/Input/inputField';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/useAuth';
+import type { UpdateUserDto } from '@/services/auth/authService';
+import { getCitiesByState } from '@/services/cities/citiesService';
 import { updateProfile } from '@/services/profileService';
 import { getAllStates } from '@/services/states/statesService';
-import { getCitiesByState } from '@/services/cities/citiesService';
 import { getSuburbsByCity } from '@/services/suburbs/suburbsService';
-import { InputField, type SelectOption } from '@/components/Input/inputField';
-import type { UpdateUserDto } from '@/services/auth/authService';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
   name: Yup.string().max(128, 'Máximo 128'),
@@ -30,19 +30,29 @@ const validationSchema = Yup.object({
     .max(254, 'Máximo 254'),
 });
 
+type LocationState = {
+  states: SelectOption[];
+  selectedStateId: string;
+  cities: SelectOption[];
+  selectedCityId: string;
+  suburbs: SelectOption[];
+  selectedSuburbId: string;
+};
+
+const initialLocationState: LocationState = {
+  states: [],
+  selectedStateId: '',
+  cities: [],
+  selectedCityId: '',
+  suburbs: [],
+  selectedSuburbId: '',
+};
+
 const EditProfileDialog = () => {
   const { user, setUser } = useAuth();
   const [open, setOpen] = useState(false);
-
-  // Location cascade state
   const [isChangingLocation, setIsChangingLocation] = useState(false);
-  const [states, setStates] = useState<SelectOption[]>([]);
-  const [cities, setCities] = useState<SelectOption[]>([]);
-  const [suburbs, setSuburbs] = useState<SelectOption[]>([]);
-  const [selectedStateId, setSelectedStateId] = useState('');
-  const [selectedCityId, setSelectedCityId] = useState('');
-  const [selectedSuburbId, setSelectedSuburbId] = useState('');
-
+  const [location, setLocation] = useState<LocationState>(initialLocationState);
   const [suburbId, setSuburbId] = useState<number | undefined>(undefined);
   const [suburbLabel, setSuburbLabel] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -87,75 +97,91 @@ const EditProfileDialog = () => {
       setSuburbId(user.suburb?.id);
       setSuburbLabel(user.suburb?.name ?? '');
       setIsChangingLocation(false);
-      setSelectedStateId('');
-      setSelectedCityId('');
-      setSelectedSuburbId('');
+      setLocation(initialLocationState);
       setError(null);
     }
   };
 
-  // Load states when "Cambiar" is toggled
+  // Load states only once when the location picker is opened
   useEffect(() => {
-    if (isChangingLocation && states.length === 0) {
-      getAllStates()
-        .then((data) =>
-          setStates(
-            data.map((s) => ({
-              value: s.id.toString(),
-              label: s.name.toUpperCase(),
-            }))
-          )
-        )
-        .catch(() => setError('Error al cargar estados'));
-    }
-  }, [isChangingLocation, states.length]);
+    if (!isChangingLocation || location.states.length > 0) return;
 
-  // Load cities when state changes
-  useEffect(() => {
-    if (selectedStateId) {
-      /* eslint-disable react-hooks/set-state-in-effect */
-      setSelectedCityId('');
-      setSelectedSuburbId('');
-      setSuburbs([]);
-      /* eslint-enable react-hooks/set-state-in-effect */
-      getCitiesByState(Number(selectedStateId))
-        .then((data) =>
-          setCities(
-            data.map((c) => ({
-              value: c.id.toString(),
-              label: c.name.toUpperCase(),
-            }))
-          )
-        )
-        .catch(() => setError('Error al cargar ciudades'));
-    }
-  }, [selectedStateId]);
+    getAllStates()
+      .then((data) =>
+        setLocation((prev) => ({
+          ...prev,
+          states: data.map((s) => ({
+            value: s.id.toString(),
+            label: s.name.toUpperCase(),
+          })),
+        }))
+      )
+      .catch(() => setError('Error al cargar estados'));
+  }, [isChangingLocation, location.states.length]);
 
-  // Load suburbs when city changes
-  useEffect(() => {
-    if (selectedCityId) {
-      /* eslint-disable-next-line react-hooks/set-state-in-effect */
-      setSelectedSuburbId('');
-      getSuburbsByCity(Number(selectedCityId))
-        .then((data) =>
-          setSuburbs(
-            data.map((s) => ({
-              value: s.id.toString(),
-              label: `${s.zipCode} - ${s.name.toUpperCase()}`,
-            }))
-          )
-        )
-        .catch(() => setError('Error al cargar colonias'));
-    }
-  }, [selectedCityId]);
+  const handleStateChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
+    const stateId = e.target.value;
+    // Reset everything below state in the same handler — no effect needed
+    setLocation((prev) => ({
+      ...prev,
+      selectedStateId: stateId,
+      cities: [],
+      selectedCityId: '',
+      suburbs: [],
+      selectedSuburbId: '',
+    }));
+
+    if (!stateId) return;
+
+    getCitiesByState(Number(stateId))
+      .then((data) =>
+        setLocation((prev) => ({
+          ...prev,
+          cities: data.map((c) => ({
+            value: c.id.toString(),
+            label: c.name.toUpperCase(),
+          })),
+        }))
+      )
+      .catch(() => setError('Error al cargar ciudades'));
+  };
+
+  const handleCityChange = (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
+    const cityId = e.target.value;
+    // Reset suburbs in the same handler — no effect needed
+    setLocation((prev) => ({
+      ...prev,
+      selectedCityId: cityId,
+      suburbs: [],
+      selectedSuburbId: '',
+    }));
+
+    if (!cityId) return;
+
+    getSuburbsByCity(Number(cityId))
+      .then((data) =>
+        setLocation((prev) => ({
+          ...prev,
+          suburbs: data.map((s) => ({
+            value: s.id.toString(),
+            label: `${s.zipCode} - ${s.name.toUpperCase()}`,
+          })),
+        }))
+      )
+      .catch(() => setError('Error al cargar colonias'));
+  };
 
   const handleSuburbSelected = (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
     const val = e.target.value;
-    setSelectedSuburbId(val);
+    setLocation((prev) => ({ ...prev, selectedSuburbId: val }));
     if (val) {
-      const selected = suburbs.find((s) => s.value === val);
+      const selected = location.suburbs.find((s) => s.value === val);
       setSuburbId(Number(val));
       setSuburbLabel(selected?.label ?? '');
       setIsChangingLocation(false);
@@ -247,29 +273,25 @@ const EditProfileDialog = () => {
                 <InputField
                   variant="select"
                   label="Estado"
-                  options={states}
-                  value={selectedStateId}
-                  onChange={(
-                    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-                  ) => setSelectedStateId(e.target.value)}
+                  options={location.states}
+                  value={location.selectedStateId}
+                  onChange={handleStateChange}
                 />
-                {selectedStateId && (
+                {location.selectedStateId && (
                   <InputField
                     variant="select"
                     label="Ciudad"
-                    options={cities}
-                    value={selectedCityId}
-                    onChange={(
-                      e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-                    ) => setSelectedCityId(e.target.value)}
+                    options={location.cities}
+                    value={location.selectedCityId}
+                    onChange={handleCityChange}
                   />
                 )}
-                {selectedCityId && (
+                {location.selectedCityId && (
                   <InputField
                     variant="select"
                     label="Colonia"
-                    options={suburbs}
-                    value={selectedSuburbId}
+                    options={location.suburbs}
+                    value={location.selectedSuburbId}
                     onChange={handleSuburbSelected}
                   />
                 )}

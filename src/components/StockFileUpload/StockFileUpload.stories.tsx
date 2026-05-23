@@ -21,10 +21,10 @@ export const Hospital20DeNoviembre: Story = {
   },
 };
 
-// Caso con el hospital "INER" 
+// Caso con el hospital "INER"
 export const HospitalINER: Story = {
   args: {
-    hospitalId: 9876543210, 
+    hospitalId: 9876543210,
     hospitalName: 'INER',
   },
 };
