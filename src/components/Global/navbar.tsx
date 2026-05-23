@@ -4,6 +4,7 @@ import perfilPhoto from '../../assets/perfil.png';
 import logo from '../../assets/Logo.svg';
 import { useAuth } from '@/contexts/useAuth';
 import { Button } from '@/components/Button/button';
+import EditProfileDialog from './EditProfileDialog';
 
 type NavbarVariant = 'admin' | 'gobierno' | 'default';
 
@@ -134,6 +135,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
               </button>
               {isProfileDropdownOpen && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                  <EditProfileDialog />
                   <button
                     onClick={async () => {
                       await signOut();
