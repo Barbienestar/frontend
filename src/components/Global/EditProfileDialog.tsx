@@ -206,50 +206,23 @@ const EditProfileDialog = () => {
         <form onSubmit={formik.handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="ep-name">Nombre(s)</Label>
-            <Input
-              id="ep-name"
-              name="name"
-              value={formik.values.name}
-              onChange={formik.handleChange}
-              placeholder="Leonardo"
-            />
+            <Input id="ep-name" name="name" value={formik.values.name} onChange={formik.handleChange} />
           </div>
 
           <div className="flex gap-2">
             <div className="flex flex-1 flex-col gap-1.5">
               <Label htmlFor="ep-lastname1">Apellido Paterno</Label>
-              <Input
-                id="ep-lastname1"
-                name="lastName1"
-                value={formik.values.lastName1}
-                onChange={formik.handleChange}
-                placeholder="Pérez"
-              />
+              <Input id="ep-lastname1" name="lastName1" value={formik.values.lastName1} onChange={formik.handleChange} />
             </div>
             <div className="flex flex-1 flex-col gap-1.5">
               <Label htmlFor="ep-lastname2">Apellido Materno</Label>
-              <Input
-                id="ep-lastname2"
-                name="lastName2"
-                value={formik.values.lastName2}
-                onChange={formik.handleChange}
-                placeholder="Palatto"
-              />
+              <Input id="ep-lastname2" name="lastName2" value={formik.values.lastName2} onChange={formik.handleChange} />
             </div>
           </div>
 
           <div className="flex flex-col gap-1.5 w-1/3">
             <Label htmlFor="ep-age">Edad</Label>
-            <Input
-              id="ep-age"
-              name="age"
-              type="number"
-              min={0}
-              max={254}
-              value={formik.values.age}
-              onChange={formik.handleChange}
-              placeholder="20"
-            />
+            <Input id="ep-age" name="age" type="number" min={0} max={254} value={formik.values.age} onChange={formik.handleChange} />
           </div>
 
           <div className="flex flex-col gap-1.5">
