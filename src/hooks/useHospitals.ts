@@ -4,7 +4,9 @@ import type { HospitalData } from '@/common/HospitalData';
 
 export const useHospitals = () => {
   const [hospitals, setHospitals] = useState<HospitalData[]>([]);
-  const [selectedHospital, setSelectedHospital] = useState<HospitalData | null>(null);
+  const [selectedHospital, setSelectedHospital] = useState<HospitalData | null>(
+    null
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
