@@ -263,9 +263,14 @@ export const PeriodStockReportGraphWithStock = ({
                             locale: es,
                           })}
                       </p>
-                      {payload.map((entry, i) => (
+                      {payload
+                        .filter(
+                          (entry, idx, arr) =>
+                            arr.findIndex((e) => e.name === entry.name) === idx
+                        )
+                        .map((entry) => (
                         <p
-                          key={i}
+                          key={entry.name}
                           className="font-semibold text-sm tabular-nums"
                           style={{ color: entry.color }}
                         >
