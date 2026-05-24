@@ -35,7 +35,7 @@ export const PeriodStockReportGraphWithStock = ({
   hospitalId,
 }: PeriodStockReportGraphWithStockProps) => {
   const [startDate, setStartDate] = useState<Date | undefined>(
-    subMonths(new Date(), 6)
+    subMonths(new Date(), 1)
   );
   const [endDate, setEndDate] = useState<Date | undefined>(new Date());
   const [data, setData] = useState<ReportSnapshotWithStock[]>([]);
@@ -130,7 +130,12 @@ export const PeriodStockReportGraphWithStock = ({
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="end">
-                  <Calendar mode="single" selected={date} onSelect={setDate} />
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    defaultMonth={date}
+                  />
                 </PopoverContent>
               </Popover>
             );
