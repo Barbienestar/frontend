@@ -1,13 +1,4 @@
 import { TrendingUp, AlertTriangle, BarChart2, Pill } from 'lucide-react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
 import Navbar from '@/components/Global/navbar';
 import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
@@ -15,6 +6,7 @@ import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
 import { HospitalSelector } from '@/components/HospitalSelector/hospitalSelector';
 import { PeriodStockReportGraph } from '@/components/PeriodStockReportGraph/PeriodStockReportGraph';
+import { PeriodStockReportGraphWithStock } from '@/components/PeriodStockReportGraphWithStock/PeriodStockReportGraphWithStock';
 import {
   getStockAvgs,
   getStockReport,
@@ -23,15 +15,6 @@ import {
 } from '@/services/dashboard/kpis';
 import { useHospitals } from '@/hooks/useHospitals';
 import { useEffect, useState } from 'react';
-
-const discrepanciaData = [
-  { mes: 'ENE', oficial: 820, reportes: 740 },
-  { mes: 'FEB', oficial: 810, reportes: 760 },
-  { mes: 'MAR', oficial: 830, reportes: 780 },
-  { mes: 'ABR', oficial: 800, reportes: 790 },
-  { mes: 'MAY', oficial: 815, reportes: 800 },
-  { mes: 'JUN', oficial: 790, reportes: 820 },
-];
 
 const medicamentosCriticos = [
   {
@@ -70,14 +53,6 @@ const heatPoints = [
   { lat: 29.07, lng: -110.95, intensity: 0.3, name: 'Sonora' },
   { lat: 28.63, lng: -106.08, intensity: 0.35, name: 'Chihuahua' },
 ];
-
-const chartTooltipStyle = {
-  contentStyle: {
-    borderRadius: '8px',
-    border: '1px solid #e2e8f0',
-    fontSize: '12px',
-  },
-};
 
 const DashboardPage = () => {
   const {
@@ -229,51 +204,11 @@ const DashboardPage = () => {
               />
             </div>
 
-            {/* Discrepancia de Reportes */}
-            <div className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-start justify-between mb-1">
-                <div>
-                  <h2 className="font-semibold text-foreground">
-                    Discrepancia de Reportes
-                  </h2>
-                  <p className="text-xs text-muted-foreground">
-                    Datos Oficiales vs. Reportes Ciudadanos
-                  </p>
-                </div>
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-blue-500 inline-block" />{' '}
-                    Oficial
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-amber-400 inline-block" />{' '}
-                    Reportes
-                  </span>
-                </div>
-              </div>
-              <ResponsiveContainer width="100%" height={220}>
-                <LineChart data={discrepanciaData} {...chartTooltipStyle}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} />
-                  <Tooltip {...chartTooltipStyle} />
-                  <Line
-                    type="monotone"
-                    dataKey="oficial"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="reportes"
-                    stroke="#f59e0b"
-                    strokeWidth={2}
-                    dot={false}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <PeriodStockReportGraphWithStock
+              hospitalId={
+                selectedHospital ? Number(selectedHospital.id) : undefined
+              }
+            />
 
             <PeriodStockReportGraph
               hospitalId={
