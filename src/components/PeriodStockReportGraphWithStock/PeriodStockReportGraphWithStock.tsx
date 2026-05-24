@@ -269,19 +269,19 @@ export const PeriodStockReportGraphWithStock = ({
                             arr.findIndex((e) => e.name === entry.name) === idx
                         )
                         .map((entry) => (
-                        <p
-                          key={entry.name}
-                          className="font-semibold text-sm tabular-nums"
-                          style={{ color: entry.color }}
-                        >
-                          {entry.value?.toLocaleString('es-MX')}{' '}
-                          <span className="font-normal text-muted-foreground text-xs">
-                            {entry.name === 'totalAcceptedReports'
-                              ? 'reportes'
-                              : 'stock'}
-                          </span>
-                        </p>
-                      ))}
+                          <p
+                            key={entry.name}
+                            className="font-semibold text-sm tabular-nums"
+                            style={{ color: entry.color }}
+                          >
+                            {entry.value?.toLocaleString('es-MX')}{' '}
+                            <span className="font-normal text-muted-foreground text-xs">
+                              {entry.name === 'totalAcceptedReports'
+                                ? 'reportes'
+                                : 'stock'}
+                            </span>
+                          </p>
+                        ))}
                     </div>
                   ) : null
                 }
