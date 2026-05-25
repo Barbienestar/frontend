@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useLoadScript } from '@react-google-maps/api';
 import { SlidersHorizontal } from 'lucide-react';
 import Navbar from '@/components/Global/navbar';
 import { Footer } from '@/components/Global/footer';
@@ -7,21 +8,21 @@ import { PageHeader } from '@/components/PageHeader/pageHeader';
 import { Button } from '@/components/Button/button';
 import HospitalStockCard from '@/components/HospitalStockCard/hospitalStockCard';
 import MedicineAutocomplete from '@/components/MedicineAutocomplete/medicineAutocomplete';
-import { Map, type MedicinePoint } from '@/components/Map/map';
+import { NearbyHospitalsMap } from '@/components/NearbyHospitalsMap/NearbyHospitalsMap';
 import { getStockByMedicine } from '@/services/stock/stockService';
 import type { StockData } from '@/common/StockData';
+import { useNearbyStockResults } from '@/hooks/useNearbyStockResults';
 import { EmptySearchCTA } from '@/components/EmptySearchCTA/emptySearchCTA';
+import Config from '@/config';
 
-const CDMX_CENTER: [number, number] = [19.4326, -99.1332];
 type FilterStatus = 'Todos' | 'Disponible' | 'Limitado' | 'Agotado';
-const filterOptions: FilterStatus[] = [
-  'Todos',
-  'Disponible',
-  'Limitado',
-  'Agotado',
-];
+const filterOptions: FilterStatus[] = ['Todos', 'Disponible', 'Limitado', 'Agotado'];
 
 const MapaDeAbasto = () => {
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: Config.GOOGLE_MAPS_API_KEY,
+  });
+
   const [submittedQuery, setSubmittedQuery] = useState('');
   const [searchValue, setSearchValue] = useState('');
   const [results, setResults] = useState<StockData[]>([]);
@@ -31,6 +32,26 @@ const MapaDeAbasto = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [filter, setFilter] = useState<FilterStatus>('Todos');
   const [filterOpen, setFilterOpen] = useState(false);
+  const [userLat, setUserLat] = useState<number | null>(null);
+  const [userLng, setUserLng] = useState<number | null>(null);
+  const listRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    navigator.geolocation?.getCurrentPosition(
+      (pos) => {
+        setUserLat(pos.coords.latitude);
+        setUserLng(pos.coords.longitude);
+      },
+      () => {}
+    );
+  }, []);
+
+  const { enriched, geocoding } = useNearbyStockResults(
+    results,
+    userLat,
+    userLng,
+    isLoaded
+  );
 
   const handleSearch = async (query: string) => {
     if (!query.trim()) return;
@@ -52,16 +73,21 @@ const MapaDeAbasto = () => {
     }
   };
 
+  const handleSelectHospital = (id: number) => {
+    setSelectedId(id);
+    const idx = filtered.findIndex((r) => r.hospitalId === id);
+    if (idx !== -1 && listRef.current) {
+      const card = listRef.current.children[idx] as HTMLElement;
+      card?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
   const normalize = (value: string) => value.trim().toLowerCase();
 
   const filtered =
     filter === 'Todos'
-      ? results
-      : results.filter((r) => normalize(r.status) === normalize(filter));
-
-  const mapPoints: MedicinePoint[] = [
-    { lat: CDMX_CENTER[0], lng: CDMX_CENTER[1] },
-  ];
+      ? enriched
+      : enriched.filter((r) => normalize(r.status) === normalize(filter));
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
@@ -107,10 +133,15 @@ const MapaDeAbasto = () => {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Lista */}
           <div className="flex flex-col gap-3 w-full lg:w-[380px] lg:shrink-0">
-            {results.length > 0 && (
+            {enriched.length > 0 && (
               <div className="flex items-center justify-between">
                 <p className="text-sm font-semibold text-foreground">
                   Resultados Cercanos
+                  {geocoding && (
+                    <span className="ml-2 text-xs font-normal text-muted-foreground">
+                      Calculando distancias…
+                    </span>
+                  )}
                 </p>
                 <div className="relative">
                   <button
@@ -147,20 +178,23 @@ const MapaDeAbasto = () => {
               </p>
             )}
 
-            <div className="flex flex-col gap-3 lg:max-h-[520px] overflow-y-auto pr-1">
+            <div
+              ref={listRef}
+              className="flex flex-col gap-3 lg:max-h-[520px] overflow-y-auto pr-1"
+            >
               {filtered.map((item, index) => (
                 <HospitalStockCard
                   key={`${item.hospitalId}-${index}`}
                   data={item}
                   medicineName={submittedQuery}
                   selected={selectedId === item.hospitalId}
-                  onClick={() => setSelectedId(item.hospitalId)}
+                  onClick={() => handleSelectHospital(item.hospitalId)}
                 />
               ))}
               {searched &&
                 !isLoading &&
                 filtered.length === 0 &&
-                results.length > 0 && (
+                enriched.length > 0 && (
                   <p className="text-sm text-muted-foreground">
                     No hay resultados con el filtro "{filter}".
                   </p>
@@ -170,11 +204,13 @@ const MapaDeAbasto = () => {
 
           {/* Mapa */}
           <div className="flex-1 min-h-[400px]">
-            <Map
-              variant="normal"
-              points={mapPoints}
-              center={CDMX_CENTER}
-              zoom={11}
+            <NearbyHospitalsMap
+              isLoaded={isLoaded}
+              results={enriched}
+              selectedId={selectedId}
+              userLat={userLat}
+              userLng={userLng}
+              onSelectHospital={handleSelectHospital}
               height="520px"
             />
           </div>
