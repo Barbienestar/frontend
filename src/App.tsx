@@ -7,11 +7,13 @@ import Inicio from './pages/inicio';
 import MapaDeAbasto from './pages/mapaDeAbasto';
 import MyReports from './pages/myReports';
 import ReportarPage from './pages/report';
+import { Toaster } from './components/ui/sonner';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   return (
     <BrowserRouter>
+      <Toaster />
       <Routes>
         <Route path="/" element={<Navigate to="/inicio" replace />} />
 

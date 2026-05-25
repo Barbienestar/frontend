@@ -11,6 +11,7 @@ import {
 } from '../ui/card';
 import { Info, Upload } from 'lucide-react';
 import { uploadMedicineStock } from '@/services/medicines/medicinesService';
+import { toast } from 'sonner';
 
 interface Props {
   hospitalId?: number;
@@ -20,6 +21,7 @@ interface Props {
 const StockFileUpload = ({ hospitalId, hospitalName }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [fileUploadKey, setFileUploadKey] = useState(0);
 
   const handleUpload = async () => {
     if (!file || !hospitalId) return;
@@ -27,12 +29,33 @@ const StockFileUpload = ({ hospitalId, hospitalName }: Props) => {
     setUploading(true);
     try {
       await uploadMedicineStock(String(hospitalId), file);
+      toast.success('Archivo subido con éxito');
+      setFile(null);
+      setFileUploadKey((prev) => prev + 1);
     } catch (e) {
       console.error('Error uploading stock:', e);
+      toast.error(
+        'Error al subir el archivo. Revise el formato o la extensión del archivo.'
+      );
     } finally {
       setUploading(false);
     }
   };
+
+  if (!hospitalId) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle>Carga de datos oficiales</CardTitle>
+          <CardAction>
+            <Badge variant="destructive" className="p-4 rounded-sm">
+              No hay hospital seleccionado
+            </Badge>
+          </CardAction>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -47,7 +70,7 @@ const StockFileUpload = ({ hospitalId, hospitalName }: Props) => {
         )}
       </CardHeader>
       <div className="px-6">
-        <FileUpload variant="csv" onFileChange={setFile} />
+        <FileUpload key={fileUploadKey} variant="csv" onFileChange={setFile} />
       </div>
       <CardFooter className="flex-col gap-2">
         <Button
