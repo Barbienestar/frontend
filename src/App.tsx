@@ -13,7 +13,7 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 function App() {
   return (
     <BrowserRouter>
-    <Toaster />
+      <Toaster />
       <Routes>
         <Route path="/" element={<Navigate to="/inicio" replace />} />
 
