@@ -29,10 +29,15 @@ export const SidebarInfoCard = ({
             {title}
           </h3>
         </div>
-        <p className="text-xs text-amber-700 leading-relaxed flex-1">{description}</p>
+        <p className="text-xs text-amber-700 leading-relaxed flex-1">
+          {description}
+        </p>
         <ul className="flex items-center gap-5 shrink-0">
           {features.map(({ icon: Icon, text }) => (
-            <li key={text} className="flex items-center gap-1.5 text-xs text-amber-700">
+            <li
+              key={text}
+              className="flex items-center gap-1.5 text-xs text-amber-700"
+            >
               <Icon className="size-3.5 shrink-0" />
               {text}
             </li>
@@ -50,10 +55,15 @@ export const SidebarInfoCard = ({
           {title}
         </h3>
       </div>
-      <p className="text-xs text-amber-700 mb-4 leading-relaxed">{description}</p>
+      <p className="text-xs text-amber-700 mb-4 leading-relaxed">
+        {description}
+      </p>
       <ul className="space-y-2">
         {features.map(({ icon: Icon, text }) => (
-          <li key={text} className="flex items-center gap-2 text-xs text-amber-700">
+          <li
+            key={text}
+            className="flex items-center gap-2 text-xs text-amber-700"
+          >
             <Icon className="size-3.5 shrink-0" />
             {text}
           </li>

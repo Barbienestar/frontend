@@ -10,7 +10,12 @@ export const ProtectedRoute = ({
   allowedRoles,
   redirectTo = '/access',
 }: ProtectedRouteProps) => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return null;
+  }
+
   if (!isAuthenticated || !user) {
     return <Navigate to={redirectTo} replace />;
   }

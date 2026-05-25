@@ -14,7 +14,10 @@ export const Breadcrumb = ({ items }: BreadcrumbProps) => {
         <span key={item.label} className="flex items-center gap-1">
           {index > 0 && <span>/</span>}
           {item.href ? (
-            <a href={item.href} className="hover:text-foreground transition-colors">
+            <a
+              href={item.href}
+              className="hover:text-foreground transition-colors"
+            >
               {item.label}
             </a>
           ) : (

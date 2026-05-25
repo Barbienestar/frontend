@@ -1,43 +1,46 @@
 import { TrendingUp, AlertTriangle, BarChart2, Pill } from 'lucide-react';
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
 import Navbar from '@/components/Global/navbar';
 import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
-
-const discrepanciaData = [
-  { mes: 'ENE', oficial: 820, reportes: 740 },
-  { mes: 'FEB', oficial: 810, reportes: 760 },
-  { mes: 'MAR', oficial: 830, reportes: 780 },
-  { mes: 'ABR', oficial: 800, reportes: 790 },
-  { mes: 'MAY', oficial: 815, reportes: 800 },
-  { mes: 'JUN', oficial: 790, reportes: 820 },
-];
-
-const historicoData = [
-  { mes: 'ENE', oficial: 1200, reportes: 980 },
-  { mes: 'FEB', oficial: 1350, reportes: 1100 },
-  { mes: 'MAR', oficial: 1280, reportes: 1200 },
-  { mes: 'ABR', oficial: 1400, reportes: 1180 },
-  { mes: 'MAY', oficial: 1320, reportes: 1250 },
-  { mes: 'JUN', oficial: 1450, reportes: 1300 },
-];
+import { HospitalSelector } from '@/components/HospitalSelector/hospitalSelector';
+import { PeriodStockReportGraph } from '@/components/PeriodStockReportGraph/PeriodStockReportGraph';
+import { PeriodStockReportGraphWithStock } from '@/components/PeriodStockReportGraphWithStock/PeriodStockReportGraphWithStock';
+import {
+  getStockAvgs,
+  getStockReport,
+  type StockAverages,
+  type StockReport,
+} from '@/services/dashboard/kpis';
+import { useHospitals } from '@/hooks/useHospitals';
+import { useEffect, useState } from 'react';
 
 const medicamentosCriticos = [
-  { nombre: 'Metformina 850mg', clave: '010.000.0412.00', stock: 12, color: 'bg-red-500' },
-  { nombre: 'Paracetamol Sol.', clave: '010.000.0104.00', stock: 8, color: 'bg-red-500' },
-  { nombre: 'Amoxicilina 500mg', clave: '010.000.2101.00', stock: 24, color: 'bg-amber-400' },
-  { nombre: 'Losartán 50mg', clave: '010.000.0520.00', stock: 31, color: 'bg-amber-400' },
+  {
+    nombre: 'Metformina 850mg',
+    clave: '010.000.0412.00',
+    stock: 12,
+    color: 'bg-red-500',
+  },
+  {
+    nombre: 'Paracetamol Sol.',
+    clave: '010.000.0104.00',
+    stock: 8,
+    color: 'bg-red-500',
+  },
+  {
+    nombre: 'Amoxicilina 500mg',
+    clave: '010.000.2101.00',
+    stock: 24,
+    color: 'bg-amber-400',
+  },
+  {
+    nombre: 'Losartán 50mg',
+    clave: '010.000.0520.00',
+    stock: 31,
+    color: 'bg-amber-400',
+  },
 ];
 
 const heatPoints = [
@@ -51,46 +54,110 @@ const heatPoints = [
   { lat: 28.63, lng: -106.08, intensity: 0.35, name: 'Chihuahua' },
 ];
 
-
-const chartTooltipStyle = {
-  contentStyle: {
-    borderRadius: '8px',
-    border: '1px solid #e2e8f0',
-    fontSize: '12px',
-  },
-};
-
 const DashboardPage = () => {
+  const {
+    hospitals,
+    selectedHospital,
+    setSelectedHospital,
+    loading: loadingHospitals,
+  } = useHospitals();
+
+  const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
+  const [stockReport, setStockReport] = useState<StockReport | null>(null);
+
+  useEffect(() => {
+    if (!selectedHospital) return;
+
+    getStockAvgs(Number(selectedHospital.id))
+      .then(setStockAvgs)
+      .catch((err) => console.log('Error al obtener el abasto promedio:', err));
+
+    getStockReport(Number(selectedHospital.id))
+      .then(setStockReport)
+      .catch((err) =>
+        console.log('Error al obtener los medicamentos en desabasto:', err)
+      );
+    return () => {
+      setStockAvgs(null);
+      setStockReport(null);
+    };
+  }, [selectedHospital]);
+
+  const renderStockValue = () => {
+    if (stockAvgs != null && stockAvgs.currentMonthAvg != null) {
+      return `${stockAvgs.currentMonthAvg.toFixed(1)} %`;
+    }
+    return '---';
+  };
+
+  const renderStockDifference = () => {
+    if (
+      stockAvgs != null &&
+      stockAvgs.currentMonthAvg != null &&
+      stockAvgs.lastMonthAvg != null
+    ) {
+      const diff = Number(
+        (stockAvgs.currentMonthAvg - stockAvgs.lastMonthAvg).toFixed(2)
+      );
+      return (diff < 0 ? '-' : '+') + `${diff} %`;
+    }
+    return '---';
+  };
+
+  const renderBottomMedicines = (medicines?: string[]) => {
+    if (!medicines || medicines.length === 0) return '---';
+    return medicines
+      .map((med) => {
+        const trimmed = med.trim();
+        return trimmed.charAt(0).toUpperCase() + trimmed.slice(1).toLowerCase();
+      })
+      .join(', ');
+  };
+
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col pt-18">
       <Navbar variant="gobierno" />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-4">
+      <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-10">
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-foreground">
             Análisis de Disponibilidad de Medicamentos
           </h1>
-          <p className="text-muted-foreground mt-1">
-            Monitoreo estratégico y detección de discrepancias en el suministro nacional.
-          </p>
+          <div className="flex items-center gap-3 mt-2">
+            <div className="flex-1 min-w-0">
+              <p className="text-sm text-muted-foreground truncate">
+                Monitoreo estratégico y detección de discrepancias en el
+                suministro nacional.
+              </p>
+            </div>
+            <span className="text-muted-foreground/30 hidden sm:block">·</span>
+            <div className="ml-auto">
+              <HospitalSelector
+                hospitals={hospitals}
+                selected={selectedHospital}
+                onSelect={setSelectedHospital}
+                loading={loadingHospitals}
+              />
+            </div>
+          </div>
         </div>
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <MetricCard
             label="Abasto Promedio"
-            value="74.2%"
+            value={renderStockValue()}
             icon={<TrendingUp className="size-5" />}
-            trend="+2.1% vs. mes anterior"
+            trend={`${renderStockDifference()} vs. mes anterior`}
             trendHighlight="+2.1%"
             variant="approved"
           />
           <MetricCard
             label="Medicamentos en Desabasto"
-            value="12"
+            value={stockReport?.lowStockCount?.toString() || '---'}
             icon={<AlertTriangle className="size-5" />}
-            trend="Principales: Insulina, Paracetamol 500mg"
+            trend={`Principales: ${renderBottomMedicines(stockReport?.bottomMedicines)}`}
             variant="rejected"
           />
           <MetricCard
@@ -137,77 +204,60 @@ const DashboardPage = () => {
               />
             </div>
 
-            {/* Discrepancia de Reportes */}
-            <div className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-start justify-between mb-1">
-                <div>
-                  <h2 className="font-semibold text-foreground">Discrepancia de Reportes</h2>
-                  <p className="text-xs text-muted-foreground">Datos Oficiales vs. Reportes Ciudadanos</p>
-                </div>
-                <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-blue-500 inline-block" /> Oficial
-                  </span>
-                  <span className="flex items-center gap-1.5">
-                    <span className="size-2 rounded-full bg-amber-400 inline-block" /> Reportes
-                  </span>
-                </div>
-              </div>
-              <ResponsiveContainer width="100%" height={220}>
-                <LineChart data={discrepanciaData} {...chartTooltipStyle}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} />
-                  <Tooltip {...chartTooltipStyle} />
-                  <Line type="monotone" dataKey="oficial" stroke="#3b82f6" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="reportes" stroke="#f59e0b" strokeWidth={2} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <PeriodStockReportGraphWithStock
+              hospitalId={
+                selectedHospital ? Number(selectedHospital.id) : undefined
+              }
+            />
 
-            {/* Datos históricos */}
-            <div className="rounded-xl border border-border bg-card p-5">
-              <div className="mb-1">
-                <h2 className="font-semibold text-foreground">Datos históricos de reportes</h2>
-                <p className="text-xs text-muted-foreground">Reportes por mes</p>
-              </div>
-              <ResponsiveContainer width="100%" height={220}>
-                <LineChart data={historicoData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                  <XAxis dataKey="mes" tick={{ fontSize: 11 }} />
-                  <YAxis tick={{ fontSize: 11 }} />
-                  <Tooltip {...chartTooltipStyle} />
-                  <Line type="monotone" dataKey="oficial" stroke="#3b82f6" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="reportes" stroke="#f59e0b" strokeWidth={2} dot={false} />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <PeriodStockReportGraph
+              hospitalId={
+                selectedHospital ? Number(selectedHospital.id) : undefined
+              }
+            />
           </div>
 
           {/* Columna derecha */}
           <div className="lg:col-span-2 flex flex-col gap-6">
             {/* Carga de datos */}
-            <StockFileUpload/>
+            <StockFileUpload
+              hospitalId={
+                selectedHospital ? Number(selectedHospital.id) : undefined
+              }
+              hospitalName={selectedHospital?.name}
+            />
 
             {/* Medicamentos críticos */}
             <div className="rounded-xl border border-border bg-card p-5">
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-semibold text-foreground">Medicamentos Críticos</h2>
-                <button className="text-xs text-primary hover:underline">Ver todos</button>
+                <h2 className="font-semibold text-foreground">
+                  Medicamentos Críticos
+                </h2>
+                <button className="text-xs text-primary hover:underline">
+                  Ver todos
+                </button>
               </div>
               <div className="flex flex-col gap-3">
                 {medicamentosCriticos.map((med) => (
                   <div key={med.clave} className="flex items-center gap-3">
-                    <div className={`w-1 self-stretch rounded-full ${med.color}`} />
+                    <div
+                      className={`w-1 self-stretch rounded-full ${med.color}`}
+                    />
                     <div className="p-2 rounded-lg bg-muted">
                       <Pill className="size-4 text-muted-foreground" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">{med.nombre}</p>
-                      <p className="text-xs text-muted-foreground">Clave: {med.clave}</p>
+                      <p className="text-sm font-semibold text-foreground truncate">
+                        {med.nombre}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Clave: {med.clave}
+                      </p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className={`text-sm font-bold ${med.stock < 20 ? 'text-red-500' : 'text-amber-500'}`}>
+                      <p
+                        className={`text-sm font-bold ${med.stock < 20 ? 'text-red-500' : 'text-amber-500'}`}
+                      >
                         {String(med.stock).padStart(2, '0')}%
                       </p>
                       <p className="text-xs text-muted-foreground">STOCK</p>

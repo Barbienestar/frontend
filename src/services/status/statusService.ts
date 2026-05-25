@@ -2,7 +2,7 @@ import type {
   StatusCountResponse,
   StatusResponse,
 } from '@/common/StatusResponse';
-import api from './api';
+import api from '../api';
 
 export const listStatuses = async () => {
   const res = await api.get<StatusResponse[]>('/status');

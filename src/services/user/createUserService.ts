@@ -1,6 +1,6 @@
 import type { UserProfile } from 'firebase/auth';
-import api from './api';
-import type { CreateUserRequest } from './auth/authService';
+import api from '../api';
+import type { CreateUserRequest } from '../auth/authService';
 
 interface CreateHealthUserRequest extends CreateUserRequest {
   hospitalIds: number[];
