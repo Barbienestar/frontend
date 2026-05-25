@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import type { HospitalData } from '@/common/HospitalData';
-import { getHospitals } from '@/services/reportService';
-import { createHealthUser } from '@/services/createUserService';
+import { getHospitals } from '@/services/report/reportService';
+import { createHealthUser } from '@/services/user/createUserService';
 import type { CreateUserRequest } from '@/services/auth/authService';
 
 const healthUserSchema = Yup.object().shape({
@@ -62,7 +62,7 @@ export const HealthUserCreationForm = () => {
     fetchHospitals();
   }, []);
 
-  const handleHospitalToggle = (hospitalId: string) => {
+  const handleHospitalToggle = (hospitalId: number) => {
     const numId = Number(hospitalId);
     const current = formik.values.hospitalIds;
     if (current.includes(numId)) {
@@ -198,9 +198,7 @@ export const HealthUserCreationForm = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              description={
-                isInvalid('password') ? formik.errors.password : ''
-              }
+              description={isInvalid('password') ? formik.errors.password : ''}
               descClassName="text-red-700"
               inputClassName={cn(
                 'h-12 rounded-xl',
@@ -268,9 +266,7 @@ export const HealthUserCreationForm = () => {
               disabled={formik.isSubmitting}
               className="w-full h-12 rounded-xl font-bold uppercase mt-2"
             >
-              {formik.isSubmitting
-                ? 'Creando...'
-                : 'Crear usuario de salud'}
+              {formik.isSubmitting ? 'Creando...' : 'Crear usuario de salud'}
             </Button>
           </div>
         </CardContent>

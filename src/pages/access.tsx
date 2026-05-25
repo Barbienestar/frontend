@@ -1,14 +1,14 @@
 import { BriefcaseMedical } from 'lucide-react';
-import accessBackground from '@/assets/access_background.svg';
-import { Login } from '@/components/Login/login';
-import { useAuth } from '@/contexts/useAuth';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import SignUp from '@/components/Signup/signup';
+import { useNavigate } from 'react-router-dom';
+import accessBackground from '@/assets/access_background.svg';
 import Navbar from '@/components/Global/navbar';
+import { Login } from '@/components/Login/login';
+import SignUp from '@/components/Signup/signup';
+import { useAuth } from '@/contexts/useAuth';
 
 const Access = () => {
-  const { signIn } = useAuth();
+  const { signIn, hasRole } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -16,10 +16,9 @@ const Access = () => {
     try {
       setIsLoading(true);
       await signIn(email, password);
-      const userRole = localStorage.getItem('role');
-      if (userRole === 'admin') {
+      if (hasRole('admin')) {
         navigate('/admin');
-      } else if (userRole === 'health') {
+      } else if (hasRole('health')) {
         navigate('/dashboard');
       } else {
         navigate('/inicio');

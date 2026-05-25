@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
-import { createAdmin } from '@/services/createUserService';
+import { createAdmin } from '@/services/user/createUserService';
 import type { CreateUserRequest } from '@/services/auth/authService';
 
 const adminSchema = Yup.object().shape({
@@ -160,9 +160,7 @@ export const AdminCreationForm = () => {
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              description={
-                isInvalid('password') ? formik.errors.password : ''
-              }
+              description={isInvalid('password') ? formik.errors.password : ''}
               descClassName="text-red-700"
               inputClassName={cn(
                 'h-12 rounded-xl',

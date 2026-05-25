@@ -13,12 +13,28 @@ export interface CreateUserRequest {
   roleId: number;
 }
 
-export interface UserProfile {
-  id: string;
+export interface Suburb {
+  id: number;
   name: string;
-  lastName: string;
+}
+
+export interface UserProfile {
+  id: number;
+  name: string;
+  lastName1: string;
+  lastName2: string | null;
+  age: number | null;
+  suburb: Suburb | null;
   role: string;
   email: string;
+}
+
+export interface UpdateUserDto {
+  name?: string;
+  lastName1?: string;
+  lastName2?: string;
+  age?: number;
+  suburbId?: number;
 }
 
 export const signup = async (req: CreateUserRequest): Promise<UserProfile> => {
