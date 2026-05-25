@@ -31,10 +31,12 @@ const StockFileUpload = ({ hospitalId, hospitalName }: Props) => {
       await uploadMedicineStock(String(hospitalId), file);
       toast.success('Archivo subido con éxito');
       setFile(null);
-      setFileUploadKey(prev => prev + 1);
+      setFileUploadKey((prev) => prev + 1);
     } catch (e) {
       console.error('Error uploading stock:', e);
-      toast.error('Error al subir el archivo. Revise el formato o la extensión del archivo.');
+      toast.error(
+        'Error al subir el archivo. Revise el formato o la extensión del archivo.'
+      );
     } finally {
       setUploading(false);
     }
