@@ -15,8 +15,10 @@ import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
 import { Map } from '@/components/Map/map';
 import { HospitalSelector } from '@/components/HospitalSelector/hospitalSelector';
 import {
+  getMonthlyReports,
   getStockAvgs,
   getStockReport,
+  type MonthlyReports,
   type StockAverages,
   type StockReport,
 } from '@/services/dashboard/kpis';
@@ -97,22 +99,31 @@ const DashboardPage = () => {
 
   const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
   const [stockReport, setStockReport] = useState<StockReport | null>(null);
+  const [monthlyReports, setMonthlyReports] = useState<MonthlyReports | null>(null);
 
   useEffect(() => {
     if (!selectedHospital) return;
 
     getStockAvgs(Number(selectedHospital.id))
       .then(setStockAvgs)
-      .catch((err) => console.log('Error al obtener el abasto promedio:', err));
+      .catch((err) => console.log('Error al obtener el abasto promedio: ', err));
 
     getStockReport(Number(selectedHospital.id))
       .then(setStockReport)
       .catch((err) =>
-        console.log('Error al obtener los medicamentos en desabasto:', err)
+        console.log('Error al obtener los medicamentos en desabasto: ', err)
       );
+
+    getMonthlyReports(Number(selectedHospital.id))
+      .then(setMonthlyReports)
+      .catch((err) => 
+        console.log('Error al obtener el numero de reportes mensuales: ', err)
+      );
+
     return () => {
       setStockAvgs(null);
       setStockReport(null);
+      setMonthlyReports(null);
     };
   }, [selectedHospital]);
 
@@ -195,9 +206,9 @@ const DashboardPage = () => {
           />
           <MetricCard
             label="Demanda Mensual"
-            value="1.2M"
+            value={monthlyReports?.currentMonthReportCount.toString() || '---'}
             icon={<BarChart2 className="size-5" />}
-            trend="Tendencia: Incremental (+15%)"
+            trend={"Tendencia: Incremental " + (monthlyReports?.comparisonToLastMonth > 0 ? "+" : "-") + `${monthlyReports?.comparisonToLastMonth}%)`}
             trendHighlight="+15%"
             variant="pending"
           />
