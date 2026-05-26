@@ -32,18 +32,24 @@ export function useNearbyStockResults(
   userLng: number | null,
   isGoogleLoaded: boolean
 ) {
-  const [enriched, setEnriched] = useState<EnrichedStockData[]>([]);
+  // enrichedInternal solo guarda el último resultado geocodificado
+  const [enrichedInternal, setEnrichedInternal] = useState<EnrichedStockData[]>(
+    []
+  );
   const [geocoding, setGeocoding] = useState(false);
 
   useEffect(() => {
-    if (results.length === 0) {
-      setEnriched([]);
+    if (
+      results.length === 0 ||
+      !isGoogleLoaded ||
+      !window.google?.maps?.Geocoder
+    )
       return;
-    }
-    if (!isGoogleLoaded || !window.google?.maps?.Geocoder) return;
 
-    setGeocoding(true);
     const geocoder = new window.google.maps.Geocoder();
+
+    // setGeocoding dentro de una microtask para evitar setState síncrono en el efecto
+    Promise.resolve().then(() => setGeocoding(true));
 
     Promise.all(
       results.map(async (r): Promise<EnrichedStockData> => {
@@ -70,10 +76,13 @@ export function useNearbyStockResults(
         if (b.distanceKm === null) return -1;
         return a.distanceKm - b.distanceKm;
       });
-      setEnriched(sorted);
+      setEnrichedInternal(sorted);
       setGeocoding(false);
     });
   }, [results, userLat, userLng, isGoogleLoaded]);
+
+  // Estado derivado: si no hay resultados, siempre devuelve array vacío
+  const enriched = results.length === 0 ? [] : enrichedInternal;
 
   return { enriched, geocoding };
 }

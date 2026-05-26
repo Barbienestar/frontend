@@ -97,11 +97,10 @@ export const InputField = ({
         <div className="relative flex items-center">
           <select
             name={name}
-            value={value}
+            value={value ?? ''}
             onChange={onChange}
             onBlur={onBlur}
             disabled={disabled}
-            defaultValue=""
             className={cn(
               'w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground shadow-xs placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8',
               inputClassName

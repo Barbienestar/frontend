@@ -18,12 +18,36 @@ const MAP_STYLES: google.maps.MapTypeStyle[] = [
   { elementType: 'labels.icon', stylers: [{ visibility: 'off' }] },
   { elementType: 'labels.text.fill', stylers: [{ color: '#475569' }] },
   { elementType: 'labels.text.stroke', stylers: [{ color: '#f8fafc' }] },
-  { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#e2e8f0' }] },
-  { featureType: 'road.arterial', elementType: 'geometry', stylers: [{ color: '#cbd5e1' }] },
-  { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#94a3b8' }] },
-  { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#64748b' }] },
-  { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#bfdbfe' }] },
-  { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#dcfce7' }] },
+  {
+    featureType: 'road',
+    elementType: 'geometry',
+    stylers: [{ color: '#e2e8f0' }],
+  },
+  {
+    featureType: 'road.arterial',
+    elementType: 'geometry',
+    stylers: [{ color: '#cbd5e1' }],
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry',
+    stylers: [{ color: '#94a3b8' }],
+  },
+  {
+    featureType: 'road.highway',
+    elementType: 'geometry.stroke',
+    stylers: [{ color: '#64748b' }],
+  },
+  {
+    featureType: 'water',
+    elementType: 'geometry',
+    stylers: [{ color: '#bfdbfe' }],
+  },
+  {
+    featureType: 'poi.park',
+    elementType: 'geometry',
+    stylers: [{ color: '#dcfce7' }],
+  },
   { featureType: 'transit', stylers: [{ visibility: 'off' }] },
 ];
 
@@ -34,13 +58,19 @@ interface HospitalMarkerProps {
 }
 
 function HospitalMarker({ data, selected, onClick }: HospitalMarkerProps) {
-  const colors = STATUS_COLORS[data.status] ?? { fill: '#94a3b8', ring: '#e2e8f0' };
+  const colors = STATUS_COLORS[data.status] ?? {
+    fill: '#94a3b8',
+    ring: '#e2e8f0',
+  };
   const size = selected ? 22 : 16;
   const ringSize = size + 10;
 
   return (
     <div
-      onClick={(e) => { e.stopPropagation(); onClick(); }}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
       style={{
         position: 'relative',
         width: ringSize,
@@ -56,7 +86,9 @@ function HospitalMarker({ data, selected, onClick }: HospitalMarkerProps) {
           borderRadius: '50%',
           backgroundColor: colors.ring,
           opacity: selected ? 1 : 0.6,
-          animation: selected ? 'markerPulse 1.5s ease-in-out infinite' : undefined,
+          animation: selected
+            ? 'markerPulse 1.5s ease-in-out infinite'
+            : undefined,
         }}
       />
       <div
@@ -112,44 +144,37 @@ export function NearbyHospitalsMap({
   height = '520px',
 }: NearbyHospitalsMapProps) {
   const mapRef = useRef<google.maps.Map | null>(null);
-  const [directions, setDirections] = useState<google.maps.DirectionsResult | null>(null);
-  const [routeInfo, setRouteInfo] = useState<RouteInfo | null>(null);
-  const [directionsError, setDirectionsError] = useState(false);
+  // Guardamos id junto al resultado para derivar si sigue vigente
+  const [routeForId, setRouteForId] = useState<{
+    id: number;
+    directions: google.maps.DirectionsResult | null;
+    info: RouteInfo;
+    error: boolean;
+  } | null>(null);
 
-  // Guardar referencia al mapa cuando carga
   const onMapLoad = useCallback((map: google.maps.Map) => {
     mapRef.current = map;
   }, []);
 
-  // Al obtener ubicación del usuario → centrar mapa
   useEffect(() => {
     if (!mapRef.current || userLat === null || userLng === null) return;
     mapRef.current.panTo({ lat: userLat, lng: userLng });
     mapRef.current.setZoom(12);
   }, [userLat, userLng]);
 
-  // Al seleccionar hospital → panear al hospital y calcular ruta
   useEffect(() => {
-    if (!selectedId) {
-      setDirections(null);
-      setRouteInfo(null);
-      setDirectionsError(false);
-      return;
-    }
+    if (!selectedId || !isLoaded) return;
 
     const hospital = results.find((r) => r.hospitalId === selectedId);
     if (!hospital || hospital.lat === null || hospital.lng === null) return;
 
-    // Panear al hospital seleccionado
     if (mapRef.current) {
       mapRef.current.panTo({ lat: hospital.lat!, lng: hospital.lng! });
       mapRef.current.setZoom(14);
     }
 
-    // Calcular ruta si hay ubicación del usuario
-    if (!isLoaded || userLat === null || userLng === null) return;
+    if (userLat === null || userLng === null) return;
 
-    setDirectionsError(false);
     const service = new window.google.maps.DirectionsService();
     service.route(
       {
@@ -159,32 +184,46 @@ export function NearbyHospitalsMap({
       },
       (result, status) => {
         if (status === 'OK' && result) {
-          setDirections(result);
           const leg = result.routes[0]?.legs[0];
-          setRouteInfo({
-            distance: leg?.distance?.text ?? '',
-            duration: leg?.duration?.text ?? '',
-            hospitalName: hospital.hospitalName,
-            mapsUrl: hospital.mapsUrl,
-            hospitalLat: hospital.lat!,
-            hospitalLng: hospital.lng!,
+          setRouteForId({
+            id: selectedId,
+            directions: result,
+            error: false,
+            info: {
+              distance: leg?.distance?.text ?? '',
+              duration: leg?.duration?.text ?? '',
+              hospitalName: hospital.hospitalName,
+              mapsUrl: hospital.mapsUrl,
+              hospitalLat: hospital.lat!,
+              hospitalLng: hospital.lng!,
+            },
           });
         } else {
-          // Directions API no habilitada u otro error → mostrar fallback
-          setDirections(null);
-          setDirectionsError(true);
-          setRouteInfo({
-            distance: hospital.distanceKm ? `~${hospital.distanceKm.toFixed(1)} km` : '',
-            duration: '',
-            hospitalName: hospital.hospitalName,
-            mapsUrl: hospital.mapsUrl,
-            hospitalLat: hospital.lat!,
-            hospitalLng: hospital.lng!,
+          setRouteForId({
+            id: selectedId,
+            directions: null,
+            error: true,
+            info: {
+              distance: hospital.distanceKm
+                ? `~${hospital.distanceKm.toFixed(1)} km`
+                : '',
+              duration: '',
+              hospitalName: hospital.hospitalName,
+              mapsUrl: hospital.mapsUrl,
+              hospitalLat: hospital.lat!,
+              hospitalLng: hospital.lng!,
+            },
           });
         }
       }
     );
   }, [selectedId, isLoaded, userLat, userLng, results]);
+
+  // Derivado: solo mostrar si corresponde al hospital seleccionado actualmente
+  const activeRoute = routeForId?.id === selectedId ? routeForId : null;
+  const directions = activeRoute?.directions ?? null;
+  const routeInfo = activeRoute?.info ?? null;
+  const directionsError = activeRoute?.error ?? false;
 
   const fallbackMapsUrl = (lat: number, lng: number) =>
     userLat !== null && userLng !== null
@@ -208,7 +247,10 @@ export function NearbyHospitalsMap({
       : { lat: 19.4326, lng: -99.1332 };
 
   return (
-    <div className="relative rounded-xl overflow-hidden border border-border" style={{ height }}>
+    <div
+      className="relative rounded-xl overflow-hidden border border-border"
+      style={{ height }}
+    >
       <style>{`
         @keyframes markerPulse {
           0%, 100% { transform: scale(1); opacity: 0.6; }
@@ -231,11 +273,7 @@ export function NearbyHospitalsMap({
           clickableIcons: false,
         }}
         onLoad={onMapLoad}
-        onClick={() => {
-          setDirections(null);
-          setRouteInfo(null);
-          setDirectionsError(false);
-        }}
+        onClick={() => setRouteForId(null)}
       >
         {/* Ruta */}
         {directions && (
@@ -260,26 +298,30 @@ export function NearbyHospitalsMap({
           >
             <div style={{ position: 'relative', width: 0, height: 0 }}>
               {/* Halo */}
-              <div style={{
-                position: 'absolute',
-                width: 36,
-                height: 36,
-                borderRadius: '50%',
-                backgroundColor: '#93c5fd',
-                transform: 'translate(-50%, -50%)',
-                animation: 'userPulse 2s ease-in-out infinite',
-              }} />
+              <div
+                style={{
+                  position: 'absolute',
+                  width: 36,
+                  height: 36,
+                  borderRadius: '50%',
+                  backgroundColor: '#93c5fd',
+                  transform: 'translate(-50%, -50%)',
+                  animation: 'userPulse 2s ease-in-out infinite',
+                }}
+              />
               {/* Punto */}
-              <div style={{
-                position: 'absolute',
-                width: 18,
-                height: 18,
-                borderRadius: '50%',
-                backgroundColor: '#2563eb',
-                border: '3px solid white',
-                boxShadow: '0 2px 6px rgba(37,99,235,0.5)',
-                transform: 'translate(-50%, -50%)',
-              }} />
+              <div
+                style={{
+                  position: 'absolute',
+                  width: 18,
+                  height: 18,
+                  borderRadius: '50%',
+                  backgroundColor: '#2563eb',
+                  border: '3px solid white',
+                  boxShadow: '0 2px 6px rgba(37,99,235,0.5)',
+                  transform: 'translate(-50%, -50%)',
+                }}
+              />
             </div>
           </OverlayView>
         )}
@@ -320,17 +362,26 @@ export function NearbyHospitalsMap({
               )}
               {routeInfo.distance && (
                 <>
-                  {routeInfo.duration && <span className="text-xs text-muted-foreground">·</span>}
-                  <span className="text-xs text-muted-foreground">{routeInfo.distance}</span>
+                  {routeInfo.duration && (
+                    <span className="text-xs text-muted-foreground">·</span>
+                  )}
+                  <span className="text-xs text-muted-foreground">
+                    {routeInfo.distance}
+                  </span>
                 </>
               )}
               {directionsError && (
-                <span className="text-xs text-amber-500">Habilita Directions API para tiempo exacto</span>
+                <span className="text-xs text-amber-500">
+                  Habilita Directions API para tiempo exacto
+                </span>
               )}
             </div>
           </div>
           <a
-            href={routeInfo.mapsUrl ?? fallbackMapsUrl(routeInfo.hospitalLat, routeInfo.hospitalLng)}
+            href={
+              routeInfo.mapsUrl ??
+              fallbackMapsUrl(routeInfo.hospitalLat, routeInfo.hospitalLng)
+            }
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1 text-xs font-semibold text-primary hover:underline shrink-0"
@@ -339,7 +390,7 @@ export function NearbyHospitalsMap({
             Ir
           </a>
           <button
-            onClick={() => { setDirections(null); setRouteInfo(null); setDirectionsError(false); }}
+            onClick={() => setRouteForId(null)}
             className="text-muted-foreground hover:text-foreground shrink-0"
           >
             <X className="size-3.5" />
@@ -354,7 +405,10 @@ export function NearbyHospitalsMap({
         </p>
         {LEGEND.map(({ label, color }) => (
           <div key={label} className="flex items-center gap-2">
-            <span className="size-3 rounded-full inline-block shrink-0" style={{ backgroundColor: color }} />
+            <span
+              className="size-3 rounded-full inline-block shrink-0"
+              style={{ backgroundColor: color }}
+            />
             <span className="text-foreground">{label}</span>
           </div>
         ))}

@@ -42,7 +42,9 @@ export function ChoroplethMap({ data, height = '340px' }: ChoroplethMapProps) {
       .catch(() => console.error('No se pudo cargar el GeoJSON de estados'));
   }, []);
 
-  const dataMap = new Map(data.map((d) => [normalizeStateName(d.stateName), d]));
+  const dataMap = new Map(
+    data.map((d) => [normalizeStateName(d.stateName), d])
+  );
 
   const styleFeature = (feature?: Feature): PathOptions => {
     const name = (feature?.properties as { name?: string })?.name ?? '';

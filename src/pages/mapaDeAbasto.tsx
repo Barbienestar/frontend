@@ -16,7 +16,12 @@ import { EmptySearchCTA } from '@/components/EmptySearchCTA/emptySearchCTA';
 import Config from '@/config';
 
 type FilterStatus = 'Todos' | 'Disponible' | 'Limitado' | 'Agotado';
-const filterOptions: FilterStatus[] = ['Todos', 'Disponible', 'Limitado', 'Agotado'];
+const filterOptions: FilterStatus[] = [
+  'Todos',
+  'Disponible',
+  'Limitado',
+  'Agotado',
+];
 
 const MapaDeAbasto = () => {
   const { isLoaded } = useLoadScript({
