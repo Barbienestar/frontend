@@ -23,13 +23,13 @@ interface CreateAdminPayload {
 export const createAdmin = async (
   req: CreateAdminPayload
 ): Promise<UserProfile> => {
-  const profileResponse = await api.post<UserProfile>('/user', req);
+  const profileResponse = await api.post<UserProfile>('/user/privileged', req);
   return profileResponse.data;
 };
 
 export const createHealthUser = async (
   req: CreateHealthUserPayload
 ): Promise<UserProfile> => {
-  const profileResponse = await api.post<UserProfile>('/user', req);
+  const profileResponse = await api.post<UserProfile>('/user/privileged', req);
   return profileResponse.data;
 };
