@@ -3,7 +3,7 @@ import Navbar from '@/components/Global/navbar';
 import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
-import { Map } from '@/components/Map/map';
+import { ChoroplethMap } from '@/components/ChoroplethMap/ChoroplethMap';
 import { HospitalSelector } from '@/components/HospitalSelector/hospitalSelector';
 import { PeriodStockReportGraph } from '@/components/PeriodStockReportGraph/PeriodStockReportGraph';
 import { PeriodStockReportGraphWithStock } from '@/components/PeriodStockReportGraphWithStock/PeriodStockReportGraphWithStock';
@@ -13,6 +13,10 @@ import {
   type StockAverages,
   type StockReport,
 } from '@/services/dashboard/kpis';
+import {
+  getStateSupplyHeatmap,
+  type StateSupplyData,
+} from '@/services/dashboard/stateSupply';
 import { useHospitals } from '@/hooks/useHospitals';
 import { useEffect, useState } from 'react';
 
@@ -43,17 +47,6 @@ const medicamentosCriticos = [
   },
 ];
 
-const heatPoints = [
-  { lat: 16.75, lng: -93.1, intensity: 0.95, name: 'Chiapas' },
-  { lat: 17.0, lng: -96.7, intensity: 0.85, name: 'Oaxaca' },
-  { lat: 18.0, lng: -92.9, intensity: 0.75, name: 'Tabasco' },
-  { lat: 20.66, lng: -103.35, intensity: 0.6, name: 'Jalisco' },
-  { lat: 19.43, lng: -99.13, intensity: 0.55, name: 'CDMX' },
-  { lat: 25.67, lng: -100.3, intensity: 0.4, name: 'Nuevo León' },
-  { lat: 29.07, lng: -110.95, intensity: 0.3, name: 'Sonora' },
-  { lat: 28.63, lng: -106.08, intensity: 0.35, name: 'Chihuahua' },
-];
-
 const DashboardPage = () => {
   const {
     hospitals,
@@ -64,6 +57,13 @@ const DashboardPage = () => {
 
   const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
   const [stockReport, setStockReport] = useState<StockReport | null>(null);
+  const [stateSupply, setStateSupply] = useState<StateSupplyData[]>([]);
+
+  useEffect(() => {
+    getStateSupplyHeatmap()
+      .then(setStateSupply)
+      .catch((err) => console.log('Error al obtener mapa de abasto:', err));
+  }, []);
 
   useEffect(() => {
     if (!selectedHospital) return;
@@ -176,32 +176,15 @@ const DashboardPage = () => {
           <div className="lg:col-span-3 flex flex-col gap-6">
             {/* Mapa */}
             <div className="rounded-xl border border-border bg-card overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-3 border-b border-border">
+              <div className="px-5 py-3 border-b border-border">
                 <h2 className="font-semibold text-foreground">
-                  Intensidad de Desabasto por Entidad Federativa
+                  Nivel de Abasto por Entidad Federativa
                 </h2>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <span className="size-2 rounded-full bg-blue-500 inline-block" />
-                    Óptimo
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="size-2 rounded-full bg-amber-400 inline-block" />
-                    Regular
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="size-2 rounded-full bg-red-500 inline-block" />
-                    Crítico
-                  </span>
-                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Pasa el cursor sobre un estado para ver el detalle
+                </p>
               </div>
-              <Map
-                variant="heatmap"
-                points={heatPoints}
-                center={[23.6, -102.5]}
-                zoom={5}
-                height="340px"
-              />
+              <ChoroplethMap data={stateSupply} height="340px" />
             </div>
 
             <PeriodStockReportGraphWithStock

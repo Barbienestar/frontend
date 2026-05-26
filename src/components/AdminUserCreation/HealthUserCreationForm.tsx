@@ -15,7 +15,6 @@ import { cn } from '@/lib/utils';
 import type { HospitalData } from '@/common/HospitalData';
 import { getHospitals } from '@/services/report/reportService';
 import { createHealthUser } from '@/services/user/createUserService';
-import type { CreateUserRequest } from '@/services/auth/authService';
 
 const healthUserSchema = Yup.object().shape({
   name: Yup.string()
@@ -88,14 +87,14 @@ export const HealthUserCreationForm = () => {
     validationSchema: healthUserSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const requestData: CreateUserRequest & { hospitalIds: number[] } = {
+        const requestData = {
           name: values.name,
           last_name_1: values.lastName1,
-          last_name_2: values.lastName2,
+          last_name_2: values.lastName2 || undefined,
           email: values.email,
           password: values.password,
-          roleId: 2,
-          hospitalIds: values.hospitalIds,
+          role_id: 2,
+          hospital_ids: values.hospitalIds,
         };
         await createHealthUser(requestData);
         resetForm();
