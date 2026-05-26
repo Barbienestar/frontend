@@ -1,6 +1,6 @@
-import Config from '@/config';
-import applyCaseMiddleware from 'axios-case-converter';
 import axios from 'axios';
+import applyCaseMiddleware from 'axios-case-converter';
+import Config from '@/config';
 
 const api = applyCaseMiddleware(
   axios.create({
@@ -29,10 +29,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
+    if (error.response?.status === 401) {
       console.log('No authorization');
     }
-    if (error.response.status === 500) {
+    if (error.response?.status === 500) {
       console.log('Server error');
     }
     return Promise.reject(error);

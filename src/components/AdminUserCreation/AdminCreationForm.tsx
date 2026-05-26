@@ -12,7 +12,6 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { createAdmin } from '@/services/user/createUserService';
-import type { CreateUserRequest } from '@/services/auth/authService';
 
 const adminSchema = Yup.object().shape({
   name: Yup.string()
@@ -51,13 +50,13 @@ export const AdminCreationForm = () => {
     validationSchema: adminSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const requestData: CreateUserRequest = {
+        const requestData = {
           name: values.name,
           last_name_1: values.lastName1,
-          last_name_2: values.lastName2,
+          last_name_2: values.lastName2 || undefined,
           email: values.email,
           password: values.password,
-          roleId: 1,
+          role_id: 1,
         };
         await createAdmin(requestData);
         resetForm();

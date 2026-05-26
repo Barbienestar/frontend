@@ -15,8 +15,8 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    onSubmit: (email, password) => {
-      console.log('Submit:', { email, password });
+    onSubmit: (_email, _password) => {
+      console.log('Submitting...');
     },
   },
 };

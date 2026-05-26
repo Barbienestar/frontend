@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { FileUp, X, CloudUpload } from 'lucide-react';
 import { FieldLabel } from '../ui/field';
 
@@ -35,6 +35,7 @@ const FileUpload = ({
 }: FileUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const cfg = config[variant];
   const Icon = cfg.icon;
@@ -76,6 +77,7 @@ const FileUpload = ({
       e.stopPropagation();
       setFile(null);
       onFileChange?.(null);
+      if (inputRef.current) inputRef.current.value = '';
     },
     [onFileChange]
   );
@@ -97,6 +99,7 @@ const FileUpload = ({
         onDrop={handleDrop}
       >
         <input
+          ref={inputRef}
           type="file"
           accept={cfg.accept}
           className="sr-only"

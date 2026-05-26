@@ -59,14 +59,15 @@ Solo si el usuario lo pide explícitamente para este PR.
 
 ## Secciones ya implementadas (no tocar sin autorización)
 
-| Componente | Archivo | Estado |
-|---|---|---|
-| Button | `src/components/Button/button.tsx` | Completo + Storybook |
-| Map (heatmap + normal) | `src/components/Map/map.tsx` | Completo + Storybook |
-| StatCard (progress + number) | `src/components/StatCard/stat-card.tsx` | Completo + Storybook |
-| MapaPage (título + stats + mapa) | `src/pages/MapaPage.tsx` | Implementado en ruta `/mapa` |
+| Componente                       | Archivo                                 | Estado                       |
+| -------------------------------- | --------------------------------------- | ---------------------------- |
+| Button                           | `src/components/Button/button.tsx`      | Completo + Storybook         |
+| Map (heatmap + normal)           | `src/components/Map/map.tsx`            | Completo + Storybook         |
+| StatCard (progress + number)     | `src/components/StatCard/stat-card.tsx` | Completo + Storybook         |
+| MapaPage (título + stats + mapa) | `src/pages/MapaPage.tsx`                | Implementado en ruta `/mapa` |
 
 Las secciones **NO asignadas a este branch** (no tocar):
+
 - Panel derecho: "Carga de Datos Oficiales" → `src/components/FileUpload/`
 - Panel derecho: "Medicamentos Críticos" → pendiente otro compañero
 - "Discrepancia de Reportes" → pendiente otro compañero
