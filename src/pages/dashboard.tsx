@@ -175,7 +175,7 @@ const DashboardPage = () => {
             label="Demanda Mensual"
             value={monthlyReports?.currentMonthReportCount.toString() || '---'}
             icon={<BarChart2 className="size-5" />}
-            trend={"Tendencia: Incremental " + (monthlyReports?.comparisonToLastMonth > 0 ? "+" : "-") + `${monthlyReports?.comparisonToLastMonth}%)`}
+            trend={"Tendencia: " + (monthlyReports?.comparisonToLastMonth > 0 ? "Incremental (+" : "Decremental (-") + `${monthlyReports?.comparisonToLastMonth}%)`}
             trendHighlight="+15%"
             variant="pending"
           />
