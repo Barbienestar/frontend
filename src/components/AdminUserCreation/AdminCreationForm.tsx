@@ -38,7 +38,11 @@ const adminSchema = Yup.object().shape({
     .required('Confirmar contraseña es obligatorio'),
 });
 
-export const AdminCreationForm = () => {
+interface AdminCreationFormProps {
+  onSuccess?: () => void;
+}
+
+export const AdminCreationForm = ({ onSuccess }: AdminCreationFormProps) => {
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -62,6 +66,7 @@ export const AdminCreationForm = () => {
         await createAdmin(requestData);
         toast.success('Usuario administrador creado correctamente.');
         resetForm();
+        onSuccess?.();
       } catch {
         toast.error('Error al crear el usuario. Intenta de nuevo.');
       }

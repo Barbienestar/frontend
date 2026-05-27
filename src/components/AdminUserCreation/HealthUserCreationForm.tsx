@@ -44,7 +44,13 @@ const healthUserSchema = Yup.object().shape({
     .required('Selecciona al menos un hospital'),
 });
 
-export const HealthUserCreationForm = () => {
+interface HealthUserCreationFormProps {
+  onSuccess?: () => void;
+}
+
+export const HealthUserCreationForm = ({
+  onSuccess,
+}: HealthUserCreationFormProps) => {
   const [hospitals, setHospitals] = useState<HospitalData[]>([]);
   const [loadingHospitals, setLoadingHospitals] = useState(true);
 
@@ -100,6 +106,7 @@ export const HealthUserCreationForm = () => {
         await createHealthUser(requestData);
         toast.success('Usuario de salud creado correctamente.');
         resetForm();
+        onSuccess?.();
       } catch {
         toast.error('Error al crear el usuario. Intenta de nuevo.');
       }
