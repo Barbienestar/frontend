@@ -2,9 +2,10 @@ import { MapPin, Navigation } from 'lucide-react';
 import StatusBadge from '@/components/StatusBadge/StatusBadge';
 import { Button } from '@/components/Button/button';
 import type { StockData } from '@/common/StockData';
+import { formatDistance } from '@/utils/geo';
 
 interface HospitalStockCardProps {
-  data: StockData;
+  data: StockData & { distanceKm?: number | null };
   medicineName: string;
   selected?: boolean;
   onClick?: () => void;
@@ -38,7 +39,7 @@ const HospitalStockCard = ({
         ${selected ? 'shadow-md ring-1 ring-primary' : 'hover:shadow-sm'}
       `}
     >
-      {/* Row 1: badge + stock label */}
+      {/* Row 1: badge + stock label + distancia */}
       <div className="flex items-center gap-3">
         <StatusBadge variant={data.status} />
         <span
@@ -46,6 +47,11 @@ const HospitalStockCard = ({
         >
           {data.stockLabel}
         </span>
+        {data.distanceKm != null && (
+          <span className="ml-auto text-xs text-muted-foreground shrink-0">
+            {formatDistance(data.distanceKm)}
+          </span>
+        )}
       </div>
 
       {/* Row 2: nombre + dirección */}

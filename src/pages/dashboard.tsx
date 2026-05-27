@@ -3,13 +3,15 @@ import Navbar from '@/components/Global/navbar';
 import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
 import StockFileUpload from '@/components/StockFileUpload/StockFileUpload';
-import { Map } from '@/components/Map/map';
+import { ChoroplethMap } from '@/components/ChoroplethMap/ChoroplethMap';
 import { HospitalSelector } from '@/components/HospitalSelector/hospitalSelector';
 import { PeriodStockReportGraph } from '@/components/PeriodStockReportGraph/PeriodStockReportGraph';
 import { PeriodStockReportGraphWithStock } from '@/components/PeriodStockReportGraphWithStock/PeriodStockReportGraphWithStock';
 import {
+  getMonthlyReports,
   getStockAvgs,
   getStockReport,
+  type MonthlyReports,
   type StockAverages,
   type StockReport,
 } from '@/services/dashboard/kpis';
@@ -18,17 +20,10 @@ import type { HospitalCriticalMedicinesResponse } from '@/common/CriticalMedicin
 import { CriticalMedicineCard } from '@/components/CriticalMedicineCard/critical-medicine-card';
 import { useHospitals } from '@/hooks/useHospitals';
 import { useEffect, useState } from 'react';
-
-const heatPoints = [
-  { lat: 16.75, lng: -93.1, intensity: 0.95, name: 'Chiapas' },
-  { lat: 17.0, lng: -96.7, intensity: 0.85, name: 'Oaxaca' },
-  { lat: 18.0, lng: -92.9, intensity: 0.75, name: 'Tabasco' },
-  { lat: 20.66, lng: -103.35, intensity: 0.6, name: 'Jalisco' },
-  { lat: 19.43, lng: -99.13, intensity: 0.55, name: 'CDMX' },
-  { lat: 25.67, lng: -100.3, intensity: 0.4, name: 'Nuevo León' },
-  { lat: 29.07, lng: -110.95, intensity: 0.3, name: 'Sonora' },
-  { lat: 28.63, lng: -106.08, intensity: 0.35, name: 'Chihuahua' },
-];
+import {
+  getStateSupplyHeatmap,
+  type StateSupplyData,
+} from '@/services/dashboard/stateSupply';
 
 const DashboardPage = () => {
   const {
@@ -43,30 +38,49 @@ const DashboardPage = () => {
   const [criticalMedicines, setCriticalMedicines] = useState<
     HospitalCriticalMedicinesResponse[]
   >([]);
+  const [monthlyReports, setMonthlyReports] = useState<MonthlyReports | null>(
+    null
+  );
+  const [stateSupply, setStateSupply] = useState<StateSupplyData[]>([]);
+
+  useEffect(() => {
+    getStateSupplyHeatmap()
+      .then(setStateSupply)
+      .catch((err) => console.log('Error al obtener mapa de abasto:', err));
+  }, []);
 
   useEffect(() => {
     if (!selectedHospital) return;
 
     getStockAvgs(Number(selectedHospital.id))
       .then(setStockAvgs)
-      .catch((err) => console.log('Error al obtener el abasto promedio:', err));
+      .catch((err) =>
+        console.log('Error al obtener el abasto promedio: ', err)
+      );
 
     getStockReport(Number(selectedHospital.id))
       .then(setStockReport)
       .catch((err) =>
-        console.log('Error al obtener los medicamentos en desabasto:', err)
+        console.log('Error al obtener los medicamentos en desabasto: ', err)
       );
+
 
     getCriticalMedicines(Number(selectedHospital.id))
       .then(setCriticalMedicines)
       .catch((err) =>
         console.log('Error al obtener medicamentos críticos:', err)
       );
+    getMonthlyReports(Number(selectedHospital.id))
+      .then(setMonthlyReports)
+      .catch((err) =>
+        console.log('Error al obtener el numero de reportes mensuales: ', err)
+      );
 
     return () => {
       setStockAvgs(null);
       setStockReport(null);
       setCriticalMedicines([]);
+      setMonthlyReports(null);
     };
   }, [selectedHospital]);
 
@@ -149,9 +163,15 @@ const DashboardPage = () => {
           />
           <MetricCard
             label="Demanda Mensual"
-            value="1.2M"
+            value={monthlyReports?.currentMonthReportCount.toString() || '---'}
             icon={<BarChart2 className="size-5" />}
-            trend="Tendencia: Incremental (+15%)"
+            trend={
+              'Tendencia: ' +
+              (Number(monthlyReports?.comparisonToLastMonth) > 0
+                ? 'Incremental (+'
+                : 'Decremental (-') +
+              `${monthlyReports?.comparisonToLastMonth}%)`
+            }
             trendHighlight="+15%"
             variant="pending"
           />
@@ -163,32 +183,15 @@ const DashboardPage = () => {
           <div className="lg:col-span-3 flex flex-col gap-6">
             {/* Mapa */}
             <div className="rounded-xl border border-border bg-card overflow-hidden">
-              <div className="flex items-center justify-between px-5 py-3 border-b border-border">
+              <div className="px-5 py-3 border-b border-border">
                 <h2 className="font-semibold text-foreground">
-                  Intensidad de Desabasto por Entidad Federativa
+                  Nivel de Abasto por Entidad Federativa
                 </h2>
-                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                  <span className="flex items-center gap-1">
-                    <span className="size-2 rounded-full bg-blue-500 inline-block" />
-                    Óptimo
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="size-2 rounded-full bg-amber-400 inline-block" />
-                    Regular
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <span className="size-2 rounded-full bg-red-500 inline-block" />
-                    Crítico
-                  </span>
-                </div>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Pasa el cursor sobre un estado para ver el detalle
+                </p>
               </div>
-              <Map
-                variant="heatmap"
-                points={heatPoints}
-                center={[23.6, -102.5]}
-                zoom={5}
-                height="340px"
-              />
+              <ChoroplethMap data={stateSupply} height="340px" />
             </div>
 
             <PeriodStockReportGraphWithStock

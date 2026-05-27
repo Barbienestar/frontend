@@ -10,6 +10,11 @@ export interface StockReport {
   bottomMedicines: string[];
 }
 
+export interface MonthlyReports {
+  currentMonthReportCount: number;
+  comparisonToLastMonth: number;
+}
+
 export const getStockAvgs = async (
   idHospital: number
 ): Promise<StockAverages> => {
@@ -24,6 +29,16 @@ export const getStockReport = async (
 ): Promise<StockReport> => {
   const response = await api.get<StockReport>(
     `/medicines-hospitals/stock-report/${idHospital}`
+  );
+
+  return response.data;
+};
+
+export const getMonthlyReports = async (
+  idHospital: number
+): Promise<MonthlyReports> => {
+  const response = await api.get<MonthlyReports>(
+    `/medicines-hospitals/monthly-reports/${idHospital}`
   );
 
   return response.data;

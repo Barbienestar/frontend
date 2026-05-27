@@ -38,7 +38,7 @@ export interface UpdateUserDto {
 }
 
 export const signup = async (req: CreateUserRequest): Promise<UserProfile> => {
-  const profileResponse = await api.post<UserProfile>('/user', req);
+  const profileResponse = await api.post<UserProfile>('/user/citizen', req);
   const UserCredential = await signInWithEmailAndPassword(
     auth,
     req.email,
