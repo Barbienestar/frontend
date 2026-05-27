@@ -15,6 +15,7 @@ import {
   getReportsCountByStatus,
   listStatuses,
 } from '@/services/status/statusService';
+import { toast } from 'sonner';
 
 interface StatusWithCount extends StatusResponse {
   count: number;
@@ -109,8 +110,11 @@ export const Admin = () => {
         await changeReportStatus(report.id, targetId);
         setRefetchKey((k) => k + 1);
         await fetchStatuses();
-      } catch (error) {
-        console.error(`Failed to ${label} report:`, error);
+        toast.success(
+          label === 'accept' ? 'Reporte aceptado.' : 'Reporte rechazado.'
+        );
+      } catch {
+        toast.error('Error al cambiar el estado del reporte.');
       }
     },
     [fetchStatuses]

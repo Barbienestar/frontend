@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import type { HospitalData } from '@/common/HospitalData';
 import { getHospitals } from '@/services/report/reportService';
 import { createHealthUser } from '@/services/user/createUserService';
+import { toast } from 'sonner';
 
 const healthUserSchema = Yup.object().shape({
   name: Yup.string()
@@ -97,9 +98,10 @@ export const HealthUserCreationForm = () => {
           hospital_ids: values.hospitalIds,
         };
         await createHealthUser(requestData);
+        toast.success('Usuario de salud creado correctamente.');
         resetForm();
-      } catch (error) {
-        console.error('Error al crear usuario de salud: ', error);
+      } catch {
+        toast.error('Error al crear el usuario. Intenta de nuevo.');
       }
     },
   });
