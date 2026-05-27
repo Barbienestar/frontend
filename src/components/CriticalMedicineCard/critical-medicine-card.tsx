@@ -12,7 +12,7 @@ export function CriticalMedicineCard({
   medicineName,
   stock,
 }: CriticalMedicineCardProps) {
-  const isCritical = stock < 50;
+  const isCritical = stock < 5; // Umbral para considerar un medicamento como crítico
   const lineColor = isCritical ? 'bg-red-500' : 'bg-amber-500';
   const stockColor = isCritical ? 'text-red-500' : 'text-amber-500';
 

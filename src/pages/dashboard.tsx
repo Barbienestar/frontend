@@ -64,7 +64,6 @@ const DashboardPage = () => {
         console.log('Error al obtener los medicamentos en desabasto: ', err)
       );
 
-
     getCriticalMedicines(Number(selectedHospital.id))
       .then(setCriticalMedicines)
       .catch((err) =>
