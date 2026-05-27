@@ -1,21 +1,22 @@
 import { Check, Clock, Stethoscope, UserCog, XCircle } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import type { FullReportData } from '@/common/FullReportData';
 import type { StatusResponse } from '@/common/StatusResponse';
 import { AdminReportsTable } from '@/components/AdminReportsTable/AdminReportsTable';
 import { AdminCreationForm } from '@/components/AdminUserCreation/AdminCreationForm';
 import { HealthUserCreationForm } from '@/components/AdminUserCreation/HealthUserCreationForm';
 import { Breadcrumb } from '@/components/Breadcrumb/breadcrumb';
+import { Button } from '@/components/Button/button';
 import Navbar from '@/components/Global/navbar';
 import { MetricCard } from '@/components/MetricCards/metric-card';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import type { MetricCardVariant } from '@/components/ui/metric-card';
-import { cn } from '@/lib/utils';
 import { changeReportStatus } from '@/services/report/reportService';
 import {
   getReportsCountByStatus,
   listStatuses,
 } from '@/services/status/statusService';
-import { toast } from 'sonner';
 
 interface StatusWithCount extends StatusResponse {
   count: number;
@@ -63,13 +64,12 @@ const findStatusId = (
   }
 };
 
-type UserType = 'admin' | 'health';
-
 export const Admin = () => {
   const [statuses, setStatuses] = useState<StatusWithCount[]>([]);
   const [loading, setLoading] = useState(true);
   const [refetchKey, setRefetchKey] = useState(0);
-  const [userType, setUserType] = useState<UserType>('admin');
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
+  const [healthModalOpen, setHealthModalOpen] = useState(false);
 
   const fetchStatuses = useCallback(async () => {
     try {
@@ -147,8 +147,41 @@ export const Admin = () => {
     <div className="min-h-screen w-full">
       <Navbar variant="admin" activePath="/admin" />
       <main className="flex-1 w-full px-4 pt-24 pb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
-          <h2 className="text-xl font-semibold">Moderacion de reportes</h2>
+        <div className="mb-6 space-y-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <h2 className="text-xl font-semibold">Moderacion de reportes</h2>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground font-medium tracking-widest uppercase">
+                Crear
+              </span>
+              <Dialog open={adminModalOpen} onOpenChange={setAdminModalOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="secondary" size="sm" className="gap-1.5">
+                    <UserCog className="size-3.5" />
+                    Admin
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-lg">
+                  <AdminCreationForm
+                    onSuccess={() => setAdminModalOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+              <Dialog open={healthModalOpen} onOpenChange={setHealthModalOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-1.5">
+                    <Stethoscope className="size-3.5" />
+                    Salud
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-lg">
+                  <HealthUserCreationForm
+                    onSuccess={() => setHealthModalOpen(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
           <Breadcrumb
             items={[
               { label: 'Inicio', href: '/inicio' },
@@ -156,69 +189,32 @@ export const Admin = () => {
             ]}
           />
         </div>
-        <div className="flex flex-col lg:flex-row gap-8">
-          <div className="flex-1 min-w-0 space-y-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {statuses.map((status) => {
-                const config =
-                  METRIC_CONFIG[normalize(status.name)] ??
-                  METRIC_CONFIG.reviewing;
-                return (
-                  <MetricCard
-                    key={status.id}
-                    label={
-                      status.name.charAt(0).toUpperCase() + status.name.slice(1)
-                    }
-                    value={status.count}
-                    icon={config.icon}
-                    trend={config.trend}
-                    variant={config.variant}
-                  />
-                );
-              })}
-            </div>
-            <AdminReportsTable
-              key={refetchKey}
-              statusId={pendingId}
-              onAccept={handleAccept}
-              onReject={handleReject}
-            />
+        <div className="space-y-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {statuses.map((status) => {
+              const config =
+                METRIC_CONFIG[normalize(status.name)] ??
+                METRIC_CONFIG.reviewing;
+              return (
+                <MetricCard
+                  key={status.id}
+                  label={
+                    status.name.charAt(0).toUpperCase() + status.name.slice(1)
+                  }
+                  value={status.count}
+                  icon={config.icon}
+                  trend={config.trend}
+                  variant={config.variant}
+                />
+              );
+            })}
           </div>
-          <div className="w-full lg:w-96 shrink-0 space-y-4">
-            <div className="flex rounded-xl border border-input bg-muted/40 p-1">
-              <button
-                type="button"
-                onClick={() => setUserType('admin')}
-                className={cn(
-                  'flex items-center justify-center gap-2 flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all',
-                  userType === 'admin'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                <UserCog className="size-4" />
-                Admin
-              </button>
-              <button
-                type="button"
-                onClick={() => setUserType('health')}
-                className={cn(
-                  'flex items-center justify-center gap-2 flex-1 px-3 py-2 rounded-lg text-sm font-medium transition-all',
-                  userType === 'health'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
-                )}
-              >
-                <Stethoscope className="size-4" />
-                Salud
-              </button>
-            </div>
-            {userType === 'admin' ? (
-              <AdminCreationForm />
-            ) : (
-              <HealthUserCreationForm />
-            )}
-          </div>
+          <AdminReportsTable
+            key={refetchKey}
+            statusId={pendingId}
+            onAccept={handleAccept}
+            onReject={handleReject}
+          />
         </div>
       </main>
     </div>
