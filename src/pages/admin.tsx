@@ -156,7 +156,7 @@ export const Admin = () => {
               </span>
               <Dialog open={adminModalOpen} onOpenChange={setAdminModalOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-1.5">
+                  <Button variant="secondary" size="sm" className="gap-1.5">
                     <UserCog className="size-3.5" />
                     Admin
                   </Button>
