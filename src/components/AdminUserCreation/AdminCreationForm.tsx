@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { createAdmin } from '@/services/user/createUserService';
-import type { CreateUserRequest } from '@/services/auth/authService';
+import { toast } from 'sonner';
 
 const adminSchema = Yup.object().shape({
   name: Yup.string()
@@ -38,7 +38,11 @@ const adminSchema = Yup.object().shape({
     .required('Confirmar contraseña es obligatorio'),
 });
 
-export const AdminCreationForm = () => {
+interface AdminCreationFormProps {
+  onSuccess?: () => void;
+}
+
+export const AdminCreationForm = ({ onSuccess }: AdminCreationFormProps) => {
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -51,18 +55,20 @@ export const AdminCreationForm = () => {
     validationSchema: adminSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const requestData: CreateUserRequest = {
+        const requestData = {
           name: values.name,
           last_name_1: values.lastName1,
-          last_name_2: values.lastName2,
+          last_name_2: values.lastName2 || undefined,
           email: values.email,
           password: values.password,
-          roleId: 1,
+          role_id: 1,
         };
         await createAdmin(requestData);
+        toast.success('Usuario administrador creado correctamente.');
         resetForm();
-      } catch (error) {
-        console.error('Error al crear administrador: ', error);
+        onSuccess?.();
+      } catch {
+        toast.error('Error al crear el usuario. Intenta de nuevo.');
       }
     },
   });

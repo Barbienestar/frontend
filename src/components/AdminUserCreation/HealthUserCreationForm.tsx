@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 import type { HospitalData } from '@/common/HospitalData';
 import { getHospitals } from '@/services/report/reportService';
 import { createHealthUser } from '@/services/user/createUserService';
-import type { CreateUserRequest } from '@/services/auth/authService';
+import { toast } from 'sonner';
 
 const healthUserSchema = Yup.object().shape({
   name: Yup.string()
@@ -44,7 +44,13 @@ const healthUserSchema = Yup.object().shape({
     .required('Selecciona al menos un hospital'),
 });
 
-export const HealthUserCreationForm = () => {
+interface HealthUserCreationFormProps {
+  onSuccess?: () => void;
+}
+
+export const HealthUserCreationForm = ({
+  onSuccess,
+}: HealthUserCreationFormProps) => {
   const [hospitals, setHospitals] = useState<HospitalData[]>([]);
   const [loadingHospitals, setLoadingHospitals] = useState(true);
 
@@ -88,19 +94,21 @@ export const HealthUserCreationForm = () => {
     validationSchema: healthUserSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const requestData: CreateUserRequest & { hospitalIds: number[] } = {
+        const requestData = {
           name: values.name,
           last_name_1: values.lastName1,
-          last_name_2: values.lastName2,
+          last_name_2: values.lastName2 || undefined,
           email: values.email,
           password: values.password,
-          roleId: 2,
-          hospitalIds: values.hospitalIds,
+          role_id: 2,
+          hospital_ids: values.hospitalIds,
         };
         await createHealthUser(requestData);
+        toast.success('Usuario de salud creado correctamente.');
         resetForm();
-      } catch (error) {
-        console.error('Error al crear usuario de salud: ', error);
+        onSuccess?.();
+      } catch {
+        toast.error('Error al crear el usuario. Intenta de nuevo.');
       }
     },
   });
