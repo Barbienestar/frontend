@@ -6,6 +6,7 @@ import Navbar from '@/components/Global/navbar';
 import { Login } from '@/components/Login/login';
 import SignUp from '@/components/Signup/signup';
 import { useAuth } from '@/contexts/useAuth';
+import { toast } from 'sonner';
 
 const Access = () => {
   const { signIn, hasRole } = useAuth();
@@ -23,6 +24,8 @@ const Access = () => {
       } else {
         navigate('/inicio');
       }
+    } catch {
+      toast.error('Error al iniciar sesión. Correo o contraseña incorrectos.');
     } finally {
       setIsLoading(false);
     }

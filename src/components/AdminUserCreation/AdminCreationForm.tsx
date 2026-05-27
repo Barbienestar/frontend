@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import { createAdmin } from '@/services/user/createUserService';
+import { toast } from 'sonner';
 
 const adminSchema = Yup.object().shape({
   name: Yup.string()
@@ -59,9 +60,10 @@ export const AdminCreationForm = () => {
           role_id: 1,
         };
         await createAdmin(requestData);
+        toast.success('Usuario administrador creado correctamente.');
         resetForm();
-      } catch (error) {
-        console.error('Error al crear administrador: ', error);
+      } catch {
+        toast.error('Error al crear el usuario. Intenta de nuevo.');
       }
     },
   });

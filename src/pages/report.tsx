@@ -22,6 +22,7 @@ import {
   uploadImage,
 } from '@/services/report/reportService';
 import { statusConfig } from '@/utils/reportStatus';
+import { toast } from 'sonner';
 
 const ReportarPage = () => {
   const navigate = useNavigate();
@@ -99,11 +100,11 @@ const ReportarPage = () => {
 
   const handleSubmit = async () => {
     if (!selectedMedicine || !selectedHospital || !description.trim()) {
-      alert('Por favor completa todos los campos.');
+      toast.warning('Por favor completa todos los campos.');
       return;
     }
     if (isUploading) {
-      alert('La imagen aún se está subiendo. Espera un momento.');
+      toast.warning('La imagen aún se está subiendo. Espera un momento.');
       return;
     }
     setIsLoading(true);
@@ -114,8 +115,9 @@ const ReportarPage = () => {
         description,
         imageUrl: imageUrl ?? undefined,
       });
+      toast.success('Reporte enviado correctamente.');
     } catch {
-      alert('Error al enviar el reporte. Intenta de nuevo.');
+      toast.error('Error al enviar el reporte. Intenta de nuevo.');
     } finally {
       setIsLoading(false);
     }
