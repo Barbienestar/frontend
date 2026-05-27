@@ -1,4 +1,4 @@
-import { TrendingUp, AlertTriangle, BarChart2, Pill } from 'lucide-react';
+import { TrendingUp, AlertTriangle, BarChart2 } from 'lucide-react';
 import Navbar from '@/components/Global/navbar';
 import { Footer } from '@/components/Global/footer';
 import { MetricCard } from '@/components/MetricCards/metric-card';
@@ -13,35 +13,11 @@ import {
   type StockAverages,
   type StockReport,
 } from '@/services/dashboard/kpis';
+import { getCriticalMedicines } from '@/services/hospitals/hospitalsService';
+import type { HospitalCriticalMedicinesResponse } from '@/common/CriticalMedicineData';
+import { CriticalMedicineCard } from '@/components/CriticalMedicineCard/critical-medicine-card';
 import { useHospitals } from '@/hooks/useHospitals';
 import { useEffect, useState } from 'react';
-
-const medicamentosCriticos = [
-  {
-    nombre: 'Metformina 850mg',
-    clave: '010.000.0412.00',
-    stock: 12,
-    color: 'bg-red-500',
-  },
-  {
-    nombre: 'Paracetamol Sol.',
-    clave: '010.000.0104.00',
-    stock: 8,
-    color: 'bg-red-500',
-  },
-  {
-    nombre: 'Amoxicilina 500mg',
-    clave: '010.000.2101.00',
-    stock: 24,
-    color: 'bg-amber-400',
-  },
-  {
-    nombre: 'Losartán 50mg',
-    clave: '010.000.0520.00',
-    stock: 31,
-    color: 'bg-amber-400',
-  },
-];
 
 const heatPoints = [
   { lat: 16.75, lng: -93.1, intensity: 0.95, name: 'Chiapas' },
@@ -64,6 +40,9 @@ const DashboardPage = () => {
 
   const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
   const [stockReport, setStockReport] = useState<StockReport | null>(null);
+  const [criticalMedicines, setCriticalMedicines] = useState<
+    HospitalCriticalMedicinesResponse[]
+  >([]);
 
   useEffect(() => {
     if (!selectedHospital) return;
@@ -77,9 +56,17 @@ const DashboardPage = () => {
       .catch((err) =>
         console.log('Error al obtener los medicamentos en desabasto:', err)
       );
+
+    getCriticalMedicines(Number(selectedHospital.id))
+      .then(setCriticalMedicines)
+      .catch((err) =>
+        console.log('Error al obtener medicamentos críticos:', err)
+      );
+
     return () => {
       setStockAvgs(null);
       setStockReport(null);
+      setCriticalMedicines([]);
     };
   }, [selectedHospital]);
 
@@ -238,32 +225,16 @@ const DashboardPage = () => {
                 </button>
               </div>
               <div className="flex flex-col gap-3">
-                {medicamentosCriticos.map((med) => (
-                  <div key={med.clave} className="flex items-center gap-3">
-                    <div
-                      className={`w-1 self-stretch rounded-full ${med.color}`}
+                {criticalMedicines.flatMap((hospital) =>
+                  hospital.criticalMedicines.map((med) => (
+                    <CriticalMedicineCard
+                      key={med.id}
+                      hospitalName={hospital.hospitalName}
+                      medicineName={med.genericName}
+                      stock={med.stock}
                     />
-                    <div className="p-2 rounded-lg bg-muted">
-                      <Pill className="size-4 text-muted-foreground" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">
-                        {med.nombre}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        Clave: {med.clave}
-                      </p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <p
-                        className={`text-sm font-bold ${med.stock < 20 ? 'text-red-500' : 'text-amber-500'}`}
-                      >
-                        {String(med.stock).padStart(2, '0')}%
-                      </p>
-                      <p className="text-xs text-muted-foreground">STOCK</p>
-                    </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
           </div>
