@@ -59,7 +59,9 @@ const DashboardPage = () => {
 
   const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
   const [stockReport, setStockReport] = useState<StockReport | null>(null);
-  const [monthlyReports, setMonthlyReports] = useState<MonthlyReports | null>(null);
+  const [monthlyReports, setMonthlyReports] = useState<MonthlyReports | null>(
+    null
+  );
   const [stateSupply, setStateSupply] = useState<StateSupplyData[]>([]);
 
   useEffect(() => {
@@ -73,7 +75,9 @@ const DashboardPage = () => {
 
     getStockAvgs(Number(selectedHospital.id))
       .then(setStockAvgs)
-      .catch((err) => console.log('Error al obtener el abasto promedio: ', err));
+      .catch((err) =>
+        console.log('Error al obtener el abasto promedio: ', err)
+      );
 
     getStockReport(Number(selectedHospital.id))
       .then(setStockReport)
@@ -83,7 +87,7 @@ const DashboardPage = () => {
 
     getMonthlyReports(Number(selectedHospital.id))
       .then(setMonthlyReports)
-      .catch((err) => 
+      .catch((err) =>
         console.log('Error al obtener el numero de reportes mensuales: ', err)
       );
 
@@ -175,7 +179,13 @@ const DashboardPage = () => {
             label="Demanda Mensual"
             value={monthlyReports?.currentMonthReportCount.toString() || '---'}
             icon={<BarChart2 className="size-5" />}
-            trend={"Tendencia: " + (monthlyReports?.comparisonToLastMonth > 0 ? "Incremental (+" : "Decremental (-") + `${monthlyReports?.comparisonToLastMonth}%)`}
+            trend={
+              'Tendencia: ' +
+              (Number(monthlyReports?.comparisonToLastMonth) > 0
+                ? 'Incremental (+'
+                : 'Decremental (-') +
+              `${monthlyReports?.comparisonToLastMonth}%)`
+            }
             trendHighlight="+15%"
             variant="pending"
           />
