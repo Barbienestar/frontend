@@ -116,8 +116,8 @@ const DashboardPage = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col pt-18">
-      <Navbar variant="gobierno" />
-
+      <Navbar variant="gobierno" activePath="/dashboard" />
+      
       <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-10">
         {/* Header */}
         <div className="mb-6">

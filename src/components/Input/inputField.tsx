@@ -1,4 +1,5 @@
 import { Search, ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 import { Field, FieldLabel, FieldDescription } from '../ui/field';
 import { Input } from '../ui/input';
 import { cn } from '@/lib/utils';
@@ -20,13 +21,14 @@ interface InputFieldProps {
   labelClassName?: string;
   descClassName?: string;
   inputClassName?: string;
+  isMedicine?: boolean;
   onChange?: (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => void;
   onBlur?: (e: React.FocusEvent<HTMLSelectElement | HTMLInputElement>) => void;
 }
 
-const variantDefaults: Record<
+const variantDefaults: Record <
   InputFieldProps['variant'],
   { label: string; placeholder: string; description: string }
 > = {
@@ -57,6 +59,83 @@ const variantDefaults: Record<
   },
 };
 
+interface MedicineComboboxProps {
+  options?: SelectOption[];
+  value?: string;
+  placeholder?: string;
+  disabled?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void;
+}
+
+const MedicineCombobox = ({
+  options = [],
+  value,
+  placeholder,
+  disabled,
+  onChange,
+}: MedicineComboboxProps) => {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  const selected = options.find((o) => o.value === value);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
+  const handleSelect = (opt: SelectOption) => {
+    const fakeEvent = {
+      target: { value: opt.value },
+    } as React.ChangeEvent<HTMLSelectElement>;
+    onChange?.(fakeEvent);
+    setOpen(false);
+  };
+
+  return (
+    <div ref={ref} className="relative w-full">
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => setOpen((prev) => !prev)}
+        className={cn(
+          'w-full appearance-none rounded-md border border-input bg-background px-3 py-2 text-sm text-left shadow-xs focus:outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pr-8',
+          !selected && 'text-muted-foreground'
+        )}
+      >
+        {selected ? selected.label : placeholder}
+      </button>
+      <ChevronDown
+        className={cn(
+          'absolute right-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none transition-transform',
+          open && 'rotate-180'
+        )}
+      />
+      {open && (
+        <ul className="absolute z-50 mt-1 w-full rounded-md border border-input bg-background shadow-md max-h-60 overflow-y-auto">
+          {options.map((opt) => (
+            <li
+              key={opt.value}
+              onClick={() => handleSelect(opt)}
+              className={cn(
+                'px-3 py-2 text-sm cursor-pointer leading-snug hover:bg-muted',
+                opt.value === value && 'bg-muted font-medium'
+              )}
+            >
+              {opt.label}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
 export const InputField = ({
   variant,
   name,
@@ -69,6 +148,7 @@ export const InputField = ({
   labelClassName,
   descClassName,
   inputClassName,
+  isMedicine = false,
   onChange,
   onBlur,
 }: InputFieldProps) => {
@@ -93,7 +173,17 @@ export const InputField = ({
         </div>
       )}
 
-      {variant === 'select' && (
+      {variant === 'select' && isMedicine && (
+        <MedicineCombobox
+          options={options}
+          value={value}
+          placeholder={placeholder ?? defaults.placeholder}
+          disabled={disabled}
+          onChange={onChange}
+        />
+      )}
+
+      {variant === 'select' && !isMedicine && (
         <div className="relative flex items-center">
           <select
             name={name}
@@ -110,7 +200,7 @@ export const InputField = ({
               {placeholder ?? defaults.placeholder}
             </option>
             {options?.map((opt) => (
-              <option key={opt.value} value={opt.value}>
+              <option key={opt.value} value={opt.value} title={opt.label}>
                 {opt.label}
               </option>
             ))}
