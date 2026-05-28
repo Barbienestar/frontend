@@ -23,6 +23,7 @@ import {
 } from '@/services/report/reportService';
 import { statusConfig } from '@/utils/reportStatus';
 import { toast } from 'sonner';
+import { ConfirmModal } from '@/components/ConfirmModal/ConfirmModal';
 
 const ReportarPage = () => {
   const navigate = useNavigate();
@@ -36,6 +37,8 @@ const ReportarPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [userReports, setUserReports] = useState<ReportRow[]>([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -157,10 +160,34 @@ const ReportarPage = () => {
               onHospitalChange={setSelectedHospital}
               onDescriptionChange={setDescription}
               onFileChange={handleFileChange}
-              onCancel={() => navigate('/inicio')}
-              onSubmit={handleSubmit}
+              onCancel={() => setShowCancelModal(true)}
+              onSubmit={() => setShowConfirmModal(true)}
               isLoading={isLoading}
               isUploading={isUploading}
+            />
+
+            <ConfirmModal
+              isOpen={showConfirmModal}
+              message="¿Está seguro que desea enviar este reporte?"
+              confirmLabel="Sí, enviar"
+              cancelLabel="Cancelar"
+              onConfirm={() => {
+                setShowConfirmModal(false);
+                handleSubmit();
+              }}
+              onCancel={() => setShowConfirmModal(false)}
+            />
+
+            <ConfirmModal
+              isOpen={showCancelModal}
+              message="¿Está seguro que desea cancelar el reporte?"
+              confirmLabel="Sí, cancelar"
+              cancelLabel="No, volver"
+              onConfirm={() => {
+                setShowCancelModal(false);
+                navigate('/inicio');
+              }}
+              onCancel={() => setShowCancelModal(false)}
             />
 
             <div className="rounded-xl bg-[#1a2235] text-white p-4">
