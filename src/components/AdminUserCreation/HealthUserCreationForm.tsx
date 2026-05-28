@@ -16,6 +16,7 @@ import type { HospitalData } from '@/common/HospitalData';
 import { getHospitals } from '@/services/report/reportService';
 import { createHealthUser } from '@/services/user/createUserService';
 import { toast } from 'sonner';
+import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 
 const healthUserSchema = Yup.object().shape({
   name: Yup.string()
@@ -118,9 +119,15 @@ export const HealthUserCreationForm = ({
       (formik.touched[fieldName] || formik.submitCount > 0) &&
       formik.errors[fieldName]
     );
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        setShowConfirmModal(true);
+      }}
+    >
       <Card>
         <CardHeader>
           <CardTitle>Crear Usuario de Salud</CardTitle>
@@ -279,6 +286,17 @@ export const HealthUserCreationForm = ({
           </div>
         </CardContent>
       </Card>
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        message="¿Está seguro que desea crear este usuario de salud?"
+        confirmLabel="Sí, crear"
+        cancelLabel="Cancelar"
+        onConfirm={() => {
+          setShowConfirmModal(false);
+          formik.handleSubmit();
+        }}
+        onCancel={() => setShowConfirmModal(false)}
+      />
     </form>
   );
 };
