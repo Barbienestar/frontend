@@ -161,7 +161,7 @@ const DashboardPage = () => {
             variant="rejected"
           />
           <MetricCard
-            label="Demanda Mensual"
+            label="Reportes mensuales"
             value={monthlyReports?.currentMonthReportCount.toString() || '---'}
             icon={<BarChart2 className="size-5" />}
             trend={
