@@ -46,7 +46,10 @@ export function SearchableSelect({
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
         setQuery('');
       }
@@ -68,9 +71,7 @@ export function SearchableSelect({
 
   return (
     <Field>
-      {label && (
-        <FieldLabel className={cn(labelClassName)}>{label}</FieldLabel>
-      )}
+      {label && <FieldLabel className={cn(labelClassName)}>{label}</FieldLabel>}
 
       <div ref={wrapperRef} className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground pointer-events-none" />

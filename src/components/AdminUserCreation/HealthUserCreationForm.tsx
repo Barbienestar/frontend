@@ -124,11 +124,12 @@ export const HealthUserCreationForm = ({
   const [hospitalSearch, setHospitalSearch] = useState('');
   const hospitalSearchRef = useRef<HTMLInputElement>(null);
 
-  const filteredHospitals = hospitalSearch.trim().length > 0
-    ? hospitals.filter((h) =>
-        h.name.toLowerCase().includes(hospitalSearch.toLowerCase().trim())
-      )
-    : [];
+  const filteredHospitals =
+    hospitalSearch.trim().length > 0
+      ? hospitals.filter((h) =>
+          h.name.toLowerCase().includes(hospitalSearch.toLowerCase().trim())
+        )
+      : [];
 
   return (
     <form
@@ -293,15 +294,19 @@ export const HealthUserCreationForm = ({
                     </div>
                   )}
 
-                  {hospitalSearch.trim().length > 0 && filteredHospitals.length === 0 && (
-                    <p className="text-xs text-muted-foreground px-1">
-                      No se encontraron hospitales con ese nombre.
-                    </p>
-                  )}
+                  {hospitalSearch.trim().length > 0 &&
+                    filteredHospitals.length === 0 && (
+                      <p className="text-xs text-muted-foreground px-1">
+                        No se encontraron hospitales con ese nombre.
+                      </p>
+                    )}
 
                   {formik.values.hospitalIds.length > 0 && (
                     <p className="text-xs text-muted-foreground px-1">
-                      {formik.values.hospitalIds.length} hospital{formik.values.hospitalIds.length !== 1 ? 'es' : ''} seleccionado{formik.values.hospitalIds.length !== 1 ? 's' : ''}
+                      {formik.values.hospitalIds.length} hospital
+                      {formik.values.hospitalIds.length !== 1 ? 'es' : ''}{' '}
+                      seleccionado
+                      {formik.values.hospitalIds.length !== 1 ? 's' : ''}
                     </p>
                   )}
                 </div>
