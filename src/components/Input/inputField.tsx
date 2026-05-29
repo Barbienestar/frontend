@@ -28,7 +28,7 @@ interface InputFieldProps {
   onBlur?: (e: React.FocusEvent<HTMLSelectElement | HTMLInputElement>) => void;
 }
 
-const variantDefaults: Record <
+const variantDefaults: Record<
   InputFieldProps['variant'],
   { label: string; placeholder: string; description: string }
 > = {
@@ -64,7 +64,9 @@ interface MedicineComboboxProps {
   value?: string;
   placeholder?: string;
   disabled?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => void;
+  onChange?: (
+    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => void;
 }
 
 const MedicineCombobox = ({
