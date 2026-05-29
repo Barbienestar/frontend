@@ -11,7 +11,6 @@ import { getCitiesByState } from '@/services/cities/citiesService';
 import { getSuburbsByCity } from '@/services/suburbs/suburbsService';
 import { signup, type CreateUserRequest } from '@/services/auth/authService';
 
-/** Validation Schema */
 const signupSchema = Yup.object().shape({
   name: Yup.string()
     .max(128, 'Máximo 128 caracteres')
@@ -54,7 +53,6 @@ const SignUp = () => {
   const [cities, setCities] = useState<SelectOption[]>([]);
   const [suburbs, setSuburbs] = useState<SelectOption[]>([]);
 
-  /** Formik Setup */
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -82,21 +80,19 @@ const SignUp = () => {
           roleId: 3,
         };
         await signup(requestData);
-        navigate('/inicio', { replace: true });
+        navigate('/reportar', { replace: true });
       } catch (error) {
         console.error('Error al crear cuenta: ', error);
       }
     },
   });
 
-  /** Helper for conditional error styling */
   const isInvalid = (fieldName: keyof typeof formik.values) =>
     !!(
       (formik.touched[fieldName] || formik.submitCount > 0) &&
       formik.errors[fieldName]
     );
 
-  /** Data Fetching Effects */
   useEffect(() => {
     getAllStates()
       .then((data) => {

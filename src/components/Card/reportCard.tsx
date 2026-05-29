@@ -57,6 +57,7 @@ const ReportCard = ({
           options={medicineOptions}
           value={selectedMedicine}
           onChange={(e) => onMedicineChange(e.target.value)}
+          isMedicine
         />
         <InputField
           variant="select"
@@ -66,6 +67,7 @@ const ReportCard = ({
           options={hospitalOptions}
           value={selectedHospital}
           onChange={(e) => onHospitalChange(e.target.value)}
+          isMedicine
         />
       </div>
 

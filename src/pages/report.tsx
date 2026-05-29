@@ -144,7 +144,22 @@ const ReportarPage = () => {
           <p className="text-red-500 text-sm mb-4">{fetchError}</p>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
+        {/* Banner ¿Por qué reportar? */}
+        <div className="mt-6">
+          <SidebarInfoCard
+            icon={ShieldCheck}
+            title="¿Por qué reportar?"
+            description="Los reportes ciudadanos permiten a la Secretaría de Salud identificar zonas críticas y redistribuir el inventario nacional de manera eficiente."
+            features={[
+              { icon: ShieldCheck, text: 'Anónimo y Seguro' },
+              { icon: Clock, text: 'Seguimiento en Tiempo Real' },
+              { icon: CheckCircle, text: 'Validez Oficial' },
+            ]}
+            horizontal
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-15 items-stretch mt-6">
           {/* Columna izquierda — formulario + teléfono */}
           <div className="lg:col-span-3 flex flex-col gap-4">
             <ReportCard
@@ -186,21 +201,6 @@ const ReportarPage = () => {
               onViewAll={() => navigate('/mis-reportes')}
             />
           </div>
-        </div>
-
-        {/* Banner ¿Por qué reportar? */}
-        <div className="mt-6">
-          <SidebarInfoCard
-            icon={ShieldCheck}
-            title="¿Por qué reportar?"
-            description="Los reportes ciudadanos permiten a la Secretaría de Salud identificar zonas críticas y redistribuir el inventario nacional de manera eficiente."
-            features={[
-              { icon: ShieldCheck, text: 'Anónimo y Seguro' },
-              { icon: Clock, text: 'Seguimiento en Tiempo Real' },
-              { icon: CheckCircle, text: 'Validez Oficial' },
-            ]}
-            horizontal
-          />
         </div>
       </main>
 
