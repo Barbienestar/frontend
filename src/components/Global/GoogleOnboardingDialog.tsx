@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { InputField, type SelectOption } from '@/components/Input/inputField';
@@ -95,7 +95,7 @@ const GoogleOnboardingDialog = ({
   });
 
   // Pre-fill form when dialog opens
-  const handleDialogOpen = useCallback(() => {
+  const handleDialogOpen = () => {
     if (user) {
       formik.resetForm({
         values: {
@@ -106,9 +106,10 @@ const GoogleOnboardingDialog = ({
         },
       });
       setLocation(initialLocationState);
+      setSuburbId(undefined);
       setError(null);
     }
-  }, [user, formik]);
+  };
 
   // Load states when dialog opens
   useEffect(() => {
@@ -130,6 +131,7 @@ const GoogleOnboardingDialog = ({
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
     const stateId = e.target.value;
+    setSuburbId(undefined);
     setLocation((prev) => ({
       ...prev,
       selectedStateId: stateId,
@@ -156,6 +158,7 @@ const GoogleOnboardingDialog = ({
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
   ) => {
     const cityId = e.target.value;
+    setSuburbId(undefined);
     setLocation((prev) => ({
       ...prev,
       selectedCityId: cityId,
