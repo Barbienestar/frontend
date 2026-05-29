@@ -111,8 +111,10 @@ const MapaDeAbasto = () => {
           subtitle="Busca la disponibilidad de tus medicamentos en las unidades de salud del país."
         />
 
+        <EmptySearchCTA />
+
         {/* Search con autocomplete */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex gap-2 mb-6 mt-6">
           <MedicineAutocomplete
             value={searchValue}
             onChange={setSearchValue}
@@ -220,8 +222,6 @@ const MapaDeAbasto = () => {
             />
           </div>
         </div>
-
-        <EmptySearchCTA />
       </main>
 
       <Footer variant="full" />

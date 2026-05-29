@@ -23,6 +23,7 @@ import {
 } from '@/services/report/reportService';
 import { statusConfig } from '@/utils/reportStatus';
 import { toast } from 'sonner';
+import { ConfirmModal } from '@/components/ConfirmModal/ConfirmModal';
 
 const ReportarPage = () => {
   const navigate = useNavigate();
@@ -36,6 +37,8 @@ const ReportarPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
   const [userReports, setUserReports] = useState<ReportRow[]>([]);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -144,7 +147,22 @@ const ReportarPage = () => {
           <p className="text-red-500 text-sm mb-4">{fetchError}</p>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
+        {/* Banner ¿Por qué reportar? */}
+        <div className="mt-6">
+          <SidebarInfoCard
+            icon={ShieldCheck}
+            title="¿Por qué reportar?"
+            description="Los reportes ciudadanos permiten a la Secretaría de Salud identificar zonas críticas y redistribuir el inventario nacional de manera eficiente."
+            features={[
+              { icon: ShieldCheck, text: 'Anónimo y Seguro' },
+              { icon: Clock, text: 'Seguimiento en Tiempo Real' },
+              { icon: CheckCircle, text: 'Validez Oficial' },
+            ]}
+            horizontal
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-15 items-stretch mt-6">
           {/* Columna izquierda — formulario + teléfono */}
           <div className="lg:col-span-3 flex flex-col gap-4">
             <ReportCard
@@ -157,10 +175,34 @@ const ReportarPage = () => {
               onHospitalChange={setSelectedHospital}
               onDescriptionChange={setDescription}
               onFileChange={handleFileChange}
-              onCancel={() => navigate('/inicio')}
-              onSubmit={handleSubmit}
+              onCancel={() => setShowCancelModal(true)}
+              onSubmit={() => setShowConfirmModal(true)}
               isLoading={isLoading}
               isUploading={isUploading}
+            />
+
+            <ConfirmModal
+              isOpen={showConfirmModal}
+              message="¿Está seguro que desea enviar este reporte?"
+              confirmLabel="Sí, enviar"
+              cancelLabel="Cancelar"
+              onConfirm={() => {
+                setShowConfirmModal(false);
+                handleSubmit();
+              }}
+              onCancel={() => setShowConfirmModal(false)}
+            />
+
+            <ConfirmModal
+              isOpen={showCancelModal}
+              message="¿Está seguro que desea cancelar el reporte?"
+              confirmLabel="Sí, cancelar"
+              cancelLabel="No, volver"
+              onConfirm={() => {
+                setShowCancelModal(false);
+                navigate('/inicio');
+              }}
+              onCancel={() => setShowCancelModal(false)}
             />
 
             <div className="rounded-xl bg-[#1a2235] text-white p-4">
@@ -186,21 +228,6 @@ const ReportarPage = () => {
               onViewAll={() => navigate('/mis-reportes')}
             />
           </div>
-        </div>
-
-        {/* Banner ¿Por qué reportar? */}
-        <div className="mt-6">
-          <SidebarInfoCard
-            icon={ShieldCheck}
-            title="¿Por qué reportar?"
-            description="Los reportes ciudadanos permiten a la Secretaría de Salud identificar zonas críticas y redistribuir el inventario nacional de manera eficiente."
-            features={[
-              { icon: ShieldCheck, text: 'Anónimo y Seguro' },
-              { icon: Clock, text: 'Seguimiento en Tiempo Real' },
-              { icon: CheckCircle, text: 'Validez Oficial' },
-            ]}
-            horizontal
-          />
         </div>
       </main>
 

@@ -15,12 +15,13 @@ import {
 } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/services/auth/auth';
+
 interface AuthContextType {
   user: UserProfile | null;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<UserProfile>;
   signInWithGoogle: () => Promise<UserProfile>;
   signOut: () => Promise<void>;
   hasRole: (role: UserProfile['role']) => boolean;
@@ -67,6 +68,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const loggedUser = await login(email, password);
     setUser(loggedUser);
     setToken(localStorage.getItem('token'));
+    return loggedUser;
   }, []);
 
   const signInWithGoogle = useCallback(async () => {

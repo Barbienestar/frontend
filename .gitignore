@@ -30,3 +30,5 @@ storybook-static
 
 # Claude context (local only)
 CLAUDE.md
+.codegraph/
+docs/

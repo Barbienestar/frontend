@@ -161,10 +161,12 @@ export const Admin = () => {
                     Admin
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-lg">
-                  <AdminCreationForm
-                    onSuccess={() => setAdminModalOpen(false)}
-                  />
+                <DialogContent className="sm:max-w-lg p-0 overflow-hidden">
+                  <div className="overflow-y-auto max-h-[90vh] p-4">
+                    <AdminCreationForm
+                      onSuccess={() => setAdminModalOpen(false)}
+                    />
+                  </div>
                 </DialogContent>
               </Dialog>
               <Dialog open={healthModalOpen} onOpenChange={setHealthModalOpen}>
@@ -174,10 +176,12 @@ export const Admin = () => {
                     Salud
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-lg">
-                  <HealthUserCreationForm
-                    onSuccess={() => setHealthModalOpen(false)}
-                  />
+                <DialogContent className="sm:max-w-lg p-0 overflow-hidden">
+                  <div className="overflow-y-auto max-h-[90vh] p-4">
+                    <HealthUserCreationForm
+                      onSuccess={() => setHealthModalOpen(false)}
+                    />
+                  </div>
                 </DialogContent>
               </Dialog>
             </div>

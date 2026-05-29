@@ -7,10 +7,12 @@ import {
   User,
   X,
 } from 'lucide-react';
+import { useState } from 'react';
 import type { FullReportData } from '@/common/FullReportData';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { ConfirmModal } from '@/components/ConfirmModal/ConfirmModal';
 
 interface AdminReportsCardProps {
   data: FullReportData;
@@ -23,6 +25,16 @@ export const AdminReportsCard = ({
   onAccept,
   onReject,
 }: AdminReportsCardProps) => {
+  const [pendingAction, setPendingAction] = useState<
+    'accept' | 'reject' | null
+  >(null);
+
+  const handleConfirm = () => {
+    if (pendingAction === 'accept') onAccept?.(data);
+    if (pendingAction === 'reject') onReject?.(data);
+    setPendingAction(null);
+  };
+
   return (
     <div className="group relative flex flex-col md:flex-row gap-3 p-3 bg-card border border-border rounded-sm hover:border-primary transition-all duration-300 ease-out w-full shadow-sm">
       <div className="shrink-0 w-full md:w-36">
@@ -85,7 +97,7 @@ export const AdminReportsCard = ({
               type="button"
               variant="outline"
               size="xs"
-              onClick={() => onReject?.(data)}
+              onClick={() => setPendingAction('reject')}
               className="px-2 border-border text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-all duration-200 rounded-sm"
             >
               <X className="w-3.5 h-3.5" />
@@ -94,7 +106,7 @@ export const AdminReportsCard = ({
             <Button
               type="button"
               size="xs"
-              onClick={() => onAccept?.(data)}
+              onClick={() => setPendingAction('accept')}
               className="px-2 bg-primary text-primary-foreground hover:opacity-90 transition-all duration-200 rounded-sm shadow-sm"
             >
               <Check className="w-3.5 h-3.5" />
@@ -129,6 +141,26 @@ export const AdminReportsCard = ({
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        isOpen={pendingAction !== null}
+        message={
+          pendingAction === 'accept'
+            ? '¿Está seguro que desea aceptar este reporte?'
+            : '¿Está seguro que desea rechazar este reporte?'
+        }
+        confirmLabel={
+          pendingAction === 'accept' ? 'Sí, aceptar' : 'Sí, rechazar'
+        }
+        confirmClassName={
+          pendingAction === 'reject'
+            ? 'bg-red-600 hover:bg-red-700 text-white'
+            : undefined
+        }
+        cancelLabel="Cancelar"
+        onConfirm={handleConfirm}
+        onCancel={() => setPendingAction(null)}
+      />
     </div>
   );
 };
