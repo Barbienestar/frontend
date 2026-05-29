@@ -9,6 +9,8 @@ interface ConfirmModalProps {
   confirmLabel?: string;
   /** Texto del botón de cancelación (default: "Cancelar") */
   cancelLabel?: string;
+  /** Clases adicionales para el botón de confirmación */
+  confirmClassName?: string;
   /** Callback al confirmar */
   onConfirm: () => void;
   /** Callback al cancelar o cerrar */
@@ -20,6 +22,7 @@ export function ConfirmModal({
   message,
   confirmLabel = 'Aceptar',
   cancelLabel = 'Cancelar',
+  confirmClassName,
   onConfirm,
   onCancel,
 }: ConfirmModalProps) {
@@ -48,7 +51,7 @@ export function ConfirmModal({
           <Button variant="outline" size="default" onClick={onCancel}>
             {cancelLabel}
           </Button>
-          <Button variant="default" size="default" onClick={onConfirm}>
+          <Button variant="default" size="default" onClick={onConfirm} className={confirmClassName}>
             {confirmLabel}
           </Button>
         </div>

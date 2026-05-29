@@ -70,25 +70,25 @@ export function Map({
 
   return (
     <div style={{ position: 'relative', zIndex: 0 }}>
-    <MapContainer
-      center={defaultCenter}
-      zoom={zoom}
-      style={{ height, width: '100%', borderRadius: '12px' }}
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
+      <MapContainer
+        center={defaultCenter}
+        zoom={zoom}
+        style={{ height, width: '100%', borderRadius: '12px' }}
+      >
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
 
-      {variant === 'heatmap' && <HeatLayer points={points} />}
+        {variant === 'heatmap' && <HeatLayer points={points} />}
 
-      {variant === 'normal' &&
-        points.map((point, i) => (
-          <Marker key={i} position={[point.lat, point.lng]}>
-            {point.name && <Popup>{point.name}</Popup>}
-          </Marker>
-        ))}
-    </MapContainer>
+        {variant === 'normal' &&
+          points.map((point, i) => (
+            <Marker key={i} position={[point.lat, point.lng]}>
+              {point.name && <Popup>{point.name}</Popup>}
+            </Marker>
+          ))}
+      </MapContainer>
     </div>
   );
 }
