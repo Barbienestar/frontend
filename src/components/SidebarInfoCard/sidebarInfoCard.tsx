@@ -22,17 +22,17 @@ export const SidebarInfoCard = ({
 }: SidebarInfoCardProps) => {
   if (horizontal) {
     return (
-      <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-3 flex items-center gap-6">
+      <div className="rounded-xl border border-amber-200 bg-amber-50 px-5 py-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
         <div className="flex items-center gap-2 shrink-0">
           <TitleIcon className="size-4 text-amber-600" />
           <h3 className="text-sm font-semibold text-amber-800 uppercase tracking-wide">
             {title}
           </h3>
         </div>
-        <p className="text-xs text-amber-700 leading-relaxed flex-1">
+        <p className="text-xs text-amber-700 leading-relaxed sm:flex-1">
           {description}
         </p>
-        <ul className="flex items-center gap-5 shrink-0">
+        <ul className="flex flex-wrap items-center gap-3 sm:gap-5 sm:shrink-0">
           {features.map(({ icon: Icon, text }) => (
             <li
               key={text}
