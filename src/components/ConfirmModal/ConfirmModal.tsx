@@ -51,12 +51,7 @@ export function ConfirmModal({
           <Button variant="outline" size="default" onClick={onCancel}>
             {cancelLabel}
           </Button>
-          <Button
-            variant="default"
-            size="default"
-            onClick={onConfirm}
-            className={confirmClassName}
-          >
+          <Button variant="default" size="default" onClick={onConfirm} className={confirmClassName}>
             {confirmLabel}
           </Button>
         </div>
