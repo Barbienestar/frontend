@@ -25,7 +25,9 @@ export const AdminReportsCard = ({
   onAccept,
   onReject,
 }: AdminReportsCardProps) => {
-  const [pendingAction, setPendingAction] = useState<'accept' | 'reject' | null>(null);
+  const [pendingAction, setPendingAction] = useState<
+    'accept' | 'reject' | null
+  >(null);
 
   const handleConfirm = () => {
     if (pendingAction === 'accept') onAccept?.(data);
@@ -147,8 +149,14 @@ export const AdminReportsCard = ({
             ? '¿Está seguro que desea aceptar este reporte?'
             : '¿Está seguro que desea rechazar este reporte?'
         }
-        confirmLabel={pendingAction === 'accept' ? 'Sí, aceptar' : 'Sí, rechazar'}
-        confirmClassName={pendingAction === 'reject' ? 'bg-red-600 hover:bg-red-700 text-white' : undefined}
+        confirmLabel={
+          pendingAction === 'accept' ? 'Sí, aceptar' : 'Sí, rechazar'
+        }
+        confirmClassName={
+          pendingAction === 'reject'
+            ? 'bg-red-600 hover:bg-red-700 text-white'
+            : undefined
+        }
         cancelLabel="Cancelar"
         onConfirm={handleConfirm}
         onCancel={() => setPendingAction(null)}

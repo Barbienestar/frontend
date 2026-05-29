@@ -1,7 +1,7 @@
 import { ClipboardList, Loader2 } from 'lucide-react';
-import InputField from '../Input/inputField';
 import { Button } from '../Button/button';
 import FileUpload from '../FileUpload/FileUpload';
+import { SearchableSelect } from '@/components/SearchableSelect/SearchableSelect';
 
 interface SelectOption {
   value: string;
@@ -49,23 +49,19 @@ const ReportCard = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <InputField
-          variant="select"
+        <SearchableSelect
           label="Medicamento"
           placeholder="Seleccione un medicamento"
-          description=""
           options={medicineOptions}
           value={selectedMedicine}
-          onChange={(e) => onMedicineChange(e.target.value)}
+          onChange={onMedicineChange}
         />
-        <InputField
-          variant="select"
+        <SearchableSelect
           label="Hospital o Clínica"
           placeholder="Seleccione una unidad médica"
-          description=""
           options={hospitalOptions}
           value={selectedHospital}
-          onChange={(e) => onHospitalChange(e.target.value)}
+          onChange={onHospitalChange}
         />
       </div>
 
