@@ -2,6 +2,7 @@ import { BriefcaseMedical } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import accessBackground from '@/assets/access_background.svg';
+import GoogleOnboardingDialog from '@/components/Global/GoogleOnboardingDialog';
 import Navbar from '@/components/Global/navbar';
 import { Login } from '@/components/Login/login';
 import SignUp from '@/components/Signup/signup';
@@ -9,9 +10,11 @@ import { useAuth } from '@/contexts/useAuth';
 import { toast } from 'sonner';
 
 const Access = () => {
-  const { signIn, hasRole } = useAuth();
+  const { signIn, signInWithGoogle, hasRole } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const handleLogin = async (email: string, password: string) => {
     try {
@@ -28,6 +31,25 @@ const Access = () => {
       toast.error('Error al iniciar sesión. Correo o contraseña incorrectos.');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      setIsGoogleLoading(true);
+      const profile = await signInWithGoogle();
+      if (!profile.age || !profile.suburb) {
+        setShowOnboarding(true);
+      } else {
+        navigate('/inicio');
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error && (err as { code?: string }).code === 'auth/popup-closed-by-user') {
+        return;
+      }
+      toast.error('Error al iniciar sesión con Google.');
+    } finally {
+      setIsGoogleLoading(false);
     }
   };
 
@@ -82,7 +104,12 @@ const Access = () => {
         <div className="flex-1 flex items-center justify-center bg-gray-50 p-8">
           <div className="flex flex-col items-center text-gray-800">
             {/** Login Form */}
-            <Login onSubmit={handleLogin} isLoading={isLoading} />
+            <Login
+              onSubmit={handleLogin}
+              isLoading={isLoading}
+              onGoogleSignIn={handleGoogleSignIn}
+              isGoogleLoading={isGoogleLoading}
+            />
 
             {/** Forms separator */}
             <div className="flex flex-col w-full my-6">
@@ -105,6 +132,11 @@ const Access = () => {
           </div>
         </div>
       </div>
+
+      <GoogleOnboardingDialog
+        open={showOnboarding}
+        onComplete={() => setShowOnboarding(false)}
+      />
     </main>
   );
 };
