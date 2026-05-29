@@ -69,6 +69,7 @@ export function Map({
   ];
 
   return (
+    <div style={{ position: 'relative', zIndex: 0 }}>
     <MapContainer
       center={defaultCenter}
       zoom={zoom}
@@ -88,5 +89,6 @@ export function Map({
           </Marker>
         ))}
     </MapContainer>
+    </div>
   );
 }
