@@ -31,7 +31,7 @@ export function ConfirmModal({
   return (
     /* Overlay */
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-[10002] flex items-center justify-center bg-black/60 backdrop-blur-sm"
       onClick={onCancel}
       aria-modal="true"
       role="dialog"
