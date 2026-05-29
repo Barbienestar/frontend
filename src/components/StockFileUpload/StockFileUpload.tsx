@@ -12,6 +12,7 @@ import {
 import { Info, Upload } from 'lucide-react';
 import { uploadMedicineStock } from '@/services/medicines/medicinesService';
 import { toast } from 'sonner';
+import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 
 interface Props {
   hospitalId?: number;
@@ -22,6 +23,7 @@ const StockFileUpload = ({ hospitalId, hospitalName }: Props) => {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
   const [fileUploadKey, setFileUploadKey] = useState(0);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const handleUpload = async () => {
     if (!file || !hospitalId) return;
@@ -58,44 +60,62 @@ const StockFileUpload = ({ hospitalId, hospitalName }: Props) => {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Carga de datos oficiales</CardTitle>
-        {hospitalName && (
-          <CardAction>
-            <Badge variant="secondary" className="p-4 rounded-sm">
-              {hospitalName}
-            </Badge>
-          </CardAction>
-        )}
-      </CardHeader>
-      <div className="px-6">
-        <FileUpload key={fileUploadKey} variant="csv" onFileChange={setFile} />
-      </div>
-      <CardFooter className="flex-col gap-2">
-        <Button
-          variant="default"
-          size="lg"
-          className="w-full bg-[#065E35] hover:bg-[#065E35]/80"
-          onClick={handleUpload}
-          disabled={!file || uploading || !hospitalId}
-        >
-          <Upload />
-          {uploading ? 'Subiendo...' : 'Subir archivo'}
-        </Button>
-        <Button
-          variant="outline"
-          size="lg"
-          className="w-full bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          asChild
-        >
-          <a href="/csvTemplate/formato_abasto.csv" download>
-            <Info />
-            Descarga la plantilla aquí.
-          </a>
-        </Button>
-      </CardFooter>
-    </Card>
+    <>
+      <Card>
+        <CardHeader>
+          <CardTitle>Carga de datos oficiales</CardTitle>
+          {hospitalName && (
+            <CardAction>
+              <Badge variant="secondary" className="p-4 rounded-sm">
+                {hospitalName}
+              </Badge>
+            </CardAction>
+          )}
+        </CardHeader>
+        <div className="px-6">
+          <FileUpload
+            key={fileUploadKey}
+            variant="csv"
+            onFileChange={setFile}
+          />
+        </div>
+        <CardFooter className="flex-col gap-2">
+          <Button
+            variant="default"
+            size="lg"
+            className="w-full bg-[#065E35] hover:bg-[#065E35]/80"
+            onClick={() => setShowConfirmModal(true)}
+            disabled={!file || uploading || !hospitalId}
+          >
+            <Upload />
+            {uploading ? 'Subiendo...' : 'Subir archivo'}
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            className="w-full bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            asChild
+          >
+            <a href="/csvTemplate/formato_abasto.csv" download>
+              <Info />
+              Descarga la plantilla aquí.
+            </a>
+          </Button>
+        </CardFooter>
+      </Card>
+
+      <ConfirmModal
+        isOpen={showConfirmModal}
+        message="¿Está seguro que desea subir este reporte de abasto?"
+        confirmLabel="Sí, subir"
+        cancelLabel="Cancelar"
+        onConfirm={() => {
+          setShowConfirmModal(false);
+          handleUpload();
+        }}
+        onCancel={() => setShowConfirmModal(false)}
+      />
+    </>
   );
 };
 

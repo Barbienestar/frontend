@@ -117,7 +117,7 @@ const DashboardPage = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col pt-18">
       <Navbar variant="gobierno" activePath="/dashboard" />
-      
+
       <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-10">
         {/* Header */}
         <div className="mb-6">
@@ -161,7 +161,7 @@ const DashboardPage = () => {
             variant="rejected"
           />
           <MetricCard
-            label="Demanda Mensual"
+            label="Reportes mensuales"
             value={monthlyReports?.currentMonthReportCount.toString() || '---'}
             icon={<BarChart2 className="size-5" />}
             trend={
