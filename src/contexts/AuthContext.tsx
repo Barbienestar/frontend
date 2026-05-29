@@ -1,5 +1,6 @@
 import {
   login,
+  loginWithGoogle,
   logout,
   getStoredUser,
   type UserProfile,
@@ -21,6 +22,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   signIn: (email: string, password: string) => Promise<UserProfile>;
+  signInWithGoogle: () => Promise<UserProfile>;
   signOut: () => Promise<void>;
   hasRole: (role: UserProfile['role']) => boolean;
   setUser: (user: UserProfile | null) => void;
@@ -69,6 +71,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return loggedUser;
   }, []);
 
+  const signInWithGoogle = useCallback(async () => {
+    const loggedUser = await loginWithGoogle();
+    setUser(loggedUser);
+    setToken(localStorage.getItem('token'));
+    return loggedUser;
+  }, []);
+
   const signOut = useCallback(async () => {
     await logout();
     setUser(null);
@@ -87,11 +96,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       isAuthenticated: !!user && !!token,
       isLoading,
       signIn,
+      signInWithGoogle,
       signOut,
       hasRole,
       setUser,
     }),
-    [user, token, isLoading, signIn, signOut, hasRole, setUser]
+    [
+      user,
+      token,
+      isLoading,
+      signIn,
+      signInWithGoogle,
+      signOut,
+      hasRole,
+      setUser,
+    ]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
