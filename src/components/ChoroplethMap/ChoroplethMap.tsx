@@ -72,7 +72,7 @@ export function ChoroplethMap({ data, height = '340px' }: ChoroplethMapProps) {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', zIndex: 0 }}>
       <MapContainer
         center={[23.6, -102.5]}
         zoom={5}
