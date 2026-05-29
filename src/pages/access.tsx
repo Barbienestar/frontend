@@ -44,7 +44,10 @@ const Access = () => {
         navigate('/inicio');
       }
     } catch (err: unknown) {
-      if (err instanceof Error && (err as { code?: string }).code === 'auth/popup-closed-by-user') {
+      if (
+        err instanceof Error &&
+        (err as { code?: string }).code === 'auth/popup-closed-by-user'
+      ) {
         return;
       }
       toast.error('Error al iniciar sesión con Google.');
