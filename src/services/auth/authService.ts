@@ -1,4 +1,9 @@
-import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  signOut,
+} from 'firebase/auth';
 import api from '../api';
 import { auth } from './auth';
 
@@ -64,6 +69,17 @@ export const login = async (
   localStorage.setItem('token', token);
 
   const profileResponse = await api.get<UserProfile>('/auth/me');
+  localStorage.setItem('user', JSON.stringify(profileResponse.data));
+  return profileResponse.data;
+};
+
+export const loginWithGoogle = async (): Promise<UserProfile> => {
+  const provider = new GoogleAuthProvider();
+  const result = await signInWithPopup(auth, provider);
+  const token = await result.user.getIdToken();
+  localStorage.setItem('token', token);
+
+  const profileResponse = await api.get<UserProfile>('/auth/google');
   localStorage.setItem('user', JSON.stringify(profileResponse.data));
   return profileResponse.data;
 };

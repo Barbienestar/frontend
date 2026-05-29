@@ -26,3 +26,16 @@ export const Loading: Story = {
     isLoading: true,
   },
 };
+
+export const WithGoogle: Story = {
+  args: {
+    onGoogleSignIn: () => console.log('Google sign-in clicked'),
+  },
+};
+
+export const GoogleLoading: Story = {
+  args: {
+    isGoogleLoading: true,
+    onGoogleSignIn: () => {},
+  },
+};
