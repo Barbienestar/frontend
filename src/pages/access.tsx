@@ -227,8 +227,8 @@ const Access = () => {
         {/* Right Side: Auth Forms */}
         <div className="flex-1 flex items-center justify-center bg-gray-50 p-8 overflow-hidden">
           {/* Key attribute forces re-render and retriggers ShadCN's tailwind-animate */}
-          <div 
-            key={isLogin ? 'login' : 'signup'} 
+          <div
+            key={isLogin ? 'login' : 'signup'}
             className="flex flex-col items-center text-gray-800 w-full max-w-md animate-in fade-in slide-in-from-bottom-4 duration-300 ease-out"
           >
             {/* 2. Conditional Forms */}
@@ -248,8 +248,8 @@ const Access = () => {
               <p className="text-sm text-gray-600 mb-2">
                 {isLogin ? '¿No tienes cuenta?' : '¿Ya tienes una cuenta?'}
               </p>
-              <Button 
-                variant="link" 
+              <Button
+                variant="link"
                 className="font-bold text-access-green"
                 onClick={() => setIsLogin(!isLogin)}
               >

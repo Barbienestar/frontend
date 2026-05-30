@@ -134,14 +134,14 @@ const SignUp = () => {
 
   return (
     <div className="">
-        <div className="mb-8 sm:mb-10">
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
-            Crear cuenta
-          </h1>
-          <p className="mt-2 text-sm sm:text-base text-muted-foreground">
-            Ingrese sus datos para crear su cuenta.
-          </p>
-        </div>
+      <div className="mb-8 sm:mb-10">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
+          Crear cuenta
+        </h1>
+        <p className="mt-2 text-sm sm:text-base text-muted-foreground">
+          Ingrese sus datos para crear su cuenta.
+        </p>
+      </div>
       <form onSubmit={formik.handleSubmit}>
         <div className="flex flex-col w-full gap-3">
           <InputField
@@ -169,7 +169,9 @@ const SignUp = () => {
               value={formik.values.lastName1}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              description={isInvalid('lastName1') ? formik.errors.lastName1 : ''}
+              description={
+                isInvalid('lastName1') ? formik.errors.lastName1 : ''
+              }
               descClassName="text-red-700"
               inputClassName={cn(
                 'h-12 rounded-xl',
@@ -184,7 +186,9 @@ const SignUp = () => {
               value={formik.values.lastName2}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              description={isInvalid('lastName2') ? formik.errors.lastName2 : ''}
+              description={
+                isInvalid('lastName2') ? formik.errors.lastName2 : ''
+              }
               descClassName="text-red-700"
               inputClassName={cn(
                 'h-12 rounded-xl',
