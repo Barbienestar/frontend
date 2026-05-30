@@ -133,201 +133,211 @@ const SignUp = () => {
   }, [formik.values.cityId]);
 
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <div className="flex flex-col w-full gap-3">
-        <InputField
-          variant="text"
-          label="Nombre(s) *"
-          placeholder="Jose Miguel"
-          value={formik.values.name}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          description={isInvalid('name') ? formik.errors.name : ''}
-          labelClassName="font-semibold"
-          descClassName="text-red-700"
-          inputClassName={cn(
-            'h-12 rounded-xl px-4 text-sm bg-muted/40',
-            isInvalid('name') && 'border-red-700 bg-red-100/30'
-          )}
-          {...namedInput('name')}
-        />
-
-        <div className="flex gap-2">
+    <div className="">
+        <div className="mb-8 sm:mb-10">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
+            Crear cuenta
+          </h1>
+          <p className="mt-2 text-sm sm:text-base text-muted-foreground">
+            Ingrese sus datos para crear su cuenta.
+          </p>
+        </div>
+      <form onSubmit={formik.handleSubmit}>
+        <div className="flex flex-col w-full gap-3">
           <InputField
             variant="text"
-            label="Apellido Paterno *"
-            placeholder="Perez"
-            value={formik.values.lastName1}
+            label="Nombre(s) *"
+            placeholder="Jose Miguel"
+            value={formik.values.name}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            description={isInvalid('lastName1') ? formik.errors.lastName1 : ''}
+            description={isInvalid('name') ? formik.errors.name : ''}
+            labelClassName="font-semibold"
             descClassName="text-red-700"
             inputClassName={cn(
-              'h-12 rounded-xl',
-              isInvalid('lastName1') && 'border-red-700 bg-red-100/30'
+              'h-12 rounded-xl px-4 text-sm bg-muted/40',
+              isInvalid('name') && 'border-red-700 bg-red-100/30'
             )}
-            {...namedInput('lastName1')}
+            {...namedInput('name')}
           />
-          <InputField
-            variant="text"
-            label="Apellido Materno"
-            placeholder="Marquez"
-            value={formik.values.lastName2}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            description={isInvalid('lastName2') ? formik.errors.lastName2 : ''}
-            descClassName="text-red-700"
-            inputClassName={cn(
-              'h-12 rounded-xl',
-              isInvalid('lastName2') && 'border-red-700 bg-red-100/30'
-            )}
-            {...namedInput('lastName2')}
-          />
-        </div>
 
-        <div className="flex gap-2">
-          <InputField
-            variant="email"
-            label="Correo electronico *"
-            placeholder="jmperez@gmail.com"
-            value={formik.values.email}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            description={isInvalid('email') ? formik.errors.email : ''}
-            descClassName="text-red-700"
-            inputClassName={cn(
-              'h-12 rounded-xl',
-              isInvalid('email') && 'border-red-700 bg-red-100/30'
-            )}
-            {...namedInput('email')}
-          />
-          <InputField
-            variant="password"
-            label="Contraseña *"
-            placeholder="••••••••"
-            value={formik.values.password}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            description={isInvalid('password') ? formik.errors.password : ''}
-            descClassName="text-red-700"
-            inputClassName={cn(
-              'h-12 rounded-xl',
-              isInvalid('password') && 'border-red-700 bg-red-100/30'
-            )}
-            {...namedInput('password')}
-          />
-        </div>
-
-        <InputField
-          variant="password"
-          label="Confirmar contraseña *"
-          placeholder="••••••••"
-          value={formik.values.confirmPassword}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          description={
-            isInvalid('confirmPassword') ? formik.errors.confirmPassword : ''
-          }
-          descClassName="text-red-700"
-          inputClassName={cn(
-            'h-12 rounded-xl',
-            isInvalid('confirmPassword') && 'border-red-700 bg-red-100/30'
-          )}
-          {...namedInput('confirmPassword')}
-        />
-
-        <div className="flex gap-2">
-          <div className="w-1/3">
+          <div className="flex gap-2">
             <InputField
               variant="text"
-              label="Edad *"
-              placeholder="24"
-              value={formik.values.age}
+              label="Apellido Paterno *"
+              placeholder="Perez"
+              value={formik.values.lastName1}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
-              description={isInvalid('age') ? formik.errors.age : ''}
+              description={isInvalid('lastName1') ? formik.errors.lastName1 : ''}
               descClassName="text-red-700"
               inputClassName={cn(
                 'h-12 rounded-xl',
-                isInvalid('age') && 'border-red-700 bg-red-100/30'
+                isInvalid('lastName1') && 'border-red-700 bg-red-100/30'
               )}
-              {...namedInput('age')}
+              {...namedInput('lastName1')}
+            />
+            <InputField
+              variant="text"
+              label="Apellido Materno"
+              placeholder="Marquez"
+              value={formik.values.lastName2}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              description={isInvalid('lastName2') ? formik.errors.lastName2 : ''}
+              descClassName="text-red-700"
+              inputClassName={cn(
+                'h-12 rounded-xl',
+                isInvalid('lastName2') && 'border-red-700 bg-red-100/30'
+              )}
+              {...namedInput('lastName2')}
             />
           </div>
-          <InputField
-            variant="select"
-            label="Estado *"
-            options={states}
-            value={formik.values.stateId}
-            onChange={(e) => {
-              formik.setFieldValue('stateId', e.target.value);
-              formik.setFieldTouched('stateId', true);
-              formik.setFieldValue('cityId', '');
-              formik.setFieldTouched('cityId', false);
-              formik.setFieldValue('idSuburb', '');
-              formik.setFieldTouched('idSuburb', false);
-            }}
-            onBlur={() => formik.setFieldTouched('stateId', true)}
-            description={isInvalid('stateId') ? formik.errors.stateId : ''}
-            descClassName="text-red-700"
-            inputClassName={cn(
-              'h-12 rounded-xl',
-              isInvalid('stateId') && 'border-red-700 bg-red-100/30'
-            )}
-            {...namedInput('stateId')}
-          />
-        </div>
 
-        {formik.values.stateId !== '' && (
-          <InputField
-            variant="select"
-            label="Ciudad *"
-            options={cities}
-            value={formik.values.cityId}
-            onChange={(e) => {
-              formik.setFieldValue('cityId', e.target.value);
-              formik.setFieldTouched('cityId', true);
-              formik.setFieldValue('idSuburb', '');
-              formik.setFieldTouched('idSuburb', false);
-            }}
-            onBlur={() => formik.setFieldTouched('cityId', true)}
-            description={isInvalid('cityId') ? formik.errors.cityId : ''}
-            descClassName="text-red-700"
-            inputClassName={cn(
-              'h-12 rounded-xl',
-              isInvalid('cityId') && 'border-red-700 bg-red-100/30'
-            )}
-            {...namedInput('cityId')}
-          />
-        )}
+          <div className="flex gap-2">
+            <InputField
+              variant="email"
+              label="Correo electronico *"
+              placeholder="jmperez@gmail.com"
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              description={isInvalid('email') ? formik.errors.email : ''}
+              descClassName="text-red-700"
+              inputClassName={cn(
+                'h-12 rounded-xl',
+                isInvalid('email') && 'border-red-700 bg-red-100/30'
+              )}
+              {...namedInput('email')}
+            />
+            <InputField
+              variant="password"
+              label="Contraseña *"
+              placeholder="••••••••"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              description={isInvalid('password') ? formik.errors.password : ''}
+              descClassName="text-red-700"
+              inputClassName={cn(
+                'h-12 rounded-xl',
+                isInvalid('password') && 'border-red-700 bg-red-100/30'
+              )}
+              {...namedInput('password')}
+            />
+          </div>
 
-        {formik.values.cityId !== '' && (
           <InputField
-            variant="select"
-            label="Localidad *"
-            options={suburbs}
-            value={formik.values.idSuburb}
+            variant="password"
+            label="Confirmar contraseña *"
+            placeholder="••••••••"
+            value={formik.values.confirmPassword}
             onChange={formik.handleChange}
-            onBlur={() => formik.setFieldTouched('idSuburb', true)}
-            description={isInvalid('idSuburb') ? formik.errors.idSuburb : ''}
+            onBlur={formik.handleBlur}
+            description={
+              isInvalid('confirmPassword') ? formik.errors.confirmPassword : ''
+            }
             descClassName="text-red-700"
             inputClassName={cn(
               'h-12 rounded-xl',
-              isInvalid('idSuburb') && 'border-red-700 bg-red-100/30'
+              isInvalid('confirmPassword') && 'border-red-700 bg-red-100/30'
             )}
-            {...namedInput('idSuburb')}
+            {...namedInput('confirmPassword')}
           />
-        )}
 
-        <Button
-          type="submit"
-          disabled={formik.isSubmitting}
-          className="w-full h-12 rounded-xl font-bold uppercase mt-2"
-        >
-          {formik.isSubmitting ? 'Creando cuenta...' : 'Crear cuenta'}
-        </Button>
-      </div>
-    </form>
+          <div className="flex gap-2">
+            <div className="w-1/3">
+              <InputField
+                variant="text"
+                label="Edad *"
+                placeholder="24"
+                value={formik.values.age}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                description={isInvalid('age') ? formik.errors.age : ''}
+                descClassName="text-red-700"
+                inputClassName={cn(
+                  'h-12 rounded-xl',
+                  isInvalid('age') && 'border-red-700 bg-red-100/30'
+                )}
+                {...namedInput('age')}
+              />
+            </div>
+            <InputField
+              variant="select"
+              label="Estado *"
+              options={states}
+              value={formik.values.stateId}
+              onChange={(e) => {
+                formik.setFieldValue('stateId', e.target.value);
+                formik.setFieldTouched('stateId', true);
+                formik.setFieldValue('cityId', '');
+                formik.setFieldTouched('cityId', false);
+                formik.setFieldValue('idSuburb', '');
+                formik.setFieldTouched('idSuburb', false);
+              }}
+              onBlur={() => formik.setFieldTouched('stateId', true)}
+              description={isInvalid('stateId') ? formik.errors.stateId : ''}
+              descClassName="text-red-700"
+              inputClassName={cn(
+                'h-12 rounded-xl',
+                isInvalid('stateId') && 'border-red-700 bg-red-100/30'
+              )}
+              {...namedInput('stateId')}
+            />
+          </div>
+
+          {formik.values.stateId !== '' && (
+            <InputField
+              variant="select"
+              label="Ciudad *"
+              options={cities}
+              value={formik.values.cityId}
+              onChange={(e) => {
+                formik.setFieldValue('cityId', e.target.value);
+                formik.setFieldTouched('cityId', true);
+                formik.setFieldValue('idSuburb', '');
+                formik.setFieldTouched('idSuburb', false);
+              }}
+              onBlur={() => formik.setFieldTouched('cityId', true)}
+              description={isInvalid('cityId') ? formik.errors.cityId : ''}
+              descClassName="text-red-700"
+              inputClassName={cn(
+                'h-12 rounded-xl',
+                isInvalid('cityId') && 'border-red-700 bg-red-100/30'
+              )}
+              {...namedInput('cityId')}
+            />
+          )}
+
+          {formik.values.cityId !== '' && (
+            <InputField
+              variant="select"
+              label="Localidad *"
+              options={suburbs}
+              value={formik.values.idSuburb}
+              onChange={formik.handleChange}
+              onBlur={() => formik.setFieldTouched('idSuburb', true)}
+              description={isInvalid('idSuburb') ? formik.errors.idSuburb : ''}
+              descClassName="text-red-700"
+              inputClassName={cn(
+                'h-12 rounded-xl',
+                isInvalid('idSuburb') && 'border-red-700 bg-red-100/30'
+              )}
+              {...namedInput('idSuburb')}
+            />
+          )}
+
+          <Button
+            type="submit"
+            disabled={formik.isSubmitting}
+            className="w-full h-12 rounded-xl font-bold uppercase mt-2"
+          >
+            {formik.isSubmitting ? 'Creando cuenta...' : 'Crear cuenta'}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 };
 
