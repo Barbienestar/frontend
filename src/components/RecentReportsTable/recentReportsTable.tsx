@@ -1,4 +1,4 @@
-import { Eye, Pencil, Trash2, History } from 'lucide-react';
+import { History } from 'lucide-react';
 
 export interface ReportRow {
   folio: string;
@@ -50,9 +50,6 @@ export const RecentReportsTable = ({
             <th className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
               Estatus
             </th>
-            <th className="text-right px-5 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-              Acciones
-            </th>
           </tr>
         </thead>
         <tbody className="divide-y divide-border">
@@ -73,28 +70,6 @@ export const RecentReportsTable = ({
                 >
                   {r.status}
                 </span>
-              </td>
-              <td className="px-5 py-4">
-                <div className="flex items-center justify-end gap-3 text-muted-foreground">
-                  <button
-                    className="hover:text-foreground transition-colors"
-                    title="Ver"
-                  >
-                    <Eye className="size-5" strokeWidth={1.5} />
-                  </button>
-                  <button
-                    className="hover:text-foreground transition-colors"
-                    title="Editar"
-                  >
-                    <Pencil className="size-5" strokeWidth={1.5} />
-                  </button>
-                  <button
-                    className="hover:text-red-500 transition-colors"
-                    title="Eliminar"
-                  >
-                    <Trash2 className="size-5" strokeWidth={1.5} />
-                  </button>
-                </div>
               </td>
             </tr>
           ))}
