@@ -20,7 +20,6 @@ import { toast } from 'sonner';
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
 import { createPortal } from 'react-dom';
 
-
 const healthUserSchema = Yup.object().shape({
   name: Yup.string()
     .max(128, 'Máximo 128 caracteres')
@@ -343,7 +342,7 @@ export const HealthUserCreationForm = ({
           }}
           onCancel={() => setShowConfirmModal(false)}
         />,
-      document.body
+        document.body
       )}
     </form>
   );

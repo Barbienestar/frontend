@@ -215,15 +215,15 @@ export const AdminCreationForm = ({ onSuccess }: AdminCreationFormProps) => {
       </Card>
       {createPortal(
         <ConfirmModal
-        isOpen={showConfirmModal}
-        message="¿Está seguro que desea crear este administrador?"
-        confirmLabel="Sí, crear"
-        cancelLabel="Cancelar"
-        onConfirm={() => {
-          setShowConfirmModal(false);
-          formik.handleSubmit();
-        }}
-        onCancel={() => setShowConfirmModal(false)}
+          isOpen={showConfirmModal}
+          message="¿Está seguro que desea crear este administrador?"
+          confirmLabel="Sí, crear"
+          cancelLabel="Cancelar"
+          onConfirm={() => {
+            setShowConfirmModal(false);
+            formik.handleSubmit();
+          }}
+          onCancel={() => setShowConfirmModal(false)}
         />,
         document.body
       )}

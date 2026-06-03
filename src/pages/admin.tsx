@@ -154,7 +154,11 @@ export const Admin = () => {
               <span className="text-xs text-muted-foreground font-medium tracking-widest uppercase">
                 Crear
               </span>
-              <Dialog open={adminModalOpen} onOpenChange={setAdminModalOpen} modal={false}>
+              <Dialog
+                open={adminModalOpen}
+                onOpenChange={setAdminModalOpen}
+                modal={false}
+              >
                 <DialogTrigger asChild>
                   <Button variant="secondary" size="sm" className="gap-1.5">
                     <UserCog className="size-3.5" />
@@ -169,7 +173,11 @@ export const Admin = () => {
                   </div>
                 </DialogContent>
               </Dialog>
-              <Dialog open={healthModalOpen} onOpenChange={setHealthModalOpen} modal={false}>
+              <Dialog
+                open={healthModalOpen}
+                onOpenChange={setHealthModalOpen}
+                modal={false}
+              >
                 <DialogTrigger asChild>
                   <Button variant="outline" size="sm" className="gap-1.5">
                     <Stethoscope className="size-3.5" />
