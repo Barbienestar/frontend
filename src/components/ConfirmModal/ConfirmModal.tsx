@@ -48,9 +48,10 @@ export function ConfirmModal({
   return (
     <dialog
       ref={dialogRef}
+      tabIndex={-1}
       onClose={onCancel}
       onClick={handleBackdropClick}
-      className="rounded-2xl bg-background p-6 shadow-xl max-w-sm open:flex open:flex-col backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+      className="m-auto rounded-2xl bg-background p-6 shadow-xl max-w-sm open:flex open:flex-col backdrop:bg-black/60 backdrop:backdrop-blur-sm"
     >
       <p className="text-base font-semibold text-foreground text-center mb-6">
         {message}
