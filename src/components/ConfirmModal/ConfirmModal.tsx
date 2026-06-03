@@ -45,12 +45,17 @@ export function ConfirmModal({
     }
   };
 
+  const handleDialogKeyDown = (e: React.KeyboardEvent<HTMLDialogElement>) => {
+    if (e.key === 'Escape') onCancel();
+  };
+
   return (
     <dialog
       ref={dialogRef}
       tabIndex={-1}
       onClose={onCancel}
       onClick={handleBackdropClick}
+      onKeyDown={handleDialogKeyDown}
       className="m-auto rounded-2xl bg-background p-6 shadow-xl max-w-sm open:flex open:flex-col backdrop:bg-black/60 backdrop:backdrop-blur-sm"
     >
       <p className="text-base font-semibold text-foreground text-center mb-6">
