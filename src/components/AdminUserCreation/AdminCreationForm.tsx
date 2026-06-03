@@ -15,6 +15,7 @@ import { createAdmin } from '@/services/user/createUserService';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { ConfirmModal } from '../ConfirmModal/ConfirmModal';
+import { createPortal } from 'react-dom';
 
 const adminSchema = Yup.object().shape({
   name: Yup.string()
@@ -212,7 +213,8 @@ export const AdminCreationForm = ({ onSuccess }: AdminCreationFormProps) => {
           </div>
         </CardContent>
       </Card>
-      <ConfirmModal
+      {createPortal(
+        <ConfirmModal
         isOpen={showConfirmModal}
         message="¿Está seguro que desea crear este administrador?"
         confirmLabel="Sí, crear"
@@ -222,7 +224,9 @@ export const AdminCreationForm = ({ onSuccess }: AdminCreationFormProps) => {
           formik.handleSubmit();
         }}
         onCancel={() => setShowConfirmModal(false)}
-      />
+        />,
+        document.body
+      )}
     </form>
   );
 };
