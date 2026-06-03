@@ -176,7 +176,7 @@ const DashboardPage = () => {
               'Tendencia: ' +
               (Number(monthlyReports?.comparisonToLastMonth) > 0
                 ? 'Incremental (+'
-                : 'Decremental (-') +
+                : 'Decremental (') +
               `${monthlyReports?.comparisonToLastMonth}%)`
             }
             trendHighlight="+15%"
