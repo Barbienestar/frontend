@@ -29,14 +29,14 @@ cp .env.example .env
 
 Las variables requeridas en `.env`:
 
-| Variable | Descripción |
-|---|---|
-| `VITE_FIREBASE_API_KEY` | Firebase API Key |
-| `VITE_FIREBASE_AUTH_DOMAIN` | Firebase Auth Domain |
-| `VITE_FIREBASE_PROJECT_ID` | Firebase Project ID |
-| `VITE_FIREBASE_APP_ID` | Firebase App ID |
-| `VITE_API_URL` | URL del backend (local: `http://localhost:8080`) |
-| `VITE_GOOGLE_MAPS_API_KEY` | Google Maps API Key |
+| Variable                    | Descripción                                      |
+| --------------------------- | ------------------------------------------------ |
+| `VITE_FIREBASE_API_KEY`     | Firebase API Key                                 |
+| `VITE_FIREBASE_AUTH_DOMAIN` | Firebase Auth Domain                             |
+| `VITE_FIREBASE_PROJECT_ID`  | Firebase Project ID                              |
+| `VITE_FIREBASE_APP_ID`      | Firebase App ID                                  |
+| `VITE_API_URL`              | URL del backend (local: `http://localhost:8080`) |
+| `VITE_GOOGLE_MAPS_API_KEY`  | Google Maps API Key                              |
 
 > ⚠️ `.env` tiene valores locales de desarrollo. **No** está versionado (`.gitignore` lo excluye). Cada developer configura el suyo.
 
@@ -51,14 +51,14 @@ Abre `http://localhost:5173`.
 
 ## Comandos útiles
 
-| Comando | Acción |
-|---|---|
-| `yarn dev` | Dev server con HMR |
-| `yarn build` | `tsc -b && vite build` (typecheck + build) |
-| `yarn lint` | ESLint sobre todo el proyecto |
-| `yarn format` | Prettier — escribe formato |
-| `yarn storybook` | Storybook en `http://localhost:6006` |
-| `yarn preview` | Preview del build de producción |
+| Comando          | Acción                                     |
+| ---------------- | ------------------------------------------ |
+| `yarn dev`       | Dev server con HMR                         |
+| `yarn build`     | `tsc -b && vite build` (typecheck + build) |
+| `yarn lint`      | ESLint sobre todo el proyecto              |
+| `yarn format`    | Prettier — escribe formato                 |
+| `yarn storybook` | Storybook en `http://localhost:6006`       |
+| `yarn preview`   | Preview del build de producción            |
 
 Build en prod corre typecheck antes que vite build. Errores de tipo bloquean el build.
 

@@ -1,4 +1,5 @@
 import { ClipboardList, Loader2 } from 'lucide-react';
+import { useState } from 'react';
 import { Button } from '../Button/button';
 import FileUpload from '../FileUpload/FileUpload';
 import { SearchableSelect } from '@/components/SearchableSelect/SearchableSelect';
@@ -22,6 +23,14 @@ interface ReportCardProps {
   onSubmit?: () => void;
   isLoading?: boolean;
   isUploading?: boolean;
+  imageUrl?: string | null;
+}
+
+interface FieldErrors {
+  medicine?: string;
+  hospital?: string;
+  description?: string;
+  image?: string;
 }
 
 const ReportCard = ({
@@ -38,7 +47,56 @@ const ReportCard = ({
   onSubmit,
   isLoading = false,
   isUploading = false,
+  imageUrl = null,
 }: ReportCardProps) => {
+  const [errors, setErrors] = useState<FieldErrors>({});
+
+  const handleMedicineChange = (value: string) => {
+    onMedicineChange(value);
+    if (value) setErrors((prev) => ({ ...prev, medicine: undefined }));
+  };
+
+  const handleHospitalChange = (value: string) => {
+    onHospitalChange(value);
+    if (value) setErrors((prev) => ({ ...prev, hospital: undefined }));
+  };
+
+  const handleDescriptionChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    onDescriptionChange(e.target.value);
+    if (e.target.value.trim())
+      setErrors((prev) => ({ ...prev, description: undefined }));
+  };
+
+  const handleFileChange = (file: File | null) => {
+    onFileChange(file);
+    if (file) setErrors((prev) => ({ ...prev, image: undefined }));
+  };
+
+  const handleSubmitClick = () => {
+    const newErrors: FieldErrors = {};
+    if (!selectedMedicine) newErrors.medicine = 'Selecciona un medicamento.';
+    if (!selectedHospital) newErrors.hospital = 'Selecciona una unidad médica.';
+    if (!description.trim())
+      newErrors.description = 'Escribe una descripción del problema.';
+    if (!imageUrl) newErrors.image = 'Adjunta una imagen de la receta.';
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
+    onSubmit?.();
+  };
+
+  const isFormComplete =
+    !!selectedMedicine &&
+    !!selectedHospital &&
+    !!description.trim() &&
+    !!imageUrl;
+
   return (
     <div className="bg-card rounded-xl border border-border shadow-sm p-5 w-full">
       <div className="flex items-center gap-2 mb-4">
@@ -49,38 +107,63 @@ const ReportCard = ({
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-        <SearchableSelect
-          label="Medicamento"
-          placeholder="Seleccione un medicamento"
-          options={medicineOptions}
-          value={selectedMedicine}
-          onChange={onMedicineChange}
-        />
-        <SearchableSelect
-          label="Hospital o Clínica"
-          placeholder="Seleccione una unidad médica"
-          options={hospitalOptions}
-          value={selectedHospital}
-          onChange={onHospitalChange}
-        />
+        {/* SearchableSelect necesita poder recibir error y la marca de requerido.
+            Si el componente no los acepta aún, ver nota abajo. */}
+        <div className="flex flex-col gap-1">
+          <SearchableSelect
+            label={<RequiredLabel text="Medicamento" />}
+            placeholder="Seleccione un medicamento"
+            options={medicineOptions}
+            value={selectedMedicine}
+            onChange={handleMedicineChange}
+            error={!!errors.medicine}
+          />
+          {errors.medicine && <FieldError message={errors.medicine} />}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <SearchableSelect
+            label={<RequiredLabel text="Hospital o Clínica" />}
+            placeholder="Seleccione una unidad médica"
+            options={hospitalOptions}
+            value={selectedHospital}
+            onChange={handleHospitalChange}
+            error={!!errors.hospital}
+          />
+          {errors.hospital && <FieldError message={errors.hospital} />}
+        </div>
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-foreground mb-1">
-          Descripción
+      <div className="mb-4 flex flex-col gap-1">
+        <label className="block text-sm font-medium text-foreground">
+          <RequiredLabel text="Descripción" />
         </label>
         <textarea
-          className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm
-                     text-foreground placeholder:text-muted-foreground focus:outline-none
-                     focus:ring-2 focus:ring-ring resize-none min-h-[90px]"
+          className={`w-full rounded-md border bg-background px-3 py-2 text-sm
+                      text-foreground placeholder:text-muted-foreground focus:outline-none
+                      focus:ring-2 resize-none min-h-[90px] transition-colors
+                      ${
+                        errors.description
+                          ? 'border-destructive focus:ring-destructive'
+                          : 'border-border focus:ring-ring'
+                      }`}
           placeholder="Describe el problema con el abasto del medicamento..."
           value={description}
-          onChange={(e) => onDescriptionChange(e.target.value)}
+          onChange={handleDescriptionChange}
         />
+        {errors.description && <FieldError message={errors.description} />}
       </div>
 
-      <div className="mb-4">
-        <FileUpload variant="receta" onFileChange={onFileChange} />
+      <div className="mb-4 flex flex-col gap-1">
+        <label className="block text-sm font-medium text-foreground">
+          <RequiredLabel text="Imagen de receta" />
+        </label>
+        <FileUpload
+          variant="receta"
+          onFileChange={handleFileChange}
+          error={!!errors.image}
+        />
+        {errors.image && <FieldError message={errors.image} />}
       </div>
 
       <div className="flex justify-end gap-3">
@@ -89,8 +172,8 @@ const ReportCard = ({
         </Button>
         <Button
           variant="default"
-          onClick={onSubmit}
-          disabled={isLoading || isUploading}
+          onClick={handleSubmitClick}
+          disabled={isLoading || isUploading || !isFormComplete}
         >
           {isUploading ? (
             <>
@@ -112,3 +195,20 @@ const ReportCard = ({
 };
 
 export default ReportCard;
+
+/** Asterisco rojo estándar de campo obligatorio */
+const RequiredLabel = ({ text }: { text: string }) => (
+  <>
+    {text}
+    <span className="text-destructive ml-0.5" aria-hidden="true">
+      *
+    </span>
+  </>
+);
+
+/** Mensaje de error debajo del campo */
+const FieldError = ({ message }: { message: string }) => (
+  <p className="text-xs text-destructive flex items-center gap-1" role="alert">
+    {message}
+  </p>
+);
