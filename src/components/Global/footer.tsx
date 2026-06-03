@@ -15,9 +15,9 @@ export function Footer({ variant = 'full' }: Readonly<FooterProps>) {
           <div className="flex items-center gap-4">
             <span>© 2026 Sistema Nacional de Salud · Gobierno de México</span>
             <span className="hidden sm:inline text-gray-300">·</span>
-            <a href="#" className="hover:text-blue-600 transition-colors">
+            <button className="hover:text-blue-600 transition-colors">
               Aviso de Privacidad
-            </a>
+            </button>
           </div>
 
           <div className="flex items-center gap-2 font-bold text-sm tracking-widest text-gray-700 uppercase">
@@ -81,15 +81,15 @@ export function Footer({ variant = 'full' }: Readonly<FooterProps>) {
       <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-500">
         <span>© 2026 Secretaría de Salud · Algunos derechos reservados</span>
         <nav className="flex items-center gap-6">
-          <a href="#" className="hover:text-white transition-colors">
+          <button className="hover:text-white transition-colors">
             Privacidad
-          </a>
-          <a href="#" className="hover:text-white transition-colors">
+          </button>
+          <button className="hover:text-white transition-colors">
             Términos y Condiciones
-          </a>
-          <a href="#" className="hover:text-white transition-colors">
+          </button>
+          <button className="hover:text-white transition-colors">
             Accesibilidad
-          </a>
+          </button>
         </nav>
       </div>
     </footer>

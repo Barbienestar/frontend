@@ -81,7 +81,7 @@ export interface MapProps {
 
 const CDMX_FALLBACK: [number, number] = [19.4326, -99.1332];
 
-export function Map({
+export function MapView({
   variant,
   points,
   center,
@@ -119,7 +119,10 @@ export function Map({
 
         {variant === 'normal' &&
           points.map((point) => (
-            <Marker key={`${point.lat}-${point.lng}`} position={[point.lat, point.lng]}>
+            <Marker
+              key={`${point.lat}-${point.lng}`}
+              position={[point.lat, point.lng]}
+            >
               {point.name && <Popup>{point.name}</Popup>}
             </Marker>
           ))}

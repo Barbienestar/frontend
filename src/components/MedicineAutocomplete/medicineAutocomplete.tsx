@@ -112,7 +112,14 @@ const MedicineAutocomplete = ({
           {suggestions.map((item) => (
             <li
               key={item.id}
+              role="option"
               onMouseDown={() => handleSelect(item)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleSelect(item);
+                }
+              }}
               className="px-4 py-2.5 text-sm cursor-pointer hover:bg-muted transition-colors flex flex-col"
             >
               <span className="font-medium text-foreground capitalize">

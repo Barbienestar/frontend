@@ -32,6 +32,14 @@ const HospitalStockCard = ({
   return (
     <div
       onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
       className={`
         rounded-xl border border-border border-l-4 bg-card p-4 cursor-pointer
         transition-all flex flex-col gap-3
