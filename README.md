@@ -1,75 +1,73 @@
-# React + TypeScript + Vite
+# Decision 360
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plataforma de monitoreo y reporte de desabasto de medicamentos en México.
 
-Currently, two official plugins are available:
+**Ciudadanos**: buscan disponibilidad de medicamentos por hospital en un mapa interactivo, reportan faltantes (con foto) y dan seguimiento a sus reportes.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Personal de salud**: dashboard con KPIs, mapa coroplético por estado, tendencias, carga masiva de stocks, y gestión de medicamentos críticos.
 
-## React Compiler
+**Administradores**: moderan reportes (aceptar/rechazar), crean cuentas de usuario, acceden a panel centralizado.
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Stack
 
-Note: This will impact Vite dev & build performances.
+React 19 · TypeScript 6 · Vite 8 · Tailwind v4 · shadcn/ui · React Router v7 · Firebase Auth · Leaflet · Recharts · Formik + Yup · Sonner
 
-## Expanding the ESLint configuration
+## Prerrequisitos
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Node.js** >= 22
+- **Yarn** >= 1.22
+- **Firebase project** con Authentication (email/password + Google)
+- **Google Maps API key** con Maps JavaScript API habilitado
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Configurar entorno
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Copia el archivo de ejemplo y completa las variables:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+```bash
+cp .env.example .env
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Las variables requeridas en `.env`:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+| Variable | Descripción |
+|---|---|
+| `VITE_FIREBASE_API_KEY` | Firebase API Key |
+| `VITE_FIREBASE_AUTH_DOMAIN` | Firebase Auth Domain |
+| `VITE_FIREBASE_PROJECT_ID` | Firebase Project ID |
+| `VITE_FIREBASE_APP_ID` | Firebase App ID |
+| `VITE_API_URL` | URL del backend (local: `http://localhost:8080`) |
+| `VITE_GOOGLE_MAPS_API_KEY` | Google Maps API Key |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-]);
+> ⚠️ `.env` tiene valores locales de desarrollo. **No** está versionado (`.gitignore` lo excluye). Cada developer configura el suyo.
+
+## Correr en desarrollo
+
+```bash
+yarn install
+yarn dev
 ```
+
+Abre `http://localhost:5173`.
+
+## Comandos útiles
+
+| Comando | Acción |
+|---|---|
+| `yarn dev` | Dev server con HMR |
+| `yarn build` | `tsc -b && vite build` (typecheck + build) |
+| `yarn lint` | ESLint sobre todo el proyecto |
+| `yarn format` | Prettier — escribe formato |
+| `yarn storybook` | Storybook en `http://localhost:6006` |
+| `yarn preview` | Preview del build de producción |
+
+Build en prod corre typecheck antes que vite build. Errores de tipo bloquean el build.
+
+Pruebas de componentes via Storybook + Vitest + Playwright — no hay script `yarn test`.
+
+## Husky pre-commit
+
+Cada commit ejecuta `yarn format && yarn lint && yarn build`.
+
+## Despliegue
+
+Cloud Build → Docker (multi-stage: `node:22-alpine` build, `nginx:1.27-alpine` serve) → Cloud Run. Ver `cloudbuild.yaml`.

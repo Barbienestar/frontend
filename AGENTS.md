@@ -1,0 +1,62 @@
+# AGENTS.md
+
+## Stack
+
+React 19, TypeScript 6, Vite 8, Tailwind v4, shadcn/ui (radix-nova, data-slot attrs), React Router v7, Firebase Auth, Leaflet maps, Recharts.
+
+## Commands
+
+| Command          | Action                                    |
+| ---------------- | ----------------------------------------- |
+| `yarn dev`       | Vite dev server                           |
+| `yarn build`     | `tsc -b && vite build` (typecheck first!) |
+| `yarn lint`      | ESLint on all files                       |
+| `yarn format`    | Prettier write (singleQuote, semi)        |
+| `yarn storybook` | Storybook on :6006                        |
+| `yarn preview`   | Vite preview                              |
+
+No `yarn test` — Vitest configured in `vite.config.ts` (Playwright + Storybook addon) but no script. Tests in `.stories.tsx` files, run via Storybook.
+
+**Husky pre-commit**: `yarn format && yarn lint && yarn build` — format+lint+build gate every commit.
+
+## Conventions
+
+- **Path alias**: `@/` → `src/` (tsconfig + vite resolve)
+- **Components**: `src/components/<Name>/<name>.tsx` + `<name>.stories.tsx`. Variants via `cva` in separate file.
+- **shadcn/ui**: `src/components/ui/`. All use `cn()` from `@/lib/utils` + `data-slot` attrs.
+- **Styles**: Tailwind v4 only, `cn()` for merging. No CSS modules, no styled-components.
+- **Dark mode**: `next-themes` — class-based, `.dark` variants in `index.css`.
+- **Forms**: `formik` + `yup` for validation.
+- **Toasts**: `sonner` via `<Toaster>` in `App.tsx`.
+- **Types**: `verbatimModuleSyntax: true` → `import type` for type-only. `noUnusedLocals`/`noUnusedParameters` on.
+- **API**: `src/services/api.ts` — Axios + `axios-case-converter` (auto snake_case ↔ camelCase). Auth token from `localStorage` attached as Bearer.
+- **Routes**: `src/App.tsx` — 3 role guards: `citizen`, `admin`, `health` via `<ProtectedRoute>`.
+- **Auth flow**: Firebase `signInWithEmailAndPassword` → `getIdToken` → localStorage + backend `/auth/me` for profile. Token/user persisted in localStorage.
+- **Env vars**: All `VITE_*`. Passed as Docker build-args: `VITE_API_URL`, `VITE_FIREBASE_*`, `VITE_GOOGLE_MAPS_API_KEY`.
+- **React Compiler**: enabled via `@rolldown/plugin-babel` + `reactCompilerPreset()` in vite config.
+
+## Architecture
+
+- **Entry**: `src/main.tsx` → `<AuthProvider>` → `<App>` (BrowserRouter)
+- **Pages**: `src/pages/*.tsx` (flat, one per route)
+- **Services**: `src/services/` — one file per domain (reportService.ts, stockService.ts, etc.)
+- **Common types**: `src/common/` — shared API response interfaces
+- **Config**: `src/config/index.ts` reads `import.meta.env.VITE_API_URL`
+- **Hooks**: `src/hooks/` — custom React hooks
+- **Storybook**: `.storybook/main.ts` — scans `../src/**/*.stories.@(js|jsx|mjs|ts|tsx)`. Addons: chromatic, vitest, a11y, docs.
+
+## Deployment
+
+- Cloud Build → Docker → Cloud Run. `cloudbuild.yaml` pushes to Artifact Registry.
+- Build args: `_VITE_API_URL`, `_VITE_FIREBASE_*` (substitutions map to `VITE_*`).
+- Docker: multi-stage (`node:22-alpine` build → `nginx:1.27-alpine` serve).
+- nginx serves `dist/` on port 8080, SPA fallback (try_files), 1y cache on static assets.
+
+## Gotchas
+
+- Build runs `tsc -b` **before** `vite build` — type errors block production build.
+- `src/common/ReportData .ts` has trailing space in filename — breaks scripts that don't quote paths.
+- `CLAUDE.md` is gitignored — do not create one, use AGENTS.md instead.
+- `.claude/skills/add-component.md` has team component-creation workflow (Spanish).
+- `docs/` is gitignored — local scratchpad, not committed.
+- `.env` is gitignored via `/**/*.env` pattern — credentials never committed.
