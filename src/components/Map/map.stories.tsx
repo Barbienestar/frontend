@@ -28,7 +28,7 @@ const mockPoints = [
   {
     lat: 19.432608,
     lng: -99.133209,
-    intensity: 1.0,
+    intensity: 1,
     name: 'Farmacia Central — Paracetamol, Ibuprofeno',
   },
   {

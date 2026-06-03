@@ -79,7 +79,7 @@ const GoogleOnboardingDialog = ({
         if (values.lastName2) data.lastName2 = values.lastName2;
         if (values.age) {
           const n = Number(values.age);
-          if (!isNaN(n)) data.age = n;
+          if (!Number.isNaN(n)) data.age = n;
         }
         if (suburbId) data.suburbId = suburbId;
 

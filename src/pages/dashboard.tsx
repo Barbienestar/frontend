@@ -89,7 +89,7 @@ const DashboardPage = () => {
   }, [selectedHospital, criticalMedicinesPage]);
 
   const renderStockValue = () => {
-    if (stockAvgs != null && stockAvgs.currentMonthAvg != null) {
+    if (stockAvgs?.currentMonthAvg != null) {
       return `${stockAvgs.currentMonthAvg.toFixed(1)} %`;
     }
     return '---';
@@ -97,9 +97,8 @@ const DashboardPage = () => {
 
   const renderStockDifference = () => {
     if (
-      stockAvgs != null &&
-      stockAvgs.currentMonthAvg != null &&
-      stockAvgs.lastMonthAvg != null
+      stockAvgs?.currentMonthAvg != null &&
+      stockAvgs?.lastMonthAvg != null
     ) {
       const diff = Number(
         (stockAvgs.currentMonthAvg - stockAvgs.lastMonthAvg).toFixed(2)

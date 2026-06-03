@@ -25,7 +25,7 @@ export function ConfirmModal({
   confirmClassName,
   onConfirm,
   onCancel,
-}: ConfirmModalProps) {
+}: Readonly<ConfirmModalProps>) {
   if (!isOpen) return null;
 
   return (

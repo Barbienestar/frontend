@@ -41,7 +41,7 @@ export function MetricCard({
   trendHighlight,
   variant = 'pending',
   className,
-}: MetricCardProps) {
+}: Readonly<MetricCardProps>) {
   // Separar highlight del resto del texto si existe
   const trendRest =
     trendHighlight && trend.startsWith(trendHighlight)
