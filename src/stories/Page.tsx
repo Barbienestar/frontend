@@ -63,8 +63,7 @@ export const Page: React.FC = () => {
             rel="noopener noreferrer"
           >
             docs
-          </a>
-          .
+          </a>.
         </p>
         <div className="tip-wrapper">
           <span className="tip">Tip</span> Adjust the width of the canvas with

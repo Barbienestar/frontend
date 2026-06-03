@@ -7,7 +7,7 @@ interface FooterProps {
   variant?: FooterVariant;
 }
 
-export function Footer({ variant = 'full' }: FooterProps) {
+export function Footer({ variant = 'full' }: Readonly<FooterProps>) {
   if (variant === 'minimal') {
     return (
       <footer className="bg-white border-t border-blue-200 w-full">
@@ -21,7 +21,7 @@ export function Footer({ variant = 'full' }: FooterProps) {
           </div>
 
           <div className="flex items-center gap-2 font-bold text-sm tracking-widest text-gray-700 uppercase">
-            MÉXICO
+            MÉXICO{' '}
             <span className="flex gap-[2px]">
               <span className="w-2 h-3 bg-primary rounded-sm" />
               <span className="w-2 h-3 bg-secondary border-gray-200 rounded-sm" />

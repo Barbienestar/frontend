@@ -116,7 +116,7 @@ export const HealthUserCreationForm = ({
   });
 
   const isInvalid = (fieldName: keyof typeof formik.values) =>
-    !!(
+    Boolean(
       (formik.touched[fieldName] || formik.submitCount > 0) &&
       formik.errors[fieldName]
     );
@@ -130,6 +130,56 @@ export const HealthUserCreationForm = ({
           h.name.toLowerCase().includes(hospitalSearch.toLowerCase().trim())
         )
       : [];
+
+  const hospitalPickerContent = (
+    <>
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
+        <input
+          ref={hospitalSearchRef}
+          type="text"
+          value={hospitalSearch}
+          onChange={(e) => setHospitalSearch(e.target.value)}
+          placeholder="Buscar hospital..."
+          className="w-full pl-8 pr-4 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+        />
+      </div>
+
+      {hospitalSearch.trim().length > 0 &&
+        (filteredHospitals.length > 0 ? (
+          <div className="flex flex-col gap-2 max-h-48 overflow-y-auto border border-border rounded-lg px-3 py-2">
+            {filteredHospitals.map((hospital) => (
+              <label
+                key={hospital.id}
+                className="flex items-center gap-3 cursor-pointer"
+              >
+                <input
+                  type="checkbox"
+                  checked={formik.values.hospitalIds.includes(
+                    Number(hospital.id)
+                  )}
+                  onChange={() => handleHospitalToggle(hospital.id)}
+                  className="size-4 rounded border-input accent-blue-600"
+                />
+                <span className="text-sm">{hospital.name}</span>
+              </label>
+            ))}
+          </div>
+        ) : (
+          <p className="text-xs text-muted-foreground px-1">
+            No se encontraron hospitales con ese nombre.
+          </p>
+        ))}
+
+      {formik.values.hospitalIds.length > 0 && (
+        <p className="text-xs text-muted-foreground px-1">
+          {formik.values.hospitalIds.length} hospital
+          {formik.values.hospitalIds.length !== 1 ? 'es' : ''} seleccionado
+          {formik.values.hospitalIds.length !== 1 ? 's' : ''}
+        </p>
+      )}
+    </>
+  );
 
   return (
     <form
@@ -261,54 +311,7 @@ export const HealthUserCreationForm = ({
                 </p>
               ) : (
                 <div className="flex flex-col gap-2">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-3.5 text-muted-foreground" />
-                    <input
-                      ref={hospitalSearchRef}
-                      type="text"
-                      value={hospitalSearch}
-                      onChange={(e) => setHospitalSearch(e.target.value)}
-                      placeholder="Buscar hospital..."
-                      className="w-full pl-8 pr-4 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
-                    />
-                  </div>
-
-                  {filteredHospitals.length > 0 && (
-                    <div className="flex flex-col gap-2 max-h-48 overflow-y-auto border border-border rounded-lg px-3 py-2">
-                      {filteredHospitals.map((hospital) => (
-                        <label
-                          key={hospital.id}
-                          className="flex items-center gap-3 cursor-pointer"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={formik.values.hospitalIds.includes(
-                              Number(hospital.id)
-                            )}
-                            onChange={() => handleHospitalToggle(hospital.id)}
-                            className="size-4 rounded border-input accent-blue-600"
-                          />
-                          <span className="text-sm">{hospital.name}</span>
-                        </label>
-                      ))}
-                    </div>
-                  )}
-
-                  {hospitalSearch.trim().length > 0 &&
-                    filteredHospitals.length === 0 && (
-                      <p className="text-xs text-muted-foreground px-1">
-                        No se encontraron hospitales con ese nombre.
-                      </p>
-                    )}
-
-                  {formik.values.hospitalIds.length > 0 && (
-                    <p className="text-xs text-muted-foreground px-1">
-                      {formik.values.hospitalIds.length} hospital
-                      {formik.values.hospitalIds.length !== 1 ? 'es' : ''}{' '}
-                      seleccionado
-                      {formik.values.hospitalIds.length !== 1 ? 's' : ''}
-                    </p>
-                  )}
+                  {hospitalPickerContent}
                 </div>
               )}
               {isInvalid('hospitalIds') && (

@@ -17,7 +17,7 @@ export function InformativeCard({
   description,
   icon,
   className,
-}: InformativeCardProps) {
+}: Readonly<InformativeCardProps>) {
   return (
     <Card className={className}>
       <CardHeader>

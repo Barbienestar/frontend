@@ -69,7 +69,7 @@ const EditProfileDialog = () => {
         if (values.lastName2) data.lastName2 = values.lastName2;
         if (values.age) {
           const n = Number(values.age);
-          if (!isNaN(n)) data.age = n;
+          if (!Number.isNaN(n)) data.age = n;
         }
         if (suburbId) data.suburbId = suburbId;
 
@@ -250,21 +250,7 @@ const EditProfileDialog = () => {
 
           <div className="flex flex-col gap-1.5">
             <span className="text-sm font-medium">Colonia</span>
-            {!isChangingLocation ? (
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">
-                  {suburbLabel || 'Sin colonia'}
-                </span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  type="button"
-                  onClick={() => setIsChangingLocation(true)}
-                >
-                  Cambiar
-                </Button>
-              </div>
-            ) : (
+            {isChangingLocation ? (
               <div className="flex flex-col gap-2">
                 <InputField
                   variant="select"
@@ -291,6 +277,20 @@ const EditProfileDialog = () => {
                     onChange={handleSuburbSelected}
                   />
                 )}
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">
+                  {suburbLabel || 'Sin colonia'}
+                </span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  type="button"
+                  onClick={() => setIsChangingLocation(true)}
+                >
+                  Cambiar
+                </Button>
               </div>
             )}
           </div>

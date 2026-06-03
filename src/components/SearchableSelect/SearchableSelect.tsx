@@ -32,7 +32,7 @@ export function SearchableSelect({
   labelClassName,
   descClassName,
   error,
-}: SearchableSelectProps) {
+}: Readonly<SearchableSelectProps>) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);

@@ -57,7 +57,7 @@ interface HospitalMarkerProps {
   onClick: () => void;
 }
 
-function HospitalMarker({ data, selected, onClick }: HospitalMarkerProps) {
+function HospitalMarker({ data, selected, onClick }: Readonly<HospitalMarkerProps>) {
   const colors = STATUS_COLORS[data.status] ?? {
     fill: '#94a3b8',
     ring: '#e2e8f0',
@@ -142,7 +142,7 @@ export function NearbyHospitalsMap({
   userLng,
   onSelectHospital,
   height = '520px',
-}: NearbyHospitalsMapProps) {
+}: Readonly<NearbyHospitalsMapProps>) {
   const mapRef = useRef<google.maps.Map | null>(null);
   // Guardamos id junto al resultado para derivar si sigue vigente
   const [routeForId, setRouteForId] = useState<{
@@ -169,17 +169,17 @@ export function NearbyHospitalsMap({
     if (!hospital || hospital.lat === null || hospital.lng === null) return;
 
     if (mapRef.current) {
-      mapRef.current.panTo({ lat: hospital.lat!, lng: hospital.lng! });
+      mapRef.current.panTo({ lat: hospital.lat, lng: hospital.lng });
       mapRef.current.setZoom(14);
     }
 
     if (userLat === null || userLng === null) return;
 
-    const service = new window.google.maps.DirectionsService();
+    const service = new globalThis.google.maps.DirectionsService();
     service.route(
       {
         origin: { lat: userLat, lng: userLng },
-        destination: { lat: hospital.lat!, lng: hospital.lng! },
+        destination: { lat: hospital.lat, lng: hospital.lng },
         travelMode: google.maps.TravelMode.DRIVING,
       },
       (result, status) => {
@@ -265,7 +265,7 @@ export function NearbyHospitalsMap({
       <GoogleMap
         mapContainerStyle={{ width: '100%', height: '100%' }}
         center={initialCenter}
-        zoom={userLat !== null ? 12 : 11}
+        zoom={userLat == null ? 11 : 12}
         options={{
           styles: MAP_STYLES,
           disableDefaultUI: true,
