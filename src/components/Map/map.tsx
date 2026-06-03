@@ -81,7 +81,7 @@ export interface MapProps {
 
 const CDMX_FALLBACK: [number, number] = [19.4326, -99.1332];
 
-export function Map({
+export function MapView({
   variant,
   points,
   center,

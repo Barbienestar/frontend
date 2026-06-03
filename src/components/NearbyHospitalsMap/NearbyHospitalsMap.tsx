@@ -71,9 +71,17 @@ function HospitalMarker({
 
   return (
     <div
+      role="button"
+      tabIndex={0}
       onClick={(e) => {
         e.stopPropagation();
         onClick();
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
       }}
       style={{
         position: 'relative',
@@ -170,10 +178,13 @@ export function NearbyHospitalsMap({
     if (!selectedId || !isLoaded) return;
 
     const hospital = results.find((r) => r.hospitalId === selectedId);
-    if (!hospital || hospital.lat === null || hospital.lng === null) return;
+    if (!hospital || hospital.lat == null || hospital.lng == null) return;
+
+    const hLat: number = hospital.lat;
+    const hLng: number = hospital.lng;
 
     if (mapRef.current) {
-      mapRef.current.panTo({ lat: hospital.lat, lng: hospital.lng });
+      mapRef.current.panTo({ lat: hLat, lng: hLng });
       mapRef.current.setZoom(14);
     }
 
@@ -183,7 +194,7 @@ export function NearbyHospitalsMap({
     service.route(
       {
         origin: { lat: userLat, lng: userLng },
-        destination: { lat: hospital.lat, lng: hospital.lng },
+        destination: { lat: hLat, lng: hLng },
         travelMode: google.maps.TravelMode.DRIVING,
       },
       (result, status) => {
@@ -198,8 +209,8 @@ export function NearbyHospitalsMap({
               duration: leg?.duration?.text ?? '',
               hospitalName: hospital.hospitalName,
               mapsUrl: hospital.mapsUrl,
-              hospitalLat: hospital.lat!,
-              hospitalLng: hospital.lng!,
+              hospitalLat: hLat,
+              hospitalLng: hLng,
             },
           });
         } else {
@@ -214,8 +225,8 @@ export function NearbyHospitalsMap({
               duration: '',
               hospitalName: hospital.hospitalName,
               mapsUrl: hospital.mapsUrl,
-              hospitalLat: hospital.lat!,
-              hospitalLng: hospital.lng!,
+              hospitalLat: hLat,
+              hospitalLng: hLng,
             },
           });
         }

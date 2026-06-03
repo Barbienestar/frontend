@@ -119,11 +119,14 @@ export const PeriodStockReportGraph = ({
                     size="xs"
                     className="justify-start min-w-[100px] text-xs"
                   >
-                    {date
-                      ? format(date, 'd MMM, yyyy', { locale: es })
-                      : which === 'start'
-                        ? 'Fecha inicio'
-                        : 'Fecha fin'}
+                    {(() => {
+                      const label = date
+                        ? format(date, 'd MMM, yyyy', { locale: es })
+                        : which === 'start'
+                          ? 'Fecha inicio'
+                          : 'Fecha fin';
+                      return label;
+                    })()}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="end">

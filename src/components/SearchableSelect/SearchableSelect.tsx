@@ -98,7 +98,14 @@ export function SearchableSelect({
               filtered.map((opt) => (
                 <li
                   key={opt.value}
+                  role="option"
                   onMouseDown={() => handleSelect(opt)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleSelect(opt);
+                    }
+                  }}
                   className={cn(
                     'px-3 py-2 text-sm cursor-pointer hover:bg-muted transition-colors',
                     opt.value === value && 'font-medium text-primary'

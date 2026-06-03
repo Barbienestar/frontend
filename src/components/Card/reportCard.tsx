@@ -170,12 +170,8 @@ const ReportCard = ({
         <Button variant="outline" onClick={onCancel} disabled={isLoading}>
           Cancelar
         </Button>
-        <Button
-          variant="default"
-          onClick={handleSubmitClick}
-          disabled={isLoading || isUploading || !isFormComplete}
-        >
-          {isUploading ? (
+        {(() => {
+          const buttonContent = isUploading ? (
             <>
               <Loader2 className="size-4 animate-spin" />
               Subiendo imagen...
@@ -187,8 +183,17 @@ const ReportCard = ({
             </>
           ) : (
             'Enviar Reporte'
-          )}
-        </Button>
+          );
+          return (
+            <Button
+              variant="default"
+              onClick={handleSubmitClick}
+              disabled={isLoading || isUploading || !isFormComplete}
+            >
+              {buttonContent}
+            </Button>
+          );
+        })()}
       </div>
     </div>
   );
