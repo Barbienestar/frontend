@@ -7,9 +7,13 @@ export const getMyHospitals = async () => {
   return response.data;
 };
 
-export const getCriticalMedicines = async (hospitalId: number) => {
-  const response = await api.get<HospitalCriticalMedicinesResponse[]>(
-    `/hospitals/${hospitalId}/critical-medicines`
+export const getCriticalMedicines = async (
+  hospitalId: number,
+  page: number = 0
+) => {
+  const response = await api.get<HospitalCriticalMedicinesResponse>(
+    `/hospitals/${hospitalId}/critical-medicines`,
+    { params: { page, size: 10 } }
   );
   return response.data;
 };
