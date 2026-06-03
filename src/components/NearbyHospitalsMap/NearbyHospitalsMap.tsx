@@ -57,7 +57,11 @@ interface HospitalMarkerProps {
   onClick: () => void;
 }
 
-function HospitalMarker({ data, selected, onClick }: Readonly<HospitalMarkerProps>) {
+function HospitalMarker({
+  data,
+  selected,
+  onClick,
+}: Readonly<HospitalMarkerProps>) {
   const colors = STATUS_COLORS[data.status] ?? {
     fill: '#94a3b8',
     ring: '#e2e8f0',

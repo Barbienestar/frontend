@@ -119,7 +119,10 @@ export function Map({
 
         {variant === 'normal' &&
           points.map((point) => (
-            <Marker key={`${point.lat}-${point.lng}`} position={[point.lat, point.lng]}>
+            <Marker
+              key={`${point.lat}-${point.lng}`}
+              position={[point.lat, point.lng]}
+            >
               {point.name && <Popup>{point.name}</Popup>}
             </Marker>
           ))}

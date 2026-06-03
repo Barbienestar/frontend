@@ -1,5 +1,3 @@
-
-
 import { BriefcaseMedical } from 'lucide-react'; // Added Google icon placeholder if needed, or use your Button component's built-in
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
