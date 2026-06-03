@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, type ReactNode } from 'react';
 import { Search } from 'lucide-react';
 import { Field, FieldLabel, FieldDescription } from '@/components/ui/field';
 import { cn } from '@/lib/utils';
@@ -9,7 +9,7 @@ interface SelectOption {
 }
 
 interface SearchableSelectProps {
-  label?: string;
+  label?: ReactNode;
   placeholder?: string;
   description?: string;
   options: SelectOption[];
@@ -18,6 +18,7 @@ interface SearchableSelectProps {
   disabled?: boolean;
   labelClassName?: string;
   descClassName?: string;
+  error?: boolean;
 }
 
 export function SearchableSelect({
@@ -30,6 +31,7 @@ export function SearchableSelect({
   disabled,
   labelClassName,
   descClassName,
+  error,
 }: SearchableSelectProps) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(false);
@@ -83,12 +85,15 @@ export function SearchableSelect({
           onFocus={handleFocus}
           placeholder={open ? 'Buscar...' : placeholder}
           className={cn(
-            'w-full pl-8 pr-3 py-2 rounded-md border border-input bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring disabled:opacity-50 disabled:cursor-not-allowed'
+            'w-full pl-8 pr-3 py-2 rounded-md border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed',
+            error
+              ? 'border-destructive focus:ring-destructive'
+              : 'border-input focus:ring-ring'
           )}
         />
 
         {open && (
-          <ul className="absolute top-full left-0 right-0 z-[10002] mt-1 bg-card border border-border rounded-md shadow-lg max-h-52 overflow-y-auto">
+          <ul className="absolute top-full left-0 right-0 z-10002 mt-1 bg-card border border-border rounded-md shadow-lg max-h-52 overflow-y-auto">
             {filtered.length > 0 ? (
               filtered.map((opt) => (
                 <li

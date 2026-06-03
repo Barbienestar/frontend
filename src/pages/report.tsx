@@ -184,6 +184,7 @@ const ReportarPage = () => {
               onSubmit={() => setShowConfirmModal(true)}
               isLoading={isLoading}
               isUploading={isUploading}
+              imageUrl={imageUrl}
             />
 
             <ConfirmModal
