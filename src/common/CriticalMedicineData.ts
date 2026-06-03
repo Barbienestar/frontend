@@ -8,4 +8,7 @@ export interface HospitalCriticalMedicinesResponse {
   hospitalId: number;
   hospitalName: string;
   criticalMedicines: CriticalMedicine[];
+  totalElements: number;
+  totalPages: number;
+  currentPage: number;
 }

@@ -35,9 +35,9 @@ const DashboardPage = () => {
 
   const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
   const [stockReport, setStockReport] = useState<StockReport | null>(null);
-  const [criticalMedicines, setCriticalMedicines] = useState<
-    HospitalCriticalMedicinesResponse[]
-  >([]);
+  const [criticalMedicines, setCriticalMedicines] =
+    useState<HospitalCriticalMedicinesResponse | null>(null);
+  const [criticalMedicinesPage, setCriticalMedicinesPage] = useState(0);
   const [monthlyReports, setMonthlyReports] = useState<MonthlyReports | null>(
     null
   );
@@ -64,11 +64,6 @@ const DashboardPage = () => {
         console.log('Error al obtener los medicamentos en desabasto: ', err)
       );
 
-    getCriticalMedicines(Number(selectedHospital.id))
-      .then(setCriticalMedicines)
-      .catch((err) =>
-        console.log('Error al obtener medicamentos críticos:', err)
-      );
     getMonthlyReports(Number(selectedHospital.id))
       .then(setMonthlyReports)
       .catch((err) =>
@@ -78,10 +73,20 @@ const DashboardPage = () => {
     return () => {
       setStockAvgs(null);
       setStockReport(null);
-      setCriticalMedicines([]);
       setMonthlyReports(null);
+      setCriticalMedicines(null);
     };
   }, [selectedHospital]);
+
+  useEffect(() => {
+    if (!selectedHospital) return;
+
+    getCriticalMedicines(Number(selectedHospital.id), criticalMedicinesPage)
+      .then(setCriticalMedicines)
+      .catch((err) =>
+        console.log('Error al obtener medicamentos críticos:', err)
+      );
+  }, [selectedHospital, criticalMedicinesPage]);
 
   const renderStockValue = () => {
     if (stockAvgs != null && stockAvgs.currentMonthAvg != null) {
@@ -136,7 +141,10 @@ const DashboardPage = () => {
               <HospitalSelector
                 hospitals={hospitals}
                 selected={selectedHospital}
-                onSelect={setSelectedHospital}
+                onSelect={(hospital) => {
+                  setSelectedHospital(hospital);
+                  setCriticalMedicinesPage(0);
+                }}
                 loading={loadingHospitals}
               />
             </div>
@@ -218,26 +226,42 @@ const DashboardPage = () => {
 
             {/* Medicamentos críticos */}
             <div className="rounded-xl border border-border bg-card p-5">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="font-semibold text-foreground">
-                  Medicamentos Críticos
-                </h2>
-                <button className="text-xs text-primary hover:underline">
-                  Ver todos
-                </button>
-              </div>
+              <h2 className="font-semibold text-foreground mb-4">
+                Medicamentos Críticos
+              </h2>
               <div className="flex flex-col gap-3">
-                {criticalMedicines.flatMap((hospital) =>
-                  hospital.criticalMedicines.map((med) => (
-                    <CriticalMedicineCard
-                      key={med.id}
-                      hospitalName={hospital.hospitalName}
-                      medicineName={med.genericName}
-                      stock={med.stock}
-                    />
-                  ))
-                )}
+                {criticalMedicines?.criticalMedicines.map((med) => (
+                  <CriticalMedicineCard
+                    key={med.id}
+                    hospitalName={criticalMedicines.hospitalName}
+                    medicineName={med.genericName}
+                    stock={med.stock}
+                  />
+                ))}
               </div>
+              {criticalMedicines && criticalMedicines.totalPages > 1 && (
+                <div className="flex items-center justify-between mt-4 pt-3 border-t border-border">
+                  <button
+                    onClick={() => setCriticalMedicinesPage((p) => p - 1)}
+                    disabled={criticalMedicinesPage === 0}
+                    className="text-xs text-primary hover:underline disabled:opacity-40 disabled:pointer-events-none"
+                  >
+                    ← Anterior
+                  </button>
+                  <span className="text-xs text-muted-foreground">
+                    {criticalMedicinesPage + 1} / {criticalMedicines.totalPages}
+                  </span>
+                  <button
+                    onClick={() => setCriticalMedicinesPage((p) => p + 1)}
+                    disabled={
+                      criticalMedicinesPage >= criticalMedicines.totalPages - 1
+                    }
+                    className="text-xs text-primary hover:underline disabled:opacity-40 disabled:pointer-events-none"
+                  >
+                    Siguiente →
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
