@@ -96,10 +96,7 @@ const DashboardPage = () => {
   };
 
   const renderStockDifference = () => {
-    if (
-      stockAvgs?.currentMonthAvg != null &&
-      stockAvgs?.lastMonthAvg != null
-    ) {
+    if (stockAvgs?.currentMonthAvg != null && stockAvgs?.lastMonthAvg != null) {
       const diff = Number(
         (stockAvgs.currentMonthAvg - stockAvgs.lastMonthAvg).toFixed(2)
       );
