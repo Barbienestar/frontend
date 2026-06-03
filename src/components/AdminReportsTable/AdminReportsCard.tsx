@@ -41,7 +41,7 @@ export const AdminReportsCard = ({
         <Dialog>
           <DialogTrigger asChild>
             <div className="cursor-zoom-in relative overflow-hidden rounded-sm border border-border bg-muted group-hover:border-primary transition-colors">
-              <AspectRatio ratio={1 / 1}>
+              <AspectRatio ratio={1}>
                 <img
                   src={data.imageUrl}
                   alt="Report preview"
