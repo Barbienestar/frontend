@@ -32,7 +32,10 @@ function normalizeStateName(name: string): string {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
-export function ChoroplethMap({ data, height = '340px' }: ChoroplethMapProps) {
+export function ChoroplethMap({
+  data,
+  height = '340px',
+}: Readonly<ChoroplethMapProps>) {
   const [geojson, setGeojson] = useState<GeoJsonObject | null>(null);
 
   useEffect(() => {

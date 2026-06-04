@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { Map } from './map';
+import { MapView } from './map';
 
-const meta: Meta<typeof Map> = {
-  component: Map,
+const meta: Meta<typeof MapView> = {
+  component: MapView,
   title: 'Components/Map',
   argTypes: {
     variant: {
@@ -19,7 +19,7 @@ const meta: Meta<typeof Map> = {
   parameters: {
     layout: 'padded',
   },
-} satisfies Meta<typeof Map>;
+} satisfies Meta<typeof MapView>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -28,7 +28,7 @@ const mockPoints = [
   {
     lat: 19.432608,
     lng: -99.133209,
-    intensity: 1.0,
+    intensity: 1,
     name: 'Farmacia Central — Paracetamol, Ibuprofeno',
   },
   {

@@ -1,6 +1,8 @@
 import { CheckCircle, Clock, Phone, ShieldCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLoadScript } from '@react-google-maps/api';
+import Config from '@/config';
 import type { HospitalData } from '@/common/HospitalData';
 import type { MedicineSearchResult } from '@/common/MedicineSearchResult';
 import { Breadcrumb } from '@/components/Breadcrumb/breadcrumb';
@@ -27,6 +29,9 @@ import { ConfirmModal } from '@/components/ConfirmModal/ConfirmModal';
 
 const ReportarPage = () => {
   const navigate = useNavigate();
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: Config.GOOGLE_MAPS_API_KEY,
+  });
   const [medicines, setMedicines] = useState<MedicineSearchResult[]>([]);
   const [hospitals, setHospitals] = useState<HospitalData[]>([]);
   const [selectedMedicine, setSelectedMedicine] = useState('');
@@ -179,6 +184,7 @@ const ReportarPage = () => {
               onSubmit={() => setShowConfirmModal(true)}
               isLoading={isLoading}
               isUploading={isUploading}
+              imageUrl={imageUrl}
             />
 
             <ConfirmModal
@@ -221,7 +227,13 @@ const ReportarPage = () => {
 
           {/* Sidebar derecho — mapa + reportes */}
           <div className="lg:col-span-2 flex flex-col gap-4 h-full">
-            <SidebarMapCard onViewFullMap={() => navigate('/mapa-de-abasto')} />
+            <SidebarMapCard
+              selectedHospitalName={
+                hospitals.find((h) => String(h.id) === selectedHospital)?.name
+              }
+              isLoaded={isLoaded}
+              onViewFullMap={() => navigate('/mapa-de-abasto')}
+            />
 
             <RecentReportsTable
               reports={userReports}
