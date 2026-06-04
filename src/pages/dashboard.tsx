@@ -298,15 +298,18 @@ const DashboardPage = () => {
                 Medicamentos Críticos
               </h2>
               <div className="flex flex-col gap-3">
-                {criticalMedicines && criticalMedicines.criticalMedicines.length > 0 ? (
-                  criticalMedicines.criticalMedicines.map((med: CriticalMedicine) => (
-                    <CriticalMedicineCard
-                      key={med.id}
-                      hospitalName={criticalMedicines.hospitalName}
-                      medicineName={med.genericName}
-                      stock={med.stock}
-                    />
-                  ))
+                {criticalMedicines &&
+                criticalMedicines.criticalMedicines.length > 0 ? (
+                  criticalMedicines.criticalMedicines.map(
+                    (med: CriticalMedicine) => (
+                      <CriticalMedicineCard
+                        key={med.id}
+                        hospitalName={criticalMedicines.hospitalName}
+                        medicineName={med.genericName}
+                        stock={med.stock}
+                      />
+                    )
+                  )
                 ) : (
                   <p className="text-xs text-muted-foreground text-center py-4">
                     No hay medicamentos críticos para este hospital.
