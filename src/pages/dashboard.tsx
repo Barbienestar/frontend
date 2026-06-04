@@ -16,7 +16,10 @@ import {
   type StockReport,
 } from '@/services/dashboard/kpis';
 import { getCriticalMedicines } from '@/services/hospitals/hospitalsService';
-import type { HospitalCriticalMedicinesResponse } from '@/common/CriticalMedicineData';
+import type {
+  CriticalMedicine,
+  HospitalCriticalMedicinesResponse,
+} from '@/common/CriticalMedicineData';
 import { CriticalMedicineCard } from '@/components/CriticalMedicineCard/critical-medicine-card';
 import { useHospitals } from '@/hooks/useHospitals';
 import { useEffect, useState } from 'react';
@@ -308,7 +311,7 @@ const DashboardPage = () => {
                   ? criticalMedicines
                   : []
                 ).flatMap((hospital) =>
-                  hospital.criticalMedicines.map((med) => (
+                  hospital.criticalMedicines.map((med: CriticalMedicine) => (
                     <CriticalMedicineCard
                       key={med.id}
                       hospitalName={hospital.hospitalName}
