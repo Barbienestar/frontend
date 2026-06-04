@@ -63,20 +63,31 @@ const DashboardPage = () => {
   );
   const [stateSupply, setStateSupply] = useState<StateSupplyData[]>([]);
 
+  // Initial fetch for state map data
   useEffect(() => {
     getStateSupplyHeatmap()
       .then(setStateSupply)
       .catch((err) => console.log('Error al obtener mapa de abasto:', err));
   }, []);
 
+  // Fetch critical medicines only when hospital or page selection transitions
   useEffect(() => {
-    // Only execute data fetching if a hospital is selected and both dates are configured
+    if (!selectedHospital) return;
+
+    getCriticalMedicines(Number(selectedHospital.id), criticalMedicinesPage)
+      .then(setCriticalMedicines)
+      .catch((err) =>
+        console.log('Error al obtener medicamentos críticos:', err)
+      );
+  }, [selectedHospital, criticalMedicinesPage]);
+
+  // Fetch standard KPI values when hospital or chosen dates alter
+  useEffect(() => {
     if (!selectedHospital || !startDate || !endDate) return;
 
     const formattedStart = format(startDate, 'yyyy-MM-dd');
     const formattedEnd = format(endDate, 'yyyy-MM-dd');
 
-    // Creating the request payload compatible with the backend DTO structure
     const dateRangePayload = {
       firstDate: formattedStart,
       secondDate: formattedEnd,
@@ -94,12 +105,6 @@ const DashboardPage = () => {
         console.log('Error al obtener los medicamentos en desabasto: ', err)
       );
 
-    getCriticalMedicines(Number(selectedHospital.id))
-      .then(setCriticalMedicines)
-      .catch((err) =>
-        console.log('Error al obtener medicamentos críticos:', err)
-      );
-
     getMonthlyReports(Number(selectedHospital.id), dateRangePayload)
       .then(setMonthlyReports)
       .catch((err) =>
@@ -110,19 +115,8 @@ const DashboardPage = () => {
       setStockAvgs(null);
       setStockReport(null);
       setMonthlyReports(null);
-      setCriticalMedicines(null);
     };
-  }, [selectedHospital, startDate, endDate]); // Added date dependencies to trigger refetching on adjustment
-
-  useEffect(() => {
-    if (!selectedHospital) return;
-
-    getCriticalMedicines(Number(selectedHospital.id), criticalMedicinesPage)
-      .then(setCriticalMedicines)
-      .catch((err) =>
-        console.log('Error al obtener medicamentos críticos:', err)
-      );
-  }, [selectedHospital, criticalMedicinesPage]);
+  }, [selectedHospital, startDate, endDate]);
 
   const renderStockValue = () => {
     if (stockAvgs?.currentMonthAvg != null) {
@@ -171,7 +165,6 @@ const DashboardPage = () => {
 
             {/* Control Element: Selectors Wrapper Container */}
             <div className="flex flex-wrap items-center gap-2 md:self-end">
-              {/* ShadCN Date Picker Component inputs grouped together */}
               {(['start', 'end'] as const).map((which) => {
                 const date = which === 'start' ? startDate : endDate;
                 const setDate = which === 'start' ? setStartDate : setEndDate;
@@ -212,6 +205,7 @@ const DashboardPage = () => {
                 onSelect={(hospital) => {
                   setSelectedHospital(hospital);
                   setCriticalMedicinesPage(0);
+                  setCriticalMedicines(null); // Clear previous UI instantly on change
                 }}
                 loading={loadingHospitals}
               />
@@ -241,7 +235,6 @@ const DashboardPage = () => {
             value={monthlyReports?.currentMonthReportCount.toString() || '---'}
             icon={<BarChart2 className="size-5" />}
             trend={(() => {
-              // 1. Guard check: Make sure monthlyReports and comparisonToLastMonth exist
               if (
                 !monthlyReports ||
                 monthlyReports.comparisonToLastMonth == null
@@ -249,7 +242,6 @@ const DashboardPage = () => {
                 return 'Tendencia: ---';
               }
 
-              // 2. Perform the mathematical calculation safely
               const trendValue = monthlyReports.comparisonToLastMonth * 100;
               const isIncremental = trendValue > 0;
 
@@ -277,7 +269,6 @@ const DashboardPage = () => {
               <ChoroplethMap data={stateSupply} height="340px" />
             </div>
 
-            {/* Passing states safely downward to preserve consistency with existing charts */}
             <PeriodStockReportGraphWithStock
               hospitalId={
                 selectedHospital ? Number(selectedHospital.id) : undefined
@@ -307,20 +298,22 @@ const DashboardPage = () => {
                 Medicamentos Críticos
               </h2>
               <div className="flex flex-col gap-3">
-                {(Array.isArray(criticalMedicines)
-                  ? criticalMedicines
-                  : []
-                ).flatMap((hospital) =>
-                  hospital.criticalMedicines.map((med: CriticalMedicine) => (
+                {criticalMedicines && criticalMedicines.criticalMedicines.length > 0 ? (
+                  criticalMedicines.criticalMedicines.map((med: CriticalMedicine) => (
                     <CriticalMedicineCard
                       key={med.id}
-                      hospitalName={hospital.hospitalName}
+                      hospitalName={criticalMedicines.hospitalName}
                       medicineName={med.genericName}
                       stock={med.stock}
                     />
                   ))
+                ) : (
+                  <p className="text-xs text-muted-foreground text-center py-4">
+                    No hay medicamentos críticos para este hospital.
+                  </p>
                 )}
               </div>
+
               {criticalMedicines && criticalMedicines.totalPages > 1 && (
                 <div className="flex items-center justify-between mt-4 pt-3 border-t border-border">
                   <button
