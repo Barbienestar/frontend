@@ -25,6 +25,17 @@ import {
   type StateSupplyData,
 } from '@/services/dashboard/stateSupply';
 
+// Imports needed for the ShadCN / date-fns Date Pickers
+import { format, subMonths } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { Button } from '@/components/ui/button';
+import { Calendar } from '@/components/ui/calendar';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+
 const DashboardPage = () => {
   const {
     hospitals,
@@ -32,6 +43,12 @@ const DashboardPage = () => {
     setSelectedHospital,
     loading: loadingHospitals,
   } = useHospitals();
+
+  // Date selection states moved up from individual components to control KPIs globally
+  const [startDate, setStartDate] = useState<Date | undefined>(
+    subMonths(new Date(), 1)
+  );
+  const [endDate, setEndDate] = useState<Date | undefined>(new Date());
 
   const [stockAvgs, setStockAvgs] = useState<StockAverages | null>(null);
   const [stockReport, setStockReport] = useState<StockReport | null>(null);
@@ -50,15 +67,25 @@ const DashboardPage = () => {
   }, []);
 
   useEffect(() => {
-    if (!selectedHospital) return;
+    // Only execute data fetching if a hospital is selected and both dates are configured
+    if (!selectedHospital || !startDate || !endDate) return;
 
-    getStockAvgs(Number(selectedHospital.id))
+    const formattedStart = format(startDate, 'yyyy-MM-dd');
+    const formattedEnd = format(endDate, 'yyyy-MM-dd');
+
+    // Creating the request payload compatible with the backend DTO structure
+    const dateRangePayload = {
+      firstDate: formattedStart,
+      secondDate: formattedEnd,
+    };
+
+    getStockAvgs(Number(selectedHospital.id), dateRangePayload)
       .then(setStockAvgs)
       .catch((err) =>
         console.log('Error al obtener el abasto promedio: ', err)
       );
 
-    getStockReport(Number(selectedHospital.id))
+    getStockReport(Number(selectedHospital.id), dateRangePayload)
       .then(setStockReport)
       .catch((err) =>
         console.log('Error al obtener los medicamentos en desabasto: ', err)
@@ -69,7 +96,8 @@ const DashboardPage = () => {
       .catch((err) =>
         console.log('Error al obtener medicamentos críticos:', err)
       );
-    getMonthlyReports(Number(selectedHospital.id))
+
+    getMonthlyReports(Number(selectedHospital.id), dateRangePayload)
       .then(setMonthlyReports)
       .catch((err) =>
         console.log('Error al obtener el numero de reportes mensuales: ', err)
@@ -81,7 +109,7 @@ const DashboardPage = () => {
       setCriticalMedicines([]);
       setMonthlyReports(null);
     };
-  }, [selectedHospital]);
+  }, [selectedHospital, startDate, endDate]); // Added date dependencies to trigger refetching on adjustment
 
   const renderStockValue = () => {
     if (stockAvgs != null && stockAvgs.currentMonthAvg != null) {
@@ -121,18 +149,51 @@ const DashboardPage = () => {
       <main className="flex-1 max-w-7xl mx-auto w-full px-6 py-10">
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-foreground">
-            Análisis de Disponibilidad de Medicamentos
-          </h1>
-          <div className="flex items-center gap-3 mt-2">
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-muted-foreground truncate">
-                Monitoreo estratégico y detección de discrepancias en el
-                suministro nacional.
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">
+                Análisis de Disponibilidad de Medicamentos
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1">
+                Monitoreo estratégico y detección de discrepancias en el suministro nacional.
               </p>
             </div>
-            <span className="text-muted-foreground/30 hidden sm:block">·</span>
-            <div className="ml-auto">
+            
+            {/* Control Element: Selectors Wrapper Container */}
+            <div className="flex flex-wrap items-center gap-2 md:self-end">
+              {/* ShadCN Date Picker Component inputs grouped together */}
+              {(['start', 'end'] as const).map((which) => {
+                const date = which === 'start' ? startDate : endDate;
+                const setDate = which === 'start' ? setStartDate : setEndDate;
+                return (
+                  <Popover key={which}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="justify-start min-w-[120px] text-xs h-9 bg-card"
+                      >
+                        {date
+                          ? format(date, 'd MMM, yyyy', { locale: es })
+                          : which === 'start'
+                            ? 'Fecha inicio'
+                            : 'Fecha fin'}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        defaultMonth={date}
+                      />
+                    </PopoverContent>
+                  </Popover>
+                );
+              })}
+
+              <span className="text-muted-foreground/30 hidden sm:block mx-1">·</span>
+
               <HospitalSelector
                 hospitals={hospitals}
                 selected={selectedHospital}
@@ -149,7 +210,7 @@ const DashboardPage = () => {
             label="Abasto Promedio"
             value={renderStockValue()}
             icon={<TrendingUp className="size-5" />}
-            trend={`${renderStockDifference()} vs. mes anterior`}
+            trend={`${renderStockDifference()} vs. periodo anterior`}
             trendHighlight="+2.1%"
             variant="approved"
           />
@@ -161,7 +222,7 @@ const DashboardPage = () => {
             variant="rejected"
           />
           <MetricCard
-            label="Reportes mensuales"
+            label="Reportes del Periodo"
             value={monthlyReports?.currentMonthReportCount.toString() || '---'}
             icon={<BarChart2 className="size-5" />}
             trend={
@@ -169,7 +230,7 @@ const DashboardPage = () => {
               (Number(monthlyReports?.comparisonToLastMonth) > 0
                 ? 'Incremental (+'
                 : 'Decremental (') +
-              `${monthlyReports?.comparisonToLastMonth}%)`
+              `${monthlyReports?.comparisonToLastMonth * 100}%)`
             }
             trendHighlight="+15%"
             variant="pending"
@@ -193,6 +254,7 @@ const DashboardPage = () => {
               <ChoroplethMap data={stateSupply} height="340px" />
             </div>
 
+            {/* Passing states safely downward to preserve consistency with existing charts */}
             <PeriodStockReportGraphWithStock
               hospitalId={
                 selectedHospital ? Number(selectedHospital.id) : undefined
@@ -227,7 +289,7 @@ const DashboardPage = () => {
                 </button>
               </div>
               <div className="flex flex-col gap-3">
-                {criticalMedicines.flatMap((hospital) =>
+                {(Array.isArray(criticalMedicines) ? criticalMedicines : []).flatMap((hospital) =>
                   hospital.criticalMedicines.map((med) => (
                     <CriticalMedicineCard
                       key={med.id}
