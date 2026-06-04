@@ -18,7 +18,7 @@ export function Login({
   isLoading = false,
   isGoogleLoading = false,
   className,
-}: LoginProps) {
+}: Readonly<LoginProps>) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 

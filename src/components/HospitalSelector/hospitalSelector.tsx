@@ -14,7 +14,7 @@ export function HospitalSelector({
   selected,
   onSelect,
   loading,
-}: Props) {
+}: Readonly<Props>) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 

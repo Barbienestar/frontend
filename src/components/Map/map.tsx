@@ -1,7 +1,7 @@
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import 'leaflet.heat';
 
 // Fix marker icons with Vite bundler
@@ -48,6 +48,29 @@ function HeatLayer({ points }: { points: MedicinePoint[] }) {
   return null;
 }
 
+function FlyToOnChange({
+  lat,
+  lng,
+  zoom,
+}: {
+  lat: number;
+  lng: number;
+  zoom: number;
+}) {
+  const map = useMap();
+  const isFirstRef = useRef(true);
+
+  useEffect(() => {
+    if (isFirstRef.current) {
+      isFirstRef.current = false;
+      return;
+    }
+    map.flyTo([lat, lng], zoom, { animate: true, duration: 1.2 });
+  }, [map, lat, lng, zoom]);
+
+  return null;
+}
+
 export interface MapProps {
   variant: 'heatmap' | 'normal';
   points: MedicinePoint[];
@@ -56,17 +79,23 @@ export interface MapProps {
   height?: string;
 }
 
-export function Map({
+const CDMX_FALLBACK: [number, number] = [19.4326, -99.1332];
+
+export function MapView({
   variant,
   points,
   center,
   zoom = 14,
   height = '480px',
-}: MapProps) {
-  const defaultCenter: [number, number] = center ?? [
-    points.reduce((acc, p) => acc + p.lat, 0) / points.length,
-    points.reduce((acc, p) => acc + p.lng, 0) / points.length,
-  ];
+}: Readonly<MapProps>) {
+  const defaultCenter: [number, number] =
+    center ??
+    (points.length > 0
+      ? [
+          points.reduce((acc, p) => acc + p.lat, 0) / points.length,
+          points.reduce((acc, p) => acc + p.lng, 0) / points.length,
+        ]
+      : CDMX_FALLBACK);
 
   return (
     <div style={{ position: 'relative', zIndex: 0 }}>
@@ -80,11 +109,20 @@ export function Map({
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
+        <FlyToOnChange
+          lat={defaultCenter[0]}
+          lng={defaultCenter[1]}
+          zoom={zoom}
+        />
+
         {variant === 'heatmap' && <HeatLayer points={points} />}
 
         {variant === 'normal' &&
-          points.map((point, i) => (
-            <Marker key={i} position={[point.lat, point.lng]}>
+          points.map((point) => (
+            <Marker
+              key={`${point.lat}-${point.lng}`}
+              position={[point.lat, point.lng]}
+            >
               {point.name && <Popup>{point.name}</Popup>}
             </Marker>
           ))}
