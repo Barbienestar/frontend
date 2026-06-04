@@ -155,10 +155,11 @@ const DashboardPage = () => {
                 Análisis de Disponibilidad de Medicamentos
               </h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Monitoreo estratégico y detección de discrepancias en el suministro nacional.
+                Monitoreo estratégico y detección de discrepancias en el
+                suministro nacional.
               </p>
             </div>
-            
+
             {/* Control Element: Selectors Wrapper Container */}
             <div className="flex flex-wrap items-center gap-2 md:self-end">
               {/* ShadCN Date Picker Component inputs grouped together */}
@@ -192,7 +193,9 @@ const DashboardPage = () => {
                 );
               })}
 
-              <span className="text-muted-foreground/30 hidden sm:block mx-1">·</span>
+              <span className="text-muted-foreground/30 hidden sm:block mx-1">
+                ·
+              </span>
 
               <HospitalSelector
                 hospitals={hospitals}
@@ -225,13 +228,21 @@ const DashboardPage = () => {
             label="Reportes del Periodo"
             value={monthlyReports?.currentMonthReportCount.toString() || '---'}
             icon={<BarChart2 className="size-5" />}
-            trend={
-              'Tendencia: ' +
-              (Number(monthlyReports?.comparisonToLastMonth) > 0
-                ? 'Incremental (+'
-                : 'Decremental (') +
-              `${monthlyReports?.comparisonToLastMonth * 100}%)`
-            }
+            trend={(() => {
+              // 1. Guard check: Make sure monthlyReports and comparisonToLastMonth exist
+              if (
+                !monthlyReports ||
+                monthlyReports.comparisonToLastMonth == null
+              ) {
+                return 'Tendencia: ---';
+              }
+
+              // 2. Perform the mathematical calculation safely
+              const trendValue = monthlyReports.comparisonToLastMonth * 100;
+              const isIncremental = trendValue > 0;
+
+              return `Tendencia: ${isIncremental ? 'Incremental (+' : 'Decremental ('}${trendValue.toFixed(1)}%)`;
+            })()}
             trendHighlight="+15%"
             variant="pending"
           />
@@ -289,7 +300,10 @@ const DashboardPage = () => {
                 </button>
               </div>
               <div className="flex flex-col gap-3">
-                {(Array.isArray(criticalMedicines) ? criticalMedicines : []).flatMap((hospital) =>
+                {(Array.isArray(criticalMedicines)
+                  ? criticalMedicines
+                  : []
+                ).flatMap((hospital) =>
                   hospital.criticalMedicines.map((med) => (
                     <CriticalMedicineCard
                       key={med.id}

@@ -35,8 +35,9 @@ export const getStockAvgs = async (
   req: StockAveragesDto
 ): Promise<StockAverages> => {
   const response = await api.get<StockAverages>(
-    `/medicines-hospitals/${idHospital}/average-stock`, {
-      params: req
+    `/medicines-hospitals/${idHospital}/average-stock`,
+    {
+      params: req,
     }
   );
   return response.data;
@@ -47,8 +48,9 @@ export const getStockReport = async (
   req: StockReportDto
 ): Promise<StockReport> => {
   const response = await api.get<StockReport>(
-    `/medicines-hospitals/${idHospital}/stock-report`, {
-      params: req
+    `/medicines-hospitals/${idHospital}/stock-report`,
+    {
+      params: req,
     }
   );
 
@@ -60,8 +62,9 @@ export const getMonthlyReports = async (
   req: MonthlyReportsDto
 ): Promise<MonthlyReports> => {
   const response = await api.get<MonthlyReports>(
-    `/medicines-hospitals/${idHospital}/monthly-reports`, {
-      params: req
+    `/medicines-hospitals/${idHospital}/monthly-reports`,
+    {
+      params: req,
     }
   );
 
