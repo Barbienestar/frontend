@@ -44,7 +44,7 @@ export const AdminReportsCard = ({
               <AspectRatio ratio={1}>
                 <img
                   src={data.imageUrl}
-                  alt="Report preview"
+                  alt="Vista previa del reporte"
                   className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
                 />
               </AspectRatio>
@@ -57,13 +57,13 @@ export const AdminReportsCard = ({
             <div className="relative w-full h-full flex flex-col items-center justify-center gap-4">
               <img
                 src={data.imageUrl}
-                alt="Report full view"
+                alt="Vista completa del reporte"
                 className="w-auto h-auto max-w-full max-h-[96vh] object-contain rounded-sm"
               />
               <div className="bg-card p-4 border border-border rounded-sm max-w-2xl w-full text-sm text-muted-foreground">
                 <div className="flex items-center gap-2 mb-1 text-foreground font-bold uppercase text-[10px] tracking-wider">
                   <FileText className="w-3 h-3" />
-                  Full Description
+                  Descripción completa
                 </div>
                 <p className="leading-relaxed">{data.description}</p>
               </div>
@@ -76,7 +76,7 @@ export const AdminReportsCard = ({
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
           <div className="min-w-0">
             <h3 className="text-sm font-bold tracking-tight text-foreground uppercase">
-              Medicine Report
+              Reporte de Medicamento
             </h3>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-muted-foreground font-medium">
               <User className="w-3 h-3 shrink-0" />
@@ -84,7 +84,7 @@ export const AdminReportsCard = ({
               <span className="text-border">•</span>
               <Building2 className="w-3 h-3 shrink-0" />
               <span className="truncate">
-                {data.hospitalName || 'No hospital provided'}
+                {data.hospitalName || 'Sin hospital asignado'}
               </span>
               <span className="text-border">•</span>
               <Calendar className="w-3 h-3 shrink-0" />
@@ -101,7 +101,7 @@ export const AdminReportsCard = ({
               className="px-2 border-border text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-all duration-200 rounded-sm"
             >
               <X className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline mr-1.5">Reject</span>
+              <span className="hidden sm:inline mr-1.5">Rechazar</span>
             </Button>
             <Button
               type="button"
@@ -110,7 +110,7 @@ export const AdminReportsCard = ({
               className="px-2 bg-primary text-primary-foreground hover:opacity-90 transition-all duration-200 rounded-sm shadow-sm"
             >
               <Check className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline mr-1.5">Accept</span>
+              <span className="hidden sm:inline mr-1.5">Aceptar</span>
             </Button>
           </div>
         </div>
@@ -119,7 +119,7 @@ export const AdminReportsCard = ({
           <div className="space-y-0.5">
             <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
               <Pill className="w-3 h-3" />
-              Medication Detail
+              Detalle de Medicamento
             </div>
             <div className="text-sm font-semibold text-foreground">
               {data.medicineName}
@@ -133,7 +133,7 @@ export const AdminReportsCard = ({
           <div className="space-y-0.5">
             <div className="flex items-center gap-2 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
               <FileText className="w-3 h-3" />
-              Case Description
+              Descripción del Caso
             </div>
             <div className="text-sm text-muted-foreground line-clamp-1 leading-relaxed">
               {data.description}

@@ -89,7 +89,7 @@ export const AdminReportsTable = ({
   if (!data || data.items.length === 0) {
     return (
       <div className="text-center py-12 text-muted-foreground">
-        No reports found
+        No se encontraron reportes
       </div>
     );
   }
@@ -109,7 +109,7 @@ export const AdminReportsTable = ({
 
       <div className="flex items-center justify-between pt-4 border-t border-border">
         <div className="text-sm text-muted-foreground">
-          Page {data.page + 1} of {data.totalPages} ({data.totalItems} total)
+          Página {data.page + 1} de {data.totalPages} ({data.totalItems} total)
         </div>
         <div className="flex items-center gap-2">
           <Button
@@ -120,7 +120,7 @@ export const AdminReportsTable = ({
             className="gap-2 bg-secondary"
           >
             <ChevronLeft className="w-4 h-4" />
-            Previous
+            Anterior
           </Button>
           <Button
             variant="default"
@@ -129,7 +129,7 @@ export const AdminReportsTable = ({
             disabled={page >= data.totalPages - 1}
             className="gap-2 bg-secondary"
           >
-            Next
+            Siguiente
             <ChevronRight className="w-4 h-4" />
           </Button>
         </div>
