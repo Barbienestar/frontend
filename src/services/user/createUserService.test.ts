@@ -5,7 +5,6 @@ jest.mock('../api');
 const mockedApi = api as jest.Mocked<typeof api>;
 
 describe('createUserService', () => {
-
   beforeEach(() => {
     jest.clearAllMocks();
   });

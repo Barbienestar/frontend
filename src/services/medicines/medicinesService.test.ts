@@ -47,7 +47,9 @@ describe('uploadStockService', () => {
 
     it('lanza el error si api.post falla', async () => {
       mockedApi.post.mockRejectedValueOnce(new Error('Upload error'));
-      await expect(uploadMedicineStock('7', fakeFile)).rejects.toThrow('Upload error');
+      await expect(uploadMedicineStock('7', fakeFile)).rejects.toThrow(
+        'Upload error'
+      );
     });
   });
 });
