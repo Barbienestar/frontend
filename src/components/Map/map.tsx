@@ -81,13 +81,13 @@ export interface MapProps {
 
 const CDMX_FALLBACK: [number, number] = [19.4326, -99.1332];
 
-export function Map({
+export function MapView({
   variant,
   points,
   center,
   zoom = 14,
   height = '480px',
-}: MapProps) {
+}: Readonly<MapProps>) {
   const defaultCenter: [number, number] =
     center ??
     (points.length > 0
@@ -118,8 +118,11 @@ export function Map({
         {variant === 'heatmap' && <HeatLayer points={points} />}
 
         {variant === 'normal' &&
-          points.map((point, i) => (
-            <Marker key={i} position={[point.lat, point.lng]}>
+          points.map((point) => (
+            <Marker
+              key={`${point.lat}-${point.lng}`}
+              position={[point.lat, point.lng]}
+            >
               {point.name && <Popup>{point.name}</Popup>}
             </Marker>
           ))}

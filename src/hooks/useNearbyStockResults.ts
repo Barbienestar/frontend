@@ -42,11 +42,11 @@ export function useNearbyStockResults(
     if (
       results.length === 0 ||
       !isGoogleLoaded ||
-      !window.google?.maps?.Geocoder
+      !globalThis.google?.maps?.Geocoder
     )
       return;
 
-    const geocoder = new window.google.maps.Geocoder();
+    const geocoder = new globalThis.google.maps.Geocoder();
 
     // setGeocoding dentro de una microtask para evitar setState síncrono en el efecto
     Promise.resolve().then(() => setGeocoding(true));

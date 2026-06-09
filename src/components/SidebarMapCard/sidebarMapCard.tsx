@@ -81,9 +81,9 @@ export const SidebarMapCard = ({
       Promise.resolve().then(() => setHospitalPos(null));
       return;
     }
-    if (!isLoaded || !window.google?.maps?.Geocoder) return;
+    if (!isLoaded || !globalThis.google?.maps?.Geocoder) return;
 
-    const geocoder = new window.google.maps.Geocoder();
+    const geocoder = new globalThis.google.maps.Geocoder();
     geocoder.geocode(
       { address: `${selectedHospitalName}, México` },
       (results, status) => {

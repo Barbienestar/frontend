@@ -97,6 +97,20 @@ const ReportCard = ({
     !!description.trim() &&
     !!imageUrl;
 
+  const buttonContent = isUploading ? (
+    <>
+      <Loader2 className="size-4 animate-spin" />
+      Subiendo imagen...
+    </>
+  ) : isLoading ? (
+    <>
+      <Loader2 className="size-4 animate-spin" />
+      Enviando...
+    </>
+  ) : (
+    'Enviar Reporte'
+  );
+
   return (
     <div className="bg-card rounded-xl border border-border shadow-sm p-5 w-full">
       <div className="flex items-center gap-2 mb-4">
@@ -175,19 +189,7 @@ const ReportCard = ({
           onClick={handleSubmitClick}
           disabled={isLoading || isUploading || !isFormComplete}
         >
-          {isUploading ? (
-            <>
-              <Loader2 className="size-4 animate-spin" />
-              Subiendo imagen...
-            </>
-          ) : isLoading ? (
-            <>
-              <Loader2 className="size-4 animate-spin" />
-              Enviando...
-            </>
-          ) : (
-            'Enviar Reporte'
-          )}
+          {buttonContent}
         </Button>
       </div>
     </div>

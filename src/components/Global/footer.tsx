@@ -7,7 +7,7 @@ interface FooterProps {
   variant?: FooterVariant;
 }
 
-export function Footer({ variant = 'full' }: FooterProps) {
+export function Footer({ variant = 'full' }: Readonly<FooterProps>) {
   if (variant === 'minimal') {
     return (
       <footer className="bg-white border-t border-blue-200 w-full">
@@ -15,13 +15,13 @@ export function Footer({ variant = 'full' }: FooterProps) {
           <div className="flex items-center gap-4">
             <span>© 2026 Sistema Nacional de Salud · Gobierno de México</span>
             <span className="hidden sm:inline text-gray-300">·</span>
-            <a href="#" className="hover:text-blue-600 transition-colors">
+            <button className="hover:text-blue-600 transition-colors">
               Aviso de Privacidad
-            </a>
+            </button>
           </div>
 
           <div className="flex items-center gap-2 font-bold text-sm tracking-widest text-gray-700 uppercase">
-            MÉXICO
+            MÉXICO{' '}
             <span className="flex gap-[2px]">
               <span className="w-2 h-3 bg-primary rounded-sm" />
               <span className="w-2 h-3 bg-secondary border-gray-200 rounded-sm" />
@@ -81,15 +81,15 @@ export function Footer({ variant = 'full' }: FooterProps) {
       <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-3 text-xs text-gray-500">
         <span>© 2026 Secretaría de Salud · Algunos derechos reservados</span>
         <nav className="flex items-center gap-6">
-          <a href="#" className="hover:text-white transition-colors">
+          <button className="hover:text-white transition-colors">
             Privacidad
-          </a>
-          <a href="#" className="hover:text-white transition-colors">
+          </button>
+          <button className="hover:text-white transition-colors">
             Términos y Condiciones
-          </a>
-          <a href="#" className="hover:text-white transition-colors">
+          </button>
+          <button className="hover:text-white transition-colors">
             Accesibilidad
-          </a>
+          </button>
         </nav>
       </div>
     </footer>

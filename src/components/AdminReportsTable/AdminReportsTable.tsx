@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { FullReportData } from '@/common/FullReportData';
 import type { PaginatedResponse } from '@/common/PaginatedResponse';
 import { Button } from '@/components/ui/button';
@@ -49,12 +49,17 @@ export const AdminReportsTable = ({
     if (data && page < data.totalPages - 1) setPage((p) => p + 1);
   };
 
+  const skeletonKeys = useMemo(
+    () => Array.from({ length: pageSize }, () => crypto.randomUUID()),
+    [pageSize]
+  );
+
   if (loading) {
     return (
       <div className="flex flex-col gap-4 w-full">
-        {Array.from({ length: pageSize }).map((_, i) => (
+        {skeletonKeys.map((key) => (
           <div
-            key={i}
+            key={key}
             className="flex flex-col md:flex-row gap-3 p-3 bg-card border border-border rounded-sm w-full"
           >
             <div className="shrink-0 w-full md:w-36">
