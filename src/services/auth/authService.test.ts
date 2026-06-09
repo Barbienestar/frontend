@@ -1,6 +1,20 @@
 // @jest-environment jsdom
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+// mocks de módulos externos
+jest.mock('firebase/auth', () => {
+  const actualAuth = jest.requireActual('firebase/auth');
+  return {
+    ...actualAuth,
+    GoogleAuthProvider: jest.fn().mockImplementation(() => ({})),
+    signInWithPopup: jest.fn(),
+    signInWithEmailAndPassword: jest.fn(),
+    signOut: jest.fn(),
+  };
+});
+
+jest.mock('../api');
+
 import { signup, login, loginWithGoogle, logout, getStoredUser } from './authService';
 import api from '../api';
 import {
@@ -9,24 +23,34 @@ import {
   signOut,
 } from 'firebase/auth';
 
-// 1. Mock de Firebase auth funciones
-jest.mock('firebase/auth', () => ({
-  GoogleAuthProvider: jest.fn().mockImplementation(() => ({})),
-  signInWithPopup: jest.fn(),
-  signInWithEmailAndPassword: jest.fn(),
-  signOut: jest.fn(),
-}));
+// mock de localStorage (como salvavidas si Jest levanta el entorno Node)
+if (typeof localStorage === 'undefined') {
+  const mockLocalStorage: Record<string, string> = {};
+  global.localStorage = {
+    getItem: jest.fn((key: string) => mockLocalStorage[key] || null),
+    setItem: jest.fn((key: string, value: string) => {
+      mockLocalStorage[key] = value;
+    }),
+    removeItem: jest.fn((key: string) => {
+      delete mockLocalStorage[key];
+    }),
+    clear: jest.fn(() => {
+      Object.keys(mockLocalStorage).forEach((key) => delete mockLocalStorage[key]);
+    }),
+    length: 0,
+    key: jest.fn((index: number) => Object.keys(mockLocalStorage)[index] || null),
+  };
+}
 
-// 2. Mock del módulo auth propio de tu aplicación
+// 4. Mock del módulo de autenticación propio
 const fakeAuthInstance = {} as any; 
 jest.mock('./auth', () => ({
   auth: fakeAuthInstance,
 }));
 
-jest.mock('../api');
+// 5. Casteos de TypeScript para los métodos mockeados
 const mockedApi = api as jest.Mocked<typeof api>;
 
-// 3. Corrección de tipado TypeScript
 const mockedSignIn = signInWithEmailAndPassword as jest.MockedFunction<
   typeof signInWithEmailAndPassword
 >;
@@ -35,6 +59,7 @@ const mockedSignInWithPopup = signInWithPopup as jest.MockedFunction<
 >;
 const mockedSignOut = signOut as jest.MockedFunction<typeof signOut>;
 
+// 6. Objetos fakes / Mocks de datos para las pruebas
 const fakeProfile = {
   id: 1,
   name: 'Ana',
@@ -50,6 +75,7 @@ const fakeCredential = {
   user: { getIdToken: jest.fn().mockResolvedValue('fake-token') },
 };
 
+// 7. Suites de Pruebas
 describe('authService', () => {
   beforeEach(() => {
     jest.clearAllMocks();
