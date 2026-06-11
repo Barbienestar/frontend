@@ -44,6 +44,7 @@ const ReportarPage = () => {
   const [userReports, setUserReports] = useState<ReportRow[]>([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
+  const [resetKey, setResetKey] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -124,6 +125,11 @@ const ReportarPage = () => {
         imageUrl: imageUrl ?? undefined,
       });
       toast.success('Reporte enviado correctamente.');
+      setSelectedMedicine('');
+      setSelectedHospital('');
+      setDescription('');
+      setImageUrl(null);
+      setResetKey((k) => k + 1);
     } catch {
       toast.error('Error al enviar el reporte. Intenta de nuevo.');
     } finally {
@@ -171,6 +177,7 @@ const ReportarPage = () => {
           {/* Columna izquierda — formulario + teléfono */}
           <div className="lg:col-span-3 flex flex-col gap-4">
             <ReportCard
+              key={resetKey}
               medicineOptions={medicineOptions}
               hospitalOptions={hospitalOptions}
               selectedMedicine={selectedMedicine}

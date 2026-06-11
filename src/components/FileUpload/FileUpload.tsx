@@ -12,10 +12,10 @@ interface FileUploadProps {
 
 const config = {
   receta: {
-    accept: 'image/jpeg,image/png,application/pdf',
+    accept: 'image/jpeg,image/png',
     icon: FileUp,
     mainText: <>Arrastre la imagen de su receta aquí o explore archivos</>,
-    subText: 'Formatos aceptados: JPG, PNG, PDF (Máx 5MB)',
+    subText: 'Formatos aceptados: JPG, PNG (Máx 5MB)',
     defaultLabel: 'Evidencia de Receta (Foto) *',
     button: false,
   },

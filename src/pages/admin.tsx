@@ -29,17 +29,17 @@ const METRIC_CONFIG: Record<
   accepted: {
     icon: <Check className="w-5 h-5" />,
     variant: 'approved',
-    trend: 'Completed reports',
+    trend: 'Reportes completados',
   },
   declined: {
     icon: <XCircle className="w-5 h-5" />,
     variant: 'rejected',
-    trend: 'Rejected reports',
+    trend: 'Reportes rechazados',
   },
   reviewing: {
     icon: <Clock className="w-5 h-5" />,
     variant: 'pending',
-    trend: 'Awaiting review',
+    trend: 'En espera de revisión',
   },
 };
 
@@ -136,7 +136,7 @@ export const Admin = () => {
         <Navbar variant="admin" activePath="/admin" />
         <main className="flex-1 w-full px-4 pt-24 pb-8">
           <div className="flex items-center justify-center py-12">
-            <div className="text-muted-foreground">Loading...</div>
+            <div className="text-muted-foreground">Cargando...</div>
           </div>
         </main>
       </div>
@@ -149,7 +149,7 @@ export const Admin = () => {
       <main className="flex-1 w-full px-4 pt-24 pb-6">
         <div className="mb-6 space-y-2">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <h2 className="text-xl font-semibold">Moderacion de reportes</h2>
+            <h2 className="text-xl font-semibold">Moderación de reportes</h2>
             <div className="flex items-center gap-2">
               <span className="text-xs text-muted-foreground font-medium tracking-widest uppercase">
                 Crear
