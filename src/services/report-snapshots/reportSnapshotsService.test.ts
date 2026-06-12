@@ -37,7 +37,11 @@ describe('reportSnapshotService', () => {
     it('retorna los snapshots correctamente', async () => {
       mockedApi.get.mockResolvedValueOnce({ data: fakeSnapshots });
 
-      const result = await getPeriodReportSnapshots(1, '2025-01-01', '2025-01-31');
+      const result = await getPeriodReportSnapshots(
+        1,
+        '2025-01-01',
+        '2025-01-31'
+      );
 
       expect(result).toEqual(fakeSnapshots);
     });
@@ -45,7 +49,11 @@ describe('reportSnapshotService', () => {
     it('retorna arreglo vacío si no hay snapshots', async () => {
       mockedApi.get.mockResolvedValueOnce({ data: [] });
 
-      const result = await getPeriodReportSnapshots(1, '2025-06-01', '2025-06-30');
+      const result = await getPeriodReportSnapshots(
+        1,
+        '2025-06-01',
+        '2025-06-30'
+      );
 
       expect(result).toEqual([]);
     });

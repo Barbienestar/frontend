@@ -8,8 +8,12 @@ const mockAuthValue = {
   token: null,
   isAuthenticated: false,
   isLoading: false,
-  signIn: async () => { throw new Error('not implemented'); },
-  signInWithGoogle: async () => { throw new Error('not implemented'); },
+  signIn: async () => {
+    throw new Error('not implemented');
+  },
+  signInWithGoogle: async () => {
+    throw new Error('not implemented');
+  },
   signOut: async () => {},
   hasRole: () => false,
   setUser: () => {},

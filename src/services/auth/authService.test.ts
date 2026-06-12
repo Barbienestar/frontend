@@ -15,7 +15,13 @@ jest.mock('firebase/auth', () => {
 
 jest.mock('../api');
 
-import { signup, login, loginWithGoogle, logout, getStoredUser } from './authService';
+import {
+  signup,
+  login,
+  loginWithGoogle,
+  logout,
+  getStoredUser,
+} from './authService';
 import api from '../api';
 import {
   signInWithEmailAndPassword,
@@ -35,15 +41,19 @@ if (typeof localStorage === 'undefined') {
       delete mockLocalStorage[key];
     }),
     clear: jest.fn(() => {
-      Object.keys(mockLocalStorage).forEach((key) => delete mockLocalStorage[key]);
+      Object.keys(mockLocalStorage).forEach(
+        (key) => delete mockLocalStorage[key]
+      );
     }),
     length: 0,
-    key: jest.fn((index: number) => Object.keys(mockLocalStorage)[index] || null),
+    key: jest.fn(
+      (index: number) => Object.keys(mockLocalStorage)[index] || null
+    ),
   };
 }
 
 // 4. Mock del módulo de autenticación propio
-const fakeAuthInstance = {} as any; 
+const fakeAuthInstance = {} as any;
 jest.mock('./auth', () => ({
   auth: fakeAuthInstance,
 }));
@@ -98,7 +108,11 @@ describe('authService', () => {
       await signup(req);
 
       expect(mockedApi.post).toHaveBeenCalledWith('/user/citizen', req);
-      expect(mockedSignIn).toHaveBeenCalledWith(fakeAuthInstance, req.email, req.password);
+      expect(mockedSignIn).toHaveBeenCalledWith(
+        fakeAuthInstance,
+        req.email,
+        req.password
+      );
     });
 
     it('guarda el token y el usuario en localStorage', async () => {
@@ -172,7 +186,9 @@ describe('authService', () => {
     });
 
     it('lanza el error si Firebase falla', async () => {
-      mockedSignInWithPopup.mockRejectedValueOnce(new Error('auth/popup-closed'));
+      mockedSignInWithPopup.mockRejectedValueOnce(
+        new Error('auth/popup-closed')
+      );
       await expect(loginWithGoogle()).rejects.toThrow('auth/popup-closed');
     });
   });

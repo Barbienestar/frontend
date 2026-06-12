@@ -1,8 +1,4 @@
-import {
-  getStockAvgs,
-  getStockReport,
-  getMonthlyReports,
-} from './kpis';
+import { getStockAvgs, getStockReport, getMonthlyReports } from './kpis';
 import api from '../api';
 
 jest.mock('../api');
@@ -68,7 +64,10 @@ describe('dashboardService', () => {
 
   describe('getMonthlyReports', () => {
     const dto = { firstDate: '2025-01-01', secondDate: '2025-01-31' };
-    const fakeMonthly = { currentMonthReportCount: 30, comparisonToLastMonth: 5 };
+    const fakeMonthly = {
+      currentMonthReportCount: 30,
+      comparisonToLastMonth: 5,
+    };
 
     it('llama a api.get con la ruta y params correctos', async () => {
       mockedApi.get.mockResolvedValueOnce({ data: fakeMonthly });
