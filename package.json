@@ -13,7 +13,9 @@
     "build-storybook": "storybook build",
     "prepare": "husky",
     "test": "jest --config jest.config.cjs",
-    "test:integration": "jest --config jest.integration.config.cjs"
+    "test:integration": "jest --config jest.integration.config.cjs",
+    "test:e2e": "cypress open",
+    "test:e2e:headless": "cypress run"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.2.8",
