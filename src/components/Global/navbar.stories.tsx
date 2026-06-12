@@ -1,8 +1,31 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { MemoryRouter } from 'react-router-dom';
+import AuthContext from '@/contexts/AuthContext';
 import Navbar from './navbar';
+
+const mockAuthValue = {
+  user: null,
+  token: null,
+  isAuthenticated: false,
+  isLoading: false,
+  signIn: async () => { throw new Error('not implemented'); },
+  signInWithGoogle: async () => { throw new Error('not implemented'); },
+  signOut: async () => {},
+  hasRole: () => false,
+  setUser: () => {},
+};
 
 const meta: Meta<typeof Navbar> = {
   component: Navbar,
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <AuthContext.Provider value={mockAuthValue}>
+          <Story />
+        </AuthContext.Provider>
+      </MemoryRouter>
+    ),
+  ],
   argTypes: {
     variant: {
       control: 'select',
