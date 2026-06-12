@@ -51,6 +51,7 @@ const Inicio = () => {
                 variant="outline"
                 size="lg"
                 className="text-white border-white/60 bg-transparent hover:bg-white/10"
+                data-testid="login-navigate-index-button"
               >
                 Iniciar sesión
               </Button>

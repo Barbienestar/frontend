@@ -131,6 +131,9 @@ const ReportCard = ({
             value={selectedMedicine}
             onChange={handleMedicineChange}
             error={!!errors.medicine}
+            inputTestId="report-search-medicine-input"
+            testPage="report"
+            testOptionType="medicine"
           />
           {errors.medicine && <FieldError message={errors.medicine} />}
         </div>
@@ -143,6 +146,9 @@ const ReportCard = ({
             value={selectedHospital}
             onChange={handleHospitalChange}
             error={!!errors.hospital}
+            inputTestId="report-search-hospital-input"
+            testPage="report"
+            testOptionType="hospital"
           />
           {errors.hospital && <FieldError message={errors.hospital} />}
         </div>
@@ -164,6 +170,7 @@ const ReportCard = ({
           placeholder="Describe el problema con el abasto del medicamento..."
           value={description}
           onChange={handleDescriptionChange}
+          data-testid="report-description-input"
         />
         {errors.description && <FieldError message={errors.description} />}
       </div>
@@ -176,6 +183,7 @@ const ReportCard = ({
           variant="receta"
           onFileChange={handleFileChange}
           error={!!errors.image}
+          testId="report-prescription-upload"
         />
         {errors.image && <FieldError message={errors.image} />}
       </div>
@@ -188,6 +196,7 @@ const ReportCard = ({
           variant="default"
           onClick={handleSubmitClick}
           disabled={isLoading || isUploading || !isFormComplete}
+          data-testid="report-submit-button"
         >
           {buttonContent}
         </Button>

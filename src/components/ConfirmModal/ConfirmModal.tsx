@@ -57,6 +57,7 @@ export function ConfirmModal({
       onClick={handleBackdropClick}
       onKeyDown={handleDialogKeyDown}
       className="m-auto rounded-2xl bg-background p-6 shadow-xl max-w-sm open:flex open:flex-col backdrop:bg-black/60 backdrop:backdrop-blur-sm"
+      data-testid="confirmation-modal"
     >
       <p className="text-base font-semibold text-foreground text-center mb-6">
         {message}
@@ -70,6 +71,7 @@ export function ConfirmModal({
           size="default"
           onClick={onConfirm}
           className={confirmClassName}
+          data-testid="confirmation-modal-confirm-button"
         >
           {confirmLabel}
         </Button>

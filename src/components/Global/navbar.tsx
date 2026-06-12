@@ -125,6 +125,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
             <div className="relative">
               <button
                 className="p-1 rounded-full hover:bg-gray-100"
+                data-testid="navbar-profile-button"
                 onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
               >
                 <img
@@ -143,6 +144,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
                       navigate('/inicio');
                     }}
                     className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 text-left"
+                    data-testid="profile-logout-button"
                   >
                     Cerrar sesión
                   </button>
@@ -154,6 +156,7 @@ const Navbar: React.FC<NavbarProps> = ({ variant = 'default', activePath }) => {
               variant="default"
               size="sm"
               onClick={() => navigate('/access')}
+              data-testid="login-navigate-navbar-button"
             >
               Iniciar sesión
             </Button>

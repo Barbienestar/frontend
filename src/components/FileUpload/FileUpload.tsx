@@ -8,6 +8,7 @@ interface FileUploadProps {
   variant?: FileUploadVariant;
   error?: boolean;
   onFileChange?: (file: File | null) => void;
+  testId?: string;
 }
 
 const config = {
@@ -32,6 +33,7 @@ const FileUpload = ({
   variant = 'receta',
   error = false,
   onFileChange,
+  testId,
 }: FileUploadProps) => {
   const [isDragging, setIsDragging] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -103,6 +105,7 @@ const FileUpload = ({
           type="file"
           accept={cfg.accept}
           className="sr-only"
+          data-testid={testId}
           onChange={handleInputChange}
         />
 
