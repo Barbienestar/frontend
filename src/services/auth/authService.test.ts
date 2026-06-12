@@ -2,16 +2,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 // mocks de módulos externos
-jest.mock('firebase/auth', () => {
-  const actualAuth = jest.requireActual('firebase/auth');
-  return {
-    ...actualAuth,
-    GoogleAuthProvider: jest.fn().mockImplementation(() => ({})),
-    signInWithPopup: jest.fn(),
-    signInWithEmailAndPassword: jest.fn(),
-    signOut: jest.fn(),
-  };
-});
+jest.mock('firebase/auth', () => ({
+  GoogleAuthProvider: jest.fn().mockImplementation(() => ({})),
+  signInWithPopup: jest.fn(),
+  signInWithEmailAndPassword: jest.fn(),
+  signOut: jest.fn(),
+  getAuth: jest.fn(),
+  connectAuthEmulator: jest.fn(),
+}));
 
 jest.mock('../api');
 

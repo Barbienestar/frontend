@@ -60,3 +60,129 @@ No `yarn test` — Vitest configured in `vite.config.ts` (Playwright + Storybook
 - `.claude/skills/add-component.md` has team component-creation workflow (Spanish).
 - `docs/` is gitignored — local scratchpad, not committed.
 - `.env` is gitignored via `/**/*.env` pattern — credentials never committed.
+
+# Unit & Integration Testing — React / Expo
+
+## Stack
+
+| Tool                      | Role                                             |
+| ------------------------- | ------------------------------------------------ |
+| **Jest**                  | Test runner, mocks, assertions, coverage reports |
+| **React Testing Library** | Component queries & interactions (web)           |
+
+---
+
+## Anatomy of a Test
+
+```js
+describe('LoginForm', () => {
+  test('calls onLogin on submit', () => {
+    // Arrange — set up data, mocks, render
+    // Act    — trigger the action
+    // Assert — verify the outcome
+  });
+});
+```
+
+Always follow **AAA (Arrange → Act → Assert)**. One test = one behavior.
+
+---
+
+## Unit Tests — for logic
+
+Target: utility functions, custom hooks, validators, pure business logic.
+
+```js
+test('formats currency correctly', () => {
+  expect(formatCurrency(1000)).toBe('$1,000.00');
+});
+```
+
+Use mocks to isolate external dependencies:
+
+```js
+jest.mock('axios');
+axios.get.mockResolvedValue({ data: [{ id: 1 }] });
+```
+
+Clean mocks between tests with `afterEach(() => jest.clearAllMocks())`.
+
+---
+
+## Integration Tests — for flows
+
+Target: component + state + API working together.
+
+```js
+jest.mock('./api', () => ({
+  getUsers: jest.fn().mockResolvedValue([{ id: 1, name: 'Ana' }]),
+}));
+
+test('renders users after load', async () => {
+  render(<UserList />);
+  const item = await screen.findByText('Ana'); // findBy* = async
+  expect(item).toBeInTheDocument();
+});
+```
+
+---
+
+## Test IDs
+
+Add them in markup when text/classes are unstable or for E2E selectors.
+
+**React (web)**
+
+```jsx
+<button data-testid="btn-login">Sign in</button>
+```
+
+**React Native / Expo**
+
+```jsx
+<TouchableOpacity testID="btn-login">...</TouchableOpacity>
+```
+
+**Naming convention** — prefix by element type, describe intent not appearance:
+
+| Prefix   | Use for                         |
+| -------- | ------------------------------- |
+| `btn-`   | Buttons and tappable actions    |
+| `input-` | Form fields                     |
+| `txt-`   | Titles, labels, visible content |
+| `card-`  | Container / card sections       |
+| `lbl-`   | Error messages, descriptors     |
+
+`btn-submit-form` · `input-email` · `lbl-error-password`
+
+Treat test IDs like a public API — rename intentionally, not casually.
+
+## Coverage Target
+
+Run with `jest --coverage`. Aim for **70–80%** on critical paths.  
+100% is not the goal — untested UI animations and trivial wrappers are fine to skip.  
+Focus coverage on: business logic, form validation, data transformations, async flows.
+
+---
+
+## Common Mistakes
+
+- **Testing implementation** instead of behavior — if you refactor without changing behavior, no test should break
+- **Over-mocking** — if everything is mocked, you're testing the mocks
+- **Skipping `clearAllMocks()`** — stale mocks cause false positives across tests
+- **Using `getByTestId` when `getByRole` exists** — prefer semantic queries; test IDs are a fallback
+- **Generic test ID names** — `button1` becomes ambiguous fast; name by intent
+
+---
+
+## Recommended Strategy
+
+```
+Many unit tests (logic) + a few integration tests (flows) = max coverage, min maintenance cost
+```
+
+1. Start with the functions/flows that cause the most damage if they break
+2. Unit test all pure logic and custom hooks
+3. Integration test key UI flows (login, form submit, data load)
+4. Add E2E (Cypress/Detox) only for the most critical user journeys
+5. Run everything in CI on every PR; block merges on failure
