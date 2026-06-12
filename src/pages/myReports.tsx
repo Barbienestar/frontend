@@ -72,6 +72,7 @@ const MyReportsPage = () => {
               placeholder="Buscar por folio, medicamento u hospital..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
+              data-testid="my-reports-search-input"
               className="w-full rounded-lg border border-border bg-background pl-9 pr-4 py-2 text-sm
                          text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
             />
@@ -79,6 +80,7 @@ const MyReportsPage = () => {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
+            data-testid="my-reports-status-filter"
             className="rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground
                        focus:outline-none focus:ring-2 focus:ring-ring"
           >
