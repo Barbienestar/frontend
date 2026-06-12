@@ -18,6 +18,9 @@ interface SearchableSelectProps {
   disabled?: boolean;
   labelClassName?: string;
   descClassName?: string;
+  inputTestId?: string;
+  testPage?: string;
+  testOptionType?: string;
   error?: boolean;
 }
 
@@ -31,6 +34,9 @@ export function SearchableSelect({
   disabled,
   labelClassName,
   descClassName,
+  inputTestId,
+  testPage,
+  testOptionType,
   error,
 }: Readonly<SearchableSelectProps>) {
   const [query, setQuery] = useState('');
@@ -90,6 +96,7 @@ export function SearchableSelect({
               ? 'border-destructive focus:ring-destructive'
               : 'border-input focus:ring-ring'
           )}
+          data-testid={inputTestId}
         />
 
         {open && (
@@ -110,6 +117,7 @@ export function SearchableSelect({
                     'px-3 py-2 text-sm cursor-pointer hover:bg-muted transition-colors',
                     opt.value === value && 'font-medium text-primary'
                   )}
+                  data-testid={`${testPage}-select-${testOptionType}-option-${opt.value}`}
                 >
                   {opt.label}
                 </li>

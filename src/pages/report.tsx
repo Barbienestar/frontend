@@ -194,29 +194,34 @@ const ReportarPage = () => {
               imageUrl={imageUrl}
             />
 
-            <ConfirmModal
-              isOpen={showConfirmModal}
-              message="¿Está seguro que desea enviar este reporte?"
-              confirmLabel="Sí, enviar"
-              cancelLabel="Cancelar"
-              onConfirm={() => {
-                setShowConfirmModal(false);
-                handleSubmit();
-              }}
-              onCancel={() => setShowConfirmModal(false)}
-            />
+            {/* Logical execution gates to dynamically mount/unmount the component */}
+            {showConfirmModal && (
+              <ConfirmModal
+                isOpen={showConfirmModal}
+                message="¿Está seguro que desea enviar este reporte?"
+                confirmLabel="Sí, enviar"
+                cancelLabel="Cancelar"
+                onConfirm={() => {
+                  setShowConfirmModal(false);
+                  handleSubmit();
+                }}
+                onCancel={() => setShowConfirmModal(false)}
+              />
+            )}
 
-            <ConfirmModal
-              isOpen={showCancelModal}
-              message="¿Está seguro que desea cancelar el reporte?"
-              confirmLabel="Sí, cancelar"
-              cancelLabel="No, volver"
-              onConfirm={() => {
-                setShowCancelModal(false);
-                navigate('/inicio');
-              }}
-              onCancel={() => setShowCancelModal(false)}
-            />
+            {showCancelModal && (
+              <ConfirmModal
+                isOpen={showCancelModal}
+                message="¿Está seguro que desea cancelar el reporte?"
+                confirmLabel="Sí, cancelar"
+                cancelLabel="No, volver"
+                onConfirm={() => {
+                  setShowCancelModal(false);
+                  navigate('/inicio');
+                }}
+                onCancel={() => setShowCancelModal(false)}
+              />
+            )}
 
             <div className="rounded-xl bg-[#1a2235] text-white p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-gray-400 mb-2">

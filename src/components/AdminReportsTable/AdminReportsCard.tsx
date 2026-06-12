@@ -99,6 +99,7 @@ export const AdminReportsCard = ({
               size="xs"
               onClick={() => setPendingAction('reject')}
               className="px-2 border-border text-muted-foreground hover:bg-destructive/10 hover:text-destructive hover:border-destructive/50 transition-all duration-200 rounded-sm"
+              data-testid="admin-reject-report-button"
             >
               <X className="w-3.5 h-3.5" />
               <span className="hidden sm:inline mr-1.5">Rechazar</span>
@@ -108,6 +109,7 @@ export const AdminReportsCard = ({
               size="xs"
               onClick={() => setPendingAction('accept')}
               className="px-2 bg-primary text-primary-foreground hover:opacity-90 transition-all duration-200 rounded-sm shadow-sm"
+              data-testid="admin-accept-report-button"
             >
               <Check className="w-3.5 h-3.5" />
               <span className="hidden sm:inline mr-1.5">Aceptar</span>

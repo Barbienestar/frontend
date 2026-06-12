@@ -105,6 +105,7 @@ const MedicineAutocomplete = ({
         placeholder="Metformina 850mg"
         disabled={isLoading}
         className="w-full pl-9 pr-4 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+        data-testid="medicines-search-input"
       />
 
       {showSuggestions && (
@@ -122,7 +123,10 @@ const MedicineAutocomplete = ({
               }}
               className="px-4 py-2.5 text-sm cursor-pointer hover:bg-muted transition-colors flex flex-col"
             >
-              <span className="font-medium text-foreground capitalize">
+              <span
+                className="font-medium text-foreground capitalize"
+                data-testid="medicines-suggestion-text"
+              >
                 {item.genericName}
               </span>
 

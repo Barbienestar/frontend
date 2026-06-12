@@ -21,6 +21,7 @@ interface InputFieldProps {
   labelClassName?: string;
   descClassName?: string;
   inputClassName?: string;
+  testId?: string;
   isMedicine?: boolean;
   onChange?: (
     e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
@@ -157,6 +158,7 @@ export const InputField = ({
   labelClassName,
   descClassName,
   inputClassName,
+  testId,
   isMedicine = false,
   onChange,
   onBlur,
@@ -228,6 +230,7 @@ export const InputField = ({
           onChange={onChange}
           onBlur={onBlur}
           className={cn(inputClassName)}
+          data-testid={testId}
         />
       )}
 

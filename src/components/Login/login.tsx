@@ -52,6 +52,7 @@ export function Login({
           description=""
           labelClassName="font-semibold"
           inputClassName="h-12 rounded-xl px-4 text-sm bg-muted/40 border-input"
+          testId="login-email-input"
         />
 
         {/* Password */}
@@ -64,6 +65,7 @@ export function Login({
           description=""
           labelClassName="font-semibold"
           inputClassName="h-12 rounded-xl px-4 text-sm bg-muted/40 border-input"
+          testId="login-password-input"
         />
 
         {/* Submit */}
@@ -72,6 +74,7 @@ export function Login({
           variant="secondary"
           disabled={isLoading}
           className="w-full h-9 sm:h-12 rounded-xl text-xs sm:text-sm font-bold tracking-widest uppercase mt-2"
+          data-testid="login-submit-button"
         >
           {isLoading ? 'Ingresando...' : 'Entrar al Sistema'}
         </Button>
