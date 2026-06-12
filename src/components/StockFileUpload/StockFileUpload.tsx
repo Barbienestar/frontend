@@ -77,6 +77,7 @@ const StockFileUpload = ({ hospitalId, hospitalName }: Props) => {
             key={fileUploadKey}
             variant="csv"
             onFileChange={setFile}
+            testId="stock-upload-file-input"
           />
         </div>
         <CardFooter className="flex-col gap-2">
@@ -86,6 +87,7 @@ const StockFileUpload = ({ hospitalId, hospitalName }: Props) => {
             className="w-full bg-[#065E35] hover:bg-[#065E35]/80"
             onClick={() => setShowConfirmModal(true)}
             disabled={!file || uploading || !hospitalId}
+            data-testid="stock-upload-button"
           >
             <Upload />
             {uploading ? 'Subiendo...' : 'Subir archivo'}
