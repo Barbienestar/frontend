@@ -4,7 +4,7 @@ declare global {
       login(
         email: string,
         password: string,
-        role?: 'admin' | 'citizen'
+        role?: 'admin' | 'citizen' | 'health'
       ): Chainable<void>;
     }
   }

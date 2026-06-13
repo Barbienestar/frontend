@@ -13,7 +13,7 @@ describe('Flujo de usuario ciudadano NO autenticado', () => {
 
   describe('Flujo de usuario ciudadano autenticado', () => {
     beforeEach(() => {
-      cy.login('citizen@tests.testing', 'Testing123.');
+      cy.login('citizenleote@tests.testing', 'Testing123.');
     });
 
     it('Crear un reporte', () => {

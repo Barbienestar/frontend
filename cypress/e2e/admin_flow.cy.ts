@@ -5,7 +5,7 @@ describe('Flujo de usuario administrador', () => {
     cy.clearAllSessionStorage();
 
     // Create dummy report
-    cy.login('citizen@tests.testing', 'Testing123.', 'citizen');
+    cy.login('citizenLeote@tests.testing', 'Testing123.', 'citizen');
 
     cy.visit('/reportar');
     cy.url().should('contain', '/reportar');
@@ -48,7 +48,7 @@ describe('Flujo de usuario administrador', () => {
     cy.wait('@createReport').its('response.statusCode').should('eq', 201);
 
     // Login as admin
-    cy.login('adminbarbienestardeploy@gmail.com', 'barboAdmin123', 'admin');
+    cy.login('adminBarbienestarLeote@gmail.com', 'barboAdmin123', 'admin');
   });
 
   it('Rechazar un reporte', () => {
