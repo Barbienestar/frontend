@@ -3,7 +3,15 @@ import type { ReactNode } from 'react';
 import ReportCard from './reportCard';
 
 jest.mock('../Button/button', () => ({
-  Button: ({ children, disabled: _d, ...props }: { children?: ReactNode; disabled?: boolean; [key: string]: unknown }) => (
+  Button: ({
+    children,
+    disabled: _d,
+    ...props
+  }: {
+    children?: ReactNode;
+    disabled?: boolean;
+    [key: string]: unknown;
+  }) => (
     <button {...(props as React.ComponentProps<'button'>)}>{children}</button>
   ),
 }));
@@ -155,17 +163,13 @@ describe('ReportCard', () => {
     rerender(<ReportCard {...defaultProps} onSubmit={onSubmit} />);
     fireEvent.click(screen.getByTestId('report-submit-button'));
     expect(onSubmit).not.toHaveBeenCalled();
-    expect(
-      screen.getByText('Selecciona un medicamento.')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Selecciona un medicamento.')).toBeInTheDocument();
   });
 
   it('clears medicine error after selecting a medicine', () => {
     render(<ReportCard {...defaultProps} />);
     fireEvent.click(screen.getByTestId('report-submit-button'));
-    expect(
-      screen.getByText('Selecciona un medicamento.')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Selecciona un medicamento.')).toBeInTheDocument();
     fireEvent.change(screen.getByTestId('report-search-medicine-input'), {
       target: { value: 'med1' },
     });

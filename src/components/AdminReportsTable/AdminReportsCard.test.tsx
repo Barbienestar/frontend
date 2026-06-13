@@ -30,13 +30,21 @@ const mockReport: FullReportData = {
 };
 
 jest.mock('@/components/ui/button', () => ({
-  Button: ({ children, ...props }: { children?: ReactNode; [key: string]: unknown }) => (
+  Button: ({
+    children,
+    ...props
+  }: {
+    children?: ReactNode;
+    [key: string]: unknown;
+  }) => (
     <button {...(props as React.ComponentProps<'button'>)}>{children}</button>
   ),
 }));
 
 jest.mock('@/components/ui/dialog', () => ({
-  Dialog: ({ children }: { children?: ReactNode }) => <div data-testid="dialog">{children}</div>,
+  Dialog: ({ children }: { children?: ReactNode }) => (
+    <div data-testid="dialog">{children}</div>
+  ),
   DialogContent: ({ children }: { children?: ReactNode }) => (
     <div data-testid="dialog-content">{children}</div>
   ),
@@ -90,8 +98,12 @@ describe('AdminReportsCard', () => {
 
   it('renders accept and reject buttons', () => {
     render(<AdminReportsCard data={mockReport} />);
-    expect(screen.getByTestId('admin-accept-report-button')).toBeInTheDocument();
-    expect(screen.getByTestId('admin-reject-report-button')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('admin-accept-report-button')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('admin-reject-report-button')
+    ).toBeInTheDocument();
   });
 
   it('shows confirm modal on accept click', () => {
