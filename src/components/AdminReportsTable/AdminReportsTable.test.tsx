@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { AdminReportsTable } from './AdminReportsTable';
 
 jest.mock('@/services/report/reportService', () => ({
@@ -128,5 +128,90 @@ describe('AdminReportsTable', () => {
     await waitFor(() => {
       expect(screen.getByText('Paracetamol')).toBeInTheDocument();
     });
+  });
+
+  it('navigates to next page on Siguiente click', async () => {
+    (getAdminPageReports as jest.Mock).mockResolvedValue(mockResponseMultiPage);
+    render(<AdminReportsTable statusId={2} />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Página 1 de 3/)).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Siguiente'));
+    await waitFor(() => {
+      expect(getAdminPageReports).toHaveBeenCalledWith(2, 1, 3);
+    });
+  });
+
+  it('navigates to previous page on Anterior click', async () => {
+    const mockResponsePage1 = {
+      ...mockResponseMultiPage,
+      page: 1,
+    };
+    (getAdminPageReports as jest.Mock).mockResolvedValue(mockResponsePage1);
+    render(<AdminReportsTable statusId={2} />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Página 2 de 3/)).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByText('Anterior'));
+    await waitFor(() => {
+      expect(getAdminPageReports).toHaveBeenCalledWith(2, 0, 3);
+    });
+  });
+
+  it('disables prev button on first page', async () => {
+    (getAdminPageReports as jest.Mock).mockResolvedValue(mockResponseMultiPage);
+    render(<AdminReportsTable statusId={2} />);
+
+    await waitFor(() => {
+      const prevBtn = screen.getByText('Anterior').closest('button');
+      expect(prevBtn).toBeDisabled();
+    });
+  });
+
+  it('enables next button when more pages', async () => {
+    (getAdminPageReports as jest.Mock).mockResolvedValue(mockResponseMultiPage);
+    render(<AdminReportsTable statusId={2} />);
+
+    await waitFor(() => {
+      const nextBtn = screen.getByText('Siguiente').closest('button');
+      expect(nextBtn).not.toBeDisabled();
+    });
+  });
+
+  it('disables next button on last page', async () => {
+    const mockSinglePage = {
+      items: [mockReport],
+      page: 0,
+      pageSize: 3,
+      totalItems: 1,
+      totalPages: 1,
+    };
+    (getAdminPageReports as jest.Mock).mockResolvedValue(mockSinglePage);
+    render(<AdminReportsTable statusId={2} pageSize={3} />);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Página 1 de 1/)).toBeInTheDocument();
+    });
+    const nextBtn = screen.getByText('Siguiente').closest('button');
+    expect(nextBtn).toBeDisabled();
+  });
+
+  it('handles API error gracefully', async () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+    (getAdminPageReports as jest.Mock).mockRejectedValue(
+      new Error('API Error')
+    );
+    render(<AdminReportsTable statusId={2} />);
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('admin-reject-report-button')
+      ).not.toBeInTheDocument();
+    });
+    consoleSpy.mockRestore();
   });
 });

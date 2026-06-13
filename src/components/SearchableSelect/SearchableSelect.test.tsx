@@ -118,4 +118,22 @@ describe('SearchableSelect', () => {
     );
     expect(screen.getByRole('textbox')).toBeDisabled();
   });
+
+  it('selects option on Enter key', () => {
+    render(<SearchableSelect options={options} value="" onChange={onChange} />);
+    const input = screen.getByRole('textbox');
+    fireEvent.focus(input);
+    const option = screen.getByText('Nuevo León');
+    fireEvent.keyDown(option, { key: 'Enter' });
+    expect(onChange).toHaveBeenCalledWith('3');
+  });
+
+  it('selects option on Space key', () => {
+    render(<SearchableSelect options={options} value="" onChange={onChange} />);
+    const input = screen.getByRole('textbox');
+    fireEvent.focus(input);
+    const option = screen.getByText('Nuevo León');
+    fireEvent.keyDown(option, { key: ' ' });
+    expect(onChange).toHaveBeenCalledWith('3');
+  });
 });

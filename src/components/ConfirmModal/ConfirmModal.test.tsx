@@ -60,4 +60,33 @@ describe('ConfirmModal', () => {
     render(<ConfirmModal {...defaultProps} />);
     expect(screen.getByTestId('confirmation-modal')).toBeInTheDocument();
   });
+
+  it('calls onCancel when backdrop clicked', () => {
+    render(<ConfirmModal {...defaultProps} />);
+    const dialog = screen.getByTestId('confirmation-modal');
+    fireEvent.click(dialog);
+    expect(defaultProps.onCancel).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls onCancel on Escape key', () => {
+    render(<ConfirmModal {...defaultProps} />);
+    fireEvent.keyDown(screen.getByTestId('confirmation-modal'), {
+      key: 'Escape',
+    });
+    expect(defaultProps.onCancel).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not render when isOpen is false', () => {
+    render(<ConfirmModal {...defaultProps} isOpen={false} />);
+    const dialog = screen.getByTestId('confirmation-modal');
+    expect(dialog).toBeInTheDocument();
+    expect(dialog).not.toHaveAttribute('open');
+  });
+
+  it('calls onCancel on dialog close event', () => {
+    render(<ConfirmModal {...defaultProps} />);
+    const dialog = screen.getByTestId('confirmation-modal');
+    fireEvent(dialog, new Event('close'));
+    expect(defaultProps.onCancel).toHaveBeenCalledTimes(1);
+  });
 });
