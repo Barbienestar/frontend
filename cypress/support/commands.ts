@@ -65,7 +65,7 @@
 // });
 Cypress.Commands.add(
   'login',
-  (email, password, role: 'admin' | 'citizen' = 'citizen') => {
+  (email, password, role: 'admin' | 'citizen' | 'health' = 'citizen') => {
     cy.clearAllCookies();
     cy.clearAllLocalStorage();
     cy.clearAllSessionStorage();
@@ -78,7 +78,7 @@ Cypress.Commands.add(
     cy.get("[data-testid='login-submit-button']").should('exist').click();
     cy.wait('@authCheck').its('response.statusCode').should('eq', 200);
     cy.get("[data-testid='navbar-profile-button']").should('be.visible');
-    if (role === 'admin') {
+    if (role === 'admin' || role === 'health') {
       cy.get('nav').contains('Dashboard').should('be.visible');
       cy.get('nav').contains('Reportar').should('not.exist');
     } else {
