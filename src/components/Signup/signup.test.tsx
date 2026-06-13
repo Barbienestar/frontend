@@ -144,4 +144,64 @@ describe('SignUp', () => {
       ).toBeInTheDocument();
     });
   });
+
+  it('handles getAllStates API error', async () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+    (getAllStates as jest.Mock).mockRejectedValue(new Error('API Error'));
+    renderSignUp();
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalled();
+    });
+    consoleSpy.mockRestore();
+  });
+
+  it('handles signup API error', async () => {
+    const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
+    (signup as jest.Mock).mockRejectedValue(new Error('Signup Error'));
+
+    const user = userEvent.setup();
+    const { container } = renderSignUp();
+
+    await user.type(screen.getByPlaceholderText('Jose Miguel'), 'Juan');
+    await user.type(screen.getByPlaceholderText('Perez'), 'López');
+    await user.type(screen.getByPlaceholderText('Marquez'), 'García');
+    await user.type(
+      screen.getByPlaceholderText('jmperez@gmail.com'),
+      'juan@test.com'
+    );
+    const passwordInputs = screen.getAllByPlaceholderText('••••••••');
+    await user.type(passwordInputs[0], 'Pass123');
+    await user.type(passwordInputs[1], 'Pass123');
+    await user.type(screen.getByPlaceholderText('24'), '30');
+
+    const stateSelect = container.querySelector(
+      'select[name="stateId"]'
+    ) as HTMLSelectElement;
+    await user.selectOptions(stateSelect, '2');
+
+    await waitFor(() => {
+      expect(getCitiesByState).toHaveBeenCalledWith(2);
+    });
+
+    const citySelect = container.querySelector(
+      'select[name="cityId"]'
+    ) as HTMLSelectElement;
+    await user.selectOptions(citySelect, '1');
+
+    await waitFor(() => {
+      expect(getSuburbsByCity).toHaveBeenCalledWith(1);
+    });
+
+    const suburbSelect = container.querySelector(
+      'select[name="idSuburb"]'
+    ) as HTMLSelectElement;
+    await user.selectOptions(suburbSelect, '1');
+
+    await user.click(screen.getByRole('button', { name: 'Crear cuenta' }));
+
+    await waitFor(() => {
+      expect(consoleSpy).toHaveBeenCalled();
+    });
+    consoleSpy.mockRestore();
+  });
 });
