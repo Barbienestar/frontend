@@ -19,7 +19,10 @@ jest.mock('@/components/ui/separator', () => ({
   Separator: ({
     children,
     ...props
-  }: { children?: ReactNode; [key: string]: unknown }) => (
+  }: {
+    children?: ReactNode;
+    [key: string]: unknown;
+  }) => (
     <hr data-slot="separator" {...(props as React.ComponentProps<'hr'>)}>
       {children}
     </hr>
@@ -30,7 +33,10 @@ jest.mock('@/components/ui/label', () => ({
   Label: ({
     children,
     ...props
-  }: { children?: ReactNode; [key: string]: unknown }) => (
+  }: {
+    children?: ReactNode;
+    [key: string]: unknown;
+  }) => (
     <label data-slot="label" {...(props as React.ComponentProps<'label'>)}>
       {children}
     </label>
@@ -40,9 +46,7 @@ jest.mock('@/components/ui/label', () => ({
 describe('Field', () => {
   it('renders Field component as div with data-slot', () => {
     const { container } = render(<Field />);
-    expect(
-      container.querySelector('[data-slot="field"]')
-    ).toBeInTheDocument();
+    expect(container.querySelector('[data-slot="field"]')).toBeInTheDocument();
   });
 
   it('renders children', () => {

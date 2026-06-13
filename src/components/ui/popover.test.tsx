@@ -15,9 +15,10 @@ jest.mock('radix-ui', () => {
   const Passthrough = ({
     children,
     ...props
-  }: { children?: ReactNode; [key: string]: unknown }) => (
-    <div {...(props as Record<string, unknown>)}>{children}</div>
-  );
+  }: {
+    children?: ReactNode;
+    [key: string]: unknown;
+  }) => <div {...(props as Record<string, unknown>)}>{children}</div>;
 
   return {
     Popover: {

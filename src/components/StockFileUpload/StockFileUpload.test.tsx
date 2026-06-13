@@ -42,15 +42,32 @@ jest.mock('../FileUpload/FileUpload', () => ({
 }));
 
 jest.mock('@/components/Button/button', () => ({
-  Button: ({ children, asChild: _asChild, ...props }: { children?: ReactNode; asChild?: boolean; [key: string]: unknown }) => (
-    <button data-testid="mock-button" {...(props as React.ComponentProps<'button'>)}>
+  Button: ({
+    children,
+    asChild: _asChild,
+    ...props
+  }: {
+    children?: ReactNode;
+    asChild?: boolean;
+    [key: string]: unknown;
+  }) => (
+    <button
+      data-testid="mock-button"
+      {...(props as React.ComponentProps<'button'>)}
+    >
       {children}
     </button>
   ),
 }));
 
 jest.mock('../ui/badge', () => ({
-  Badge: ({ children, ...props }: { children?: ReactNode; [key: string]: unknown }) => (
+  Badge: ({
+    children,
+    ...props
+  }: {
+    children?: ReactNode;
+    [key: string]: unknown;
+  }) => (
     <span data-testid="badge" {...(props as React.ComponentProps<'span'>)}>
       {children}
     </span>
@@ -58,7 +75,13 @@ jest.mock('../ui/badge', () => ({
 }));
 
 jest.mock('../ui/card', () => ({
-  Card: ({ children, ...props }: { children?: ReactNode; [key: string]: unknown }) => (
+  Card: ({
+    children,
+    ...props
+  }: {
+    children?: ReactNode;
+    [key: string]: unknown;
+  }) => (
     <div data-testid="card" {...(props as React.ComponentProps<'div'>)}>
       {children}
     </div>
@@ -125,9 +148,7 @@ describe('StockFileUpload', () => {
   });
 
   it('when hospitalName provided: shows badge with name', () => {
-    render(
-      <StockFileUpload hospitalId={1} hospitalName="Hospital General" />
-    );
+    render(<StockFileUpload hospitalId={1} hospitalName="Hospital General" />);
     expect(screen.getByText('Hospital General')).toBeInTheDocument();
   });
 
